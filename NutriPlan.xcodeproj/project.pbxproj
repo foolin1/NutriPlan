@@ -6,17 +6,90 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXFileReference section */
-		8B7D9B702F545AD3006A4CFD /* NutriPlan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NutriPlan.app; sourceTree = BUILT_PRODUCTS_DIR; };
-/* End PBXFileReference section */
+/* Begin PBXBuildFile section */
+		8B0B9DEF2F65BDE800B41AE7 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9DEE2F65BDE800B41AE7 /* UserProfile.swift */; };
+		8B0B9DF12F65BE1000B41AE7 /* NutritionGoal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9DF02F65BE1000B41AE7 /* NutritionGoal.swift */; };
+		8B0B9DF32F65BE4200B41AE7 /* GoalCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9DF22F65BE4200B41AE7 /* GoalCalculator.swift */; };
+		8B0B9DF52F65C03D00B41AE7 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9DF42F65C03D00B41AE7 /* AppState.swift */; };
+		8B0B9DF72F65C09700B41AE7 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9DF62F65C09700B41AE7 /* RootView.swift */; };
+		8B0B9DF92F65C0DC00B41AE7 /* OnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9DF82F65C0DC00B41AE7 /* OnboardingViewModel.swift */; };
+		8B0B9DFB2F65C1C700B41AE7 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9DFA2F65C1C700B41AE7 /* OnboardingView.swift */; };
+		8B0B9DFD2F65CA7600B41AE7 /* MealType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9DFC2F65CA7600B41AE7 /* MealType.swift */; };
+		8B0B9DFF2F65CA9A00B41AE7 /* PlannedMeal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9DFE2F65CA9A00B41AE7 /* PlannedMeal.swift */; };
+		8B0B9E012F65CAC000B41AE7 /* DayPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9E002F65CAC000B41AE7 /* DayPlan.swift */; };
+		8B0B9E032F65CAD900B41AE7 /* MealPlanBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9E022F65CAD900B41AE7 /* MealPlanBuilder.swift */; };
+		8B0B9E052F65D4B600B41AE7 /* ConsumedFoodEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9E042F65D4B600B41AE7 /* ConsumedFoodEntry.swift */; };
+		8B0B9E072F65D4E000B41AE7 /* DiaryDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9E062F65D4E000B41AE7 /* DiaryDay.swift */; };
+		8B0B9E092F65D5DA00B41AE7 /* DiaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9E082F65D5DA00B41AE7 /* DiaryView.swift */; };
+		8B0B9E0D2F65DFD000B41AE7 /* PlanComparison.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9E0C2F65DFD000B41AE7 /* PlanComparison.swift */; };
+		8B0B9E0F2F65DFFC00B41AE7 /* PlanComparisonService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9E0E2F65DFFC00B41AE7 /* PlanComparisonService.swift */; };
+		8B0B9E122F65E0FC00B41AE7 /* PlanComparisonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9E112F65E0FC00B41AE7 /* PlanComparisonView.swift */; };
+		8B0B9E142F65FB0D00B41AE7 /* PlanAdjustment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9E132F65FB0D00B41AE7 /* PlanAdjustment.swift */; };
+		8B0B9E162F65FB9C00B41AE7 /* PlanAdjuster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9E152F65FB9C00B41AE7 /* PlanAdjuster.swift */; };
+		8B0B9E182F66053A00B41AE7 /* NutrientFocus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9E172F66053A00B41AE7 /* NutrientFocus.swift */; };
+		8B94CA432F54778A000CB887 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B94CA402F54778A000CB887 /* ContentView.swift */; };
+		8B94CA442F54778A000CB887 /* NutriPlanApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B94CA412F54778A000CB887 /* NutriPlanApp.swift */; };
+		8B94CA452F54778A000CB887 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B94CA3F2F54778A000CB887 /* Assets.xcassets */; };
+		8B94CA492F547C30000CB887 /* Nutrient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B94CA482F547C30000CB887 /* Nutrient.swift */; };
+		8B94CA4B2F547C8B000CB887 /* Macros.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B94CA4A2F547C8B000CB887 /* Macros.swift */; };
+		8B94CA4D2F547CB6000CB887 /* Food.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B94CA4C2F547CB6000CB887 /* Food.swift */; };
+		8B94CA4F2F547CDA000CB887 /* Recipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B94CA4E2F547CDA000CB887 /* Recipe.swift */; };
+		8B94CA512F547D1E000CB887 /* NutritionCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B94CA502F547D1E000CB887 /* NutritionCalculator.swift */; };
+		8B94CA552F547DCB000CB887 /* FoodRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B94CA542F547DCB000CB887 /* FoodRepository.swift */; };
+		8B94CA572F547DEE000CB887 /* RecipeRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B94CA562F547DEE000CB887 /* RecipeRepository.swift */; };
+		8B94CA592F547E11000CB887 /* InMemoryFoodRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B94CA582F547E11000CB887 /* InMemoryFoodRepository.swift */; };
+		8B94CA5B2F547E55000CB887 /* InMemoryRecipeRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B94CA5A2F547E55000CB887 /* InMemoryRecipeRepository.swift */; };
+		8B94CA5D2F548308000CB887 /* PlanViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B94CA5C2F548308000CB887 /* PlanViewModel.swift */; };
+		8B94CA5F2F548720000CB887 /* ShoppingItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B94CA5E2F548720000CB887 /* ShoppingItem.swift */; };
+		8B94CA612F548743000CB887 /* ShoppingListBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B94CA602F548743000CB887 /* ShoppingListBuilder.swift */; };
+		8B94CA632F548778000CB887 /* ShoppingListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B94CA622F548778000CB887 /* ShoppingListView.swift */; };
+		8B94CA682F5491D4000CB887 /* SubstitutionEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B94CA672F5491D4000CB887 /* SubstitutionEngine.swift */; };
+		8B94CA6A2F5495B1000CB887 /* SubstitutionPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B94CA692F5495B1000CB887 /* SubstitutionPickerView.swift */; };
+		8B94CA6C2F5495EB000CB887 /* RecipeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B94CA6B2F5495EB000CB887 /* RecipeDetailView.swift */; };
+/* End PBXBuildFile section */
 
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		8B7D9B722F545AD3006A4CFD /* NutriPlan */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = NutriPlan;
-			sourceTree = "<group>";
-		};
-/* End PBXFileSystemSynchronizedRootGroup section */
+/* Begin PBXFileReference section */
+		8B0B9DEE2F65BDE800B41AE7 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
+		8B0B9DF02F65BE1000B41AE7 /* NutritionGoal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutritionGoal.swift; sourceTree = "<group>"; };
+		8B0B9DF22F65BE4200B41AE7 /* GoalCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalCalculator.swift; sourceTree = "<group>"; };
+		8B0B9DF42F65C03D00B41AE7 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		8B0B9DF62F65C09700B41AE7 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		8B0B9DF82F65C0DC00B41AE7 /* OnboardingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewModel.swift; sourceTree = "<group>"; };
+		8B0B9DFA2F65C1C700B41AE7 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		8B0B9DFC2F65CA7600B41AE7 /* MealType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealType.swift; sourceTree = "<group>"; };
+		8B0B9DFE2F65CA9A00B41AE7 /* PlannedMeal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlannedMeal.swift; sourceTree = "<group>"; };
+		8B0B9E002F65CAC000B41AE7 /* DayPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayPlan.swift; sourceTree = "<group>"; };
+		8B0B9E022F65CAD900B41AE7 /* MealPlanBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealPlanBuilder.swift; sourceTree = "<group>"; };
+		8B0B9E042F65D4B600B41AE7 /* ConsumedFoodEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsumedFoodEntry.swift; sourceTree = "<group>"; };
+		8B0B9E062F65D4E000B41AE7 /* DiaryDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiaryDay.swift; sourceTree = "<group>"; };
+		8B0B9E082F65D5DA00B41AE7 /* DiaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiaryView.swift; sourceTree = "<group>"; };
+		8B0B9E0C2F65DFD000B41AE7 /* PlanComparison.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanComparison.swift; sourceTree = "<group>"; };
+		8B0B9E0E2F65DFFC00B41AE7 /* PlanComparisonService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanComparisonService.swift; sourceTree = "<group>"; };
+		8B0B9E112F65E0FC00B41AE7 /* PlanComparisonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanComparisonView.swift; sourceTree = "<group>"; };
+		8B0B9E132F65FB0D00B41AE7 /* PlanAdjustment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanAdjustment.swift; sourceTree = "<group>"; };
+		8B0B9E152F65FB9C00B41AE7 /* PlanAdjuster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanAdjuster.swift; sourceTree = "<group>"; };
+		8B0B9E172F66053A00B41AE7 /* NutrientFocus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutrientFocus.swift; sourceTree = "<group>"; };
+		8B7D9B702F545AD3006A4CFD /* NutriPlan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NutriPlan.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8B94CA3F2F54778A000CB887 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		8B94CA402F54778A000CB887 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		8B94CA412F54778A000CB887 /* NutriPlanApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutriPlanApp.swift; sourceTree = "<group>"; };
+		8B94CA482F547C30000CB887 /* Nutrient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Nutrient.swift; sourceTree = "<group>"; };
+		8B94CA4A2F547C8B000CB887 /* Macros.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Macros.swift; sourceTree = "<group>"; };
+		8B94CA4C2F547CB6000CB887 /* Food.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Food.swift; sourceTree = "<group>"; };
+		8B94CA4E2F547CDA000CB887 /* Recipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recipe.swift; sourceTree = "<group>"; };
+		8B94CA502F547D1E000CB887 /* NutritionCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutritionCalculator.swift; sourceTree = "<group>"; };
+		8B94CA542F547DCB000CB887 /* FoodRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodRepository.swift; sourceTree = "<group>"; };
+		8B94CA562F547DEE000CB887 /* RecipeRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeRepository.swift; sourceTree = "<group>"; };
+		8B94CA582F547E11000CB887 /* InMemoryFoodRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InMemoryFoodRepository.swift; sourceTree = "<group>"; };
+		8B94CA5A2F547E55000CB887 /* InMemoryRecipeRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InMemoryRecipeRepository.swift; sourceTree = "<group>"; };
+		8B94CA5C2F548308000CB887 /* PlanViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanViewModel.swift; sourceTree = "<group>"; };
+		8B94CA5E2F548720000CB887 /* ShoppingItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingItem.swift; sourceTree = "<group>"; };
+		8B94CA602F548743000CB887 /* ShoppingListBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingListBuilder.swift; sourceTree = "<group>"; };
+		8B94CA622F548778000CB887 /* ShoppingListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingListView.swift; sourceTree = "<group>"; };
+		8B94CA672F5491D4000CB887 /* SubstitutionEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubstitutionEngine.swift; sourceTree = "<group>"; };
+		8B94CA692F5495B1000CB887 /* SubstitutionPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubstitutionPickerView.swift; sourceTree = "<group>"; };
+		8B94CA6B2F5495EB000CB887 /* RecipeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeDetailView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		8B7D9B6D2F545AD3006A4CFD /* Frameworks */ = {
@@ -29,10 +102,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8B0B9E102F65E0AC00B41AE7 /* Comparison */ = {
+			isa = PBXGroup;
+			children = (
+				8B0B9E112F65E0FC00B41AE7 /* PlanComparisonView.swift */,
+			);
+			path = Comparison;
+			sourceTree = "<group>";
+		};
 		8B7D9B672F545AD3006A4CFD = {
 			isa = PBXGroup;
 			children = (
-				8B7D9B722F545AD3006A4CFD /* NutriPlan */,
+				8B94CA422F54778A000CB887 /* NutriPlan */,
 				8B7D9B712F545AD3006A4CFD /* Products */,
 			);
 			sourceTree = "<group>";
@@ -43,6 +124,180 @@
 				8B7D9B702F545AD3006A4CFD /* NutriPlan.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		8B94CA332F54778A000CB887 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				8B94CA412F54778A000CB887 /* NutriPlanApp.swift */,
+				8B0B9DF42F65C03D00B41AE7 /* AppState.swift */,
+				8B0B9DF62F65C09700B41AE7 /* RootView.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		8B94CA342F54778A000CB887 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		8B94CA352F54778A000CB887 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				8B94CA532F547D8B000CB887 /* Local */,
+				8B94CA522F547D83000CB887 /* Repositories */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		8B94CA362F54778A000CB887 /* Domain */ = {
+			isa = PBXGroup;
+			children = (
+				8B94CA472F547BCE000CB887 /* Services */,
+				8B94CA462F547BBD000CB887 /* Models */,
+			);
+			path = Domain;
+			sourceTree = "<group>";
+		};
+		8B94CA372F54778A000CB887 /* Diary */ = {
+			isa = PBXGroup;
+			children = (
+				8B0B9E082F65D5DA00B41AE7 /* DiaryView.swift */,
+			);
+			path = Diary;
+			sourceTree = "<group>";
+		};
+		8B94CA382F54778A000CB887 /* Micronutrients */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Micronutrients;
+			sourceTree = "<group>";
+		};
+		8B94CA392F54778A000CB887 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				8B0B9DF82F65C0DC00B41AE7 /* OnboardingViewModel.swift */,
+				8B0B9DFA2F65C1C700B41AE7 /* OnboardingView.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		8B94CA3A2F54778A000CB887 /* Plan */ = {
+			isa = PBXGroup;
+			children = (
+				8B94CA402F54778A000CB887 /* ContentView.swift */,
+				8B94CA5C2F548308000CB887 /* PlanViewModel.swift */,
+				8B94CA6B2F5495EB000CB887 /* RecipeDetailView.swift */,
+			);
+			path = Plan;
+			sourceTree = "<group>";
+		};
+		8B94CA3B2F54778A000CB887 /* ShoppingList */ = {
+			isa = PBXGroup;
+			children = (
+				8B94CA622F548778000CB887 /* ShoppingListView.swift */,
+			);
+			path = ShoppingList;
+			sourceTree = "<group>";
+		};
+		8B94CA3C2F54778A000CB887 /* Substitutions */ = {
+			isa = PBXGroup;
+			children = (
+				8B94CA692F5495B1000CB887 /* SubstitutionPickerView.swift */,
+			);
+			path = Substitutions;
+			sourceTree = "<group>";
+		};
+		8B94CA3D2F54778A000CB887 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				8B0B9E102F65E0AC00B41AE7 /* Comparison */,
+				8B94CA372F54778A000CB887 /* Diary */,
+				8B94CA382F54778A000CB887 /* Micronutrients */,
+				8B94CA392F54778A000CB887 /* Onboarding */,
+				8B94CA3A2F54778A000CB887 /* Plan */,
+				8B94CA3B2F54778A000CB887 /* ShoppingList */,
+				8B94CA3C2F54778A000CB887 /* Substitutions */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		8B94CA3E2F54778A000CB887 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		8B94CA422F54778A000CB887 /* NutriPlan */ = {
+			isa = PBXGroup;
+			children = (
+				8B94CA332F54778A000CB887 /* App */,
+				8B94CA342F54778A000CB887 /* Core */,
+				8B94CA352F54778A000CB887 /* Data */,
+				8B94CA362F54778A000CB887 /* Domain */,
+				8B94CA3D2F54778A000CB887 /* Features */,
+				8B94CA3E2F54778A000CB887 /* Resources */,
+				8B94CA3F2F54778A000CB887 /* Assets.xcassets */,
+			);
+			path = NutriPlan;
+			sourceTree = "<group>";
+		};
+		8B94CA462F547BBD000CB887 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				8B94CA482F547C30000CB887 /* Nutrient.swift */,
+				8B94CA4A2F547C8B000CB887 /* Macros.swift */,
+				8B94CA4C2F547CB6000CB887 /* Food.swift */,
+				8B94CA4E2F547CDA000CB887 /* Recipe.swift */,
+				8B94CA5E2F548720000CB887 /* ShoppingItem.swift */,
+				8B0B9DEE2F65BDE800B41AE7 /* UserProfile.swift */,
+				8B0B9DF02F65BE1000B41AE7 /* NutritionGoal.swift */,
+				8B0B9DFC2F65CA7600B41AE7 /* MealType.swift */,
+				8B0B9DFE2F65CA9A00B41AE7 /* PlannedMeal.swift */,
+				8B0B9E002F65CAC000B41AE7 /* DayPlan.swift */,
+				8B0B9E042F65D4B600B41AE7 /* ConsumedFoodEntry.swift */,
+				8B0B9E062F65D4E000B41AE7 /* DiaryDay.swift */,
+				8B0B9E0C2F65DFD000B41AE7 /* PlanComparison.swift */,
+				8B0B9E132F65FB0D00B41AE7 /* PlanAdjustment.swift */,
+				8B0B9E172F66053A00B41AE7 /* NutrientFocus.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		8B94CA472F547BCE000CB887 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				8B94CA502F547D1E000CB887 /* NutritionCalculator.swift */,
+				8B94CA602F548743000CB887 /* ShoppingListBuilder.swift */,
+				8B94CA672F5491D4000CB887 /* SubstitutionEngine.swift */,
+				8B0B9DF22F65BE4200B41AE7 /* GoalCalculator.swift */,
+				8B0B9E022F65CAD900B41AE7 /* MealPlanBuilder.swift */,
+				8B0B9E0E2F65DFFC00B41AE7 /* PlanComparisonService.swift */,
+				8B0B9E152F65FB9C00B41AE7 /* PlanAdjuster.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		8B94CA522F547D83000CB887 /* Repositories */ = {
+			isa = PBXGroup;
+			children = (
+				8B94CA542F547DCB000CB887 /* FoodRepository.swift */,
+				8B94CA562F547DEE000CB887 /* RecipeRepository.swift */,
+			);
+			path = Repositories;
+			sourceTree = "<group>";
+		};
+		8B94CA532F547D8B000CB887 /* Local */ = {
+			isa = PBXGroup;
+			children = (
+				8B94CA582F547E11000CB887 /* InMemoryFoodRepository.swift */,
+				8B94CA5A2F547E55000CB887 /* InMemoryRecipeRepository.swift */,
+			);
+			path = Local;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -59,9 +314,6 @@
 			buildRules = (
 			);
 			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				8B7D9B722F545AD3006A4CFD /* NutriPlan */,
 			);
 			name = NutriPlan;
 			packageProductDependencies = (
@@ -109,6 +361,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8B94CA452F54778A000CB887 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -119,6 +372,44 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8B94CA512F547D1E000CB887 /* NutritionCalculator.swift in Sources */,
+				8B0B9DF72F65C09700B41AE7 /* RootView.swift in Sources */,
+				8B94CA6C2F5495EB000CB887 /* RecipeDetailView.swift in Sources */,
+				8B94CA4B2F547C8B000CB887 /* Macros.swift in Sources */,
+				8B0B9E032F65CAD900B41AE7 /* MealPlanBuilder.swift in Sources */,
+				8B0B9DF32F65BE4200B41AE7 /* GoalCalculator.swift in Sources */,
+				8B94CA5F2F548720000CB887 /* ShoppingItem.swift in Sources */,
+				8B0B9E072F65D4E000B41AE7 /* DiaryDay.swift in Sources */,
+				8B94CA432F54778A000CB887 /* ContentView.swift in Sources */,
+				8B94CA4D2F547CB6000CB887 /* Food.swift in Sources */,
+				8B0B9DFD2F65CA7600B41AE7 /* MealType.swift in Sources */,
+				8B0B9E182F66053A00B41AE7 /* NutrientFocus.swift in Sources */,
+				8B94CA572F547DEE000CB887 /* RecipeRepository.swift in Sources */,
+				8B94CA682F5491D4000CB887 /* SubstitutionEngine.swift in Sources */,
+				8B94CA5D2F548308000CB887 /* PlanViewModel.swift in Sources */,
+				8B0B9DF12F65BE1000B41AE7 /* NutritionGoal.swift in Sources */,
+				8B0B9E012F65CAC000B41AE7 /* DayPlan.swift in Sources */,
+				8B94CA6A2F5495B1000CB887 /* SubstitutionPickerView.swift in Sources */,
+				8B94CA592F547E11000CB887 /* InMemoryFoodRepository.swift in Sources */,
+				8B94CA4F2F547CDA000CB887 /* Recipe.swift in Sources */,
+				8B0B9DFF2F65CA9A00B41AE7 /* PlannedMeal.swift in Sources */,
+				8B94CA632F548778000CB887 /* ShoppingListView.swift in Sources */,
+				8B0B9E052F65D4B600B41AE7 /* ConsumedFoodEntry.swift in Sources */,
+				8B0B9E0D2F65DFD000B41AE7 /* PlanComparison.swift in Sources */,
+				8B94CA442F54778A000CB887 /* NutriPlanApp.swift in Sources */,
+				8B0B9DEF2F65BDE800B41AE7 /* UserProfile.swift in Sources */,
+				8B0B9DFB2F65C1C700B41AE7 /* OnboardingView.swift in Sources */,
+				8B0B9DF52F65C03D00B41AE7 /* AppState.swift in Sources */,
+				8B0B9DF92F65C0DC00B41AE7 /* OnboardingViewModel.swift in Sources */,
+				8B94CA5B2F547E55000CB887 /* InMemoryRecipeRepository.swift in Sources */,
+				8B0B9E142F65FB0D00B41AE7 /* PlanAdjustment.swift in Sources */,
+				8B0B9E0F2F65DFFC00B41AE7 /* PlanComparisonService.swift in Sources */,
+				8B94CA612F548743000CB887 /* ShoppingListBuilder.swift in Sources */,
+				8B94CA492F547C30000CB887 /* Nutrient.swift in Sources */,
+				8B0B9E162F65FB9C00B41AE7 /* PlanAdjuster.swift in Sources */,
+				8B0B9E092F65D5DA00B41AE7 /* DiaryView.swift in Sources */,
+				8B0B9E122F65E0FC00B41AE7 /* PlanComparisonView.swift in Sources */,
+				8B94CA552F547DCB000CB887 /* FoodRepository.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -251,6 +542,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3Z4TN3B83Y;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -263,7 +555,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.NutriPlan;
+				PRODUCT_BUNDLE_IDENTIFIER = com.r1nzu.nutriplan;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -282,6 +574,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3Z4TN3B83Y;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -294,7 +587,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.NutriPlan;
+				PRODUCT_BUNDLE_IDENTIFIER = com.r1nzu.nutriplan;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
