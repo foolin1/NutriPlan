@@ -3,12 +3,17 @@ import Combine
 
 @MainActor
 final class PlanViewModel: ObservableObject {
+    @Published var dayPlan: DayPlan = .empty {
+        didSet { persistSession() }
+    }
 
-    @Published var dayPlan: DayPlan = .empty
-    @Published var diaryDay: DiaryDay = .empty
+    @Published var diaryDay: DiaryDay = .empty {
+        didSet { persistSession() }
+    }
 
     private let foodRepo: FoodRepository
     private let recipeRepo: RecipeRepository
+    private let sessionStore: PlanSessionStore
 
     private var excludedAllergens: Set<String> = []
     private var requiredTags: Set<String> = []
@@ -16,28 +21,59 @@ final class PlanViewModel: ObservableObject {
     private var currentGoal: NutritionGoal?
     private var currentNutrientFocus: NutrientFocus = .none
 
+    private var hasConfiguredSession = false
+    private var currentInputSignature: PlanInputSignature?
+
     init(
         foodRepo: FoodRepository = InMemoryFoodRepository(),
-        recipeRepo: RecipeRepository = InMemoryRecipeRepository()
+        recipeRepo: RecipeRepository = InMemoryRecipeRepository(),
+        sessionStore: PlanSessionStore = UserDefaultsPlanSessionStore()
     ) {
         self.foodRepo = foodRepo
         self.recipeRepo = recipeRepo
+        self.sessionStore = sessionStore
         self.allRecipes = recipeRepo.getAllRecipes()
-
-        self.dayPlan = MealPlanBuilder.buildDayPlan(
-            goal: nil,
-            recipes: allRecipes,
-            foodsById: foodRepo.getFoodsById()
-        )
     }
 
     var foodsById: [String: Food] {
         foodRepo.getFoodsById()
     }
 
-    func applyProfile(_ profile: UserProfile?) {
-        excludedAllergens = Set(profile?.excludedAllergens ?? [])
+    func configureSession(profile: UserProfile?, goal: NutritionGoal?) {
+        excludedAllergens = Set(profile?.excludedAllergens.map(normalizeText) ?? [])
         currentNutrientFocus = profile?.nutrientFocus ?? .none
+        currentGoal = goal
+
+        let newSignature = buildInputSignature(profile: profile, goal: goal)
+
+        if !hasConfiguredSession {
+            hasConfiguredSession = true
+
+            if let persisted = sessionStore.load(),
+               persisted.inputSignature == newSignature {
+                currentInputSignature = persisted.inputSignature
+                dayPlan = persisted.dayPlan
+                diaryDay = persisted.diaryDay
+                return
+            }
+        }
+
+        if currentInputSignature != newSignature {
+            currentInputSignature = newSignature
+            rebuildDayPlan(goal: goal)
+            return
+        }
+
+        if dayPlan.meals.isEmpty {
+            rebuildDayPlan(goal: goal)
+        }
+    }
+
+    func resetSession() {
+        currentInputSignature = nil
+        dayPlan = .empty
+        diaryDay = .empty
+        sessionStore.clear()
     }
 
     func rebuildDayPlan(goal: NutritionGoal?) {
@@ -76,7 +112,10 @@ final class PlanViewModel: ObservableObject {
             }
         }
 
-        return NutritionSummary(macros: totalMacros, nutrients: totalNutrients)
+        return NutritionSummary(
+            macros: totalMacros,
+            nutrients: totalNutrients
+        )
     }
 
     func actualSummary() -> NutritionSummary {
@@ -92,7 +131,10 @@ final class PlanViewModel: ObservableObject {
             }
         }
 
-        return NutritionSummary(macros: totalMacros, nutrients: totalNutrients)
+        return NutritionSummary(
+            macros: totalMacros,
+            nutrients: totalNutrients
+        )
     }
 
     func comparison() -> PlanComparison {
@@ -126,6 +168,7 @@ final class PlanViewModel: ObservableObject {
 
         let items: [TitleItem] = recipe.ingredients.compactMap { ing in
             guard let food = foodsById[ing.foodId] else { return nil }
+
             let factor = ing.grams / 100.0
             let calories = food.macrosPer100g.calories * factor
 
@@ -140,8 +183,12 @@ final class PlanViewModel: ObservableObject {
 
         let suffix = dishSuffix(for: recipe)
 
-        if let protein = items.filter({ $0.category == .protein }).max(by: { $0.calories < $1.calories }),
-           let carb = items.filter({ $0.category == .carb }).max(by: { $0.calories < $1.calories }) {
+        if let protein = items
+            .filter({ $0.category == .protein })
+            .max(by: { $0.calories < $1.calories }),
+           let carb = items
+            .filter({ $0.category == .carb })
+            .max(by: { $0.calories < $1.calories }) {
             return "\(protein.name) + \(carb.name) \(suffix)"
         }
 
@@ -169,13 +216,20 @@ final class PlanViewModel: ObservableObject {
     }
 
     func applySubstitution(mealId: UUID, ingredientIndex: Int, newFoodId: String) {
-        guard let mealIndex = dayPlan.meals.firstIndex(where: { $0.id == mealId }) else { return }
-        guard dayPlan.meals[mealIndex].recipe.ingredients.indices.contains(ingredientIndex) else { return }
+        guard let mealIndex = dayPlan.meals.firstIndex(where: { $0.id == mealId }) else {
+            return
+        }
+
+        guard dayPlan.meals[mealIndex].recipe.ingredients.indices.contains(ingredientIndex) else {
+            return
+        }
 
         var updatedMeals = dayPlan.meals
         let oldIngredient = updatedMeals[mealIndex].recipe.ingredients[ingredientIndex]
 
-        guard oldIngredient.foodId != newFoodId else { return }
+        guard oldIngredient.foodId != newFoodId else {
+            return
+        }
 
         updatedMeals[mealIndex].recipe.ingredients[ingredientIndex] = RecipeIngredient(
             foodId: newFoodId,
@@ -229,21 +283,67 @@ final class PlanViewModel: ObservableObject {
         diaryDay = .empty
     }
 
+    private func persistSession() {
+        guard let currentInputSignature else { return }
+
+        sessionStore.save(
+            inputSignature: currentInputSignature,
+            dayPlan: dayPlan,
+            diaryDay: diaryDay
+        )
+    }
+
+    private func buildInputSignature(
+        profile: UserProfile?,
+        goal: NutritionGoal?
+    ) -> PlanInputSignature {
+        PlanInputSignature(
+            sex: profile?.sex,
+            age: profile?.age,
+            heightCm: profile.map { Int($0.heightCm.rounded()) },
+            weightKg: profile.map { Int($0.weightKg.rounded()) },
+            activityLevel: profile?.activityLevel,
+            goalType: profile?.goalType,
+            nutrientFocus: profile?.nutrientFocus,
+            excludedAllergens: (profile?.excludedAllergens ?? [])
+                .map(normalizeText)
+                .sorted(),
+            excludedProducts: (profile?.excludedProducts ?? [])
+                .map(normalizeText)
+                .sorted(),
+            targetCalories: goal?.targetCalories,
+            proteinGrams: goal?.proteinGrams,
+            fatGrams: goal?.fatGrams,
+            carbsGrams: goal?.carbsGrams
+        )
+    }
+
+    private func normalizeText(_ value: String) -> String {
+        value
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .lowercased()
+    }
+
     private func sortedDiaryEntries(_ entries: [ConsumedFoodEntry]) -> [ConsumedFoodEntry] {
         entries.sorted {
             if mealTypeOrder($0.mealType) != mealTypeOrder($1.mealType) {
                 return mealTypeOrder($0.mealType) < mealTypeOrder($1.mealType)
             }
+
             return $0.loggedAt < $1.loggedAt
         }
     }
 
     private func mealTypeOrder(_ mealType: MealType) -> Int {
         switch mealType {
-        case .breakfast: return 0
-        case .lunch: return 1
-        case .dinner: return 2
-        case .snack: return 3
+        case .breakfast:
+            return 0
+        case .lunch:
+            return 1
+        case .dinner:
+            return 2
+        case .snack:
+            return 3
         }
     }
 
@@ -262,9 +362,18 @@ final class PlanViewModel: ObservableObject {
     }
 
     private func category(for food: Food) -> TitleCategory {
-        if food.tags.contains("meat") { return .protein }
-        if food.tags.contains("grain") || food.tags.contains("legume") { return .carb }
-        if food.tags.contains("vegetable") { return .veggie }
+        if food.tags.contains("meat") {
+            return .protein
+        }
+
+        if food.tags.contains("grain") || food.tags.contains("legume") {
+            return .carb
+        }
+
+        if food.tags.contains("vegetable") {
+            return .veggie
+        }
+
         return .other
     }
 
@@ -282,6 +391,7 @@ final class PlanViewModel: ObservableObject {
             with: "",
             options: .regularExpression
         )
+
         return result.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 }

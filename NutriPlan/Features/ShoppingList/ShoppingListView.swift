@@ -1,33 +1,102 @@
 import SwiftUI
 
 struct ShoppingListView: View {
-
     let items: [ShoppingItem]
 
-    @AppStorage("shopping.checkedIds") private var checkedIdsString: String = ""
+    @AppStorage("shopping.checkedIds")
+    private var checkedIdsString: String = ""
+
+    @State private var searchText: String = ""
+    @State private var filter: ShoppingFilter = .all
 
     var body: some View {
-        List {
-            ForEach(categoryKeysInUse, id: \.self) { categoryKey in
-                if let categoryItems = grouped[categoryKey] {
-                    Section(categoryTitle(for: categoryKey)) {
-                        ForEach(categoryItems) { item in
-                            row(for: item)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                headerCard
+
+                if items.isEmpty {
+                    emptyPlanState
+                } else {
+                    ShoppingProgressCard(
+                        totalCount: items.count,
+                        boughtCount: boughtItems.count,
+                        remainingCount: remainingItems.count
+                    )
+
+                    SectionTitleView(
+                        "Filter",
+                        subtitle: "Search items or switch between all, pending and bought products."
+                    )
+
+                    AppCard {
+                        Picker("Filter", selection: $filter) {
+                            ForEach(ShoppingFilter.allCases) { value in
+                                Text(value.rawValue).tag(value)
+                            }
+                        }
+                        .pickerStyle(.segmented)
+                    }
+
+                    SectionTitleView(
+                        "Shopping list",
+                        subtitle: "Items are grouped by category and aggregated from the current meal plan."
+                    )
+
+                    if filteredItems.isEmpty {
+                        filteredEmptyState
+                    } else {
+                        VStack(spacing: 18) {
+                            ForEach(categoryKeysInUse, id: \.self) { categoryKey in
+                                if let categoryItems = grouped[categoryKey] {
+                                    categorySection(
+                                        title: categoryTitle(for: categoryKey),
+                                        icon: categoryIcon(for: categoryKey),
+                                        items: categoryItems
+                                    )
+                                }
+                            }
                         }
                     }
                 }
             }
+            .padding(16)
         }
-        .navigationTitle("Shopping List")
+        .background(Color(.systemGroupedBackground).ignoresSafeArea())
+        .navigationTitle("Shopping")
+        .navigationBarTitleDisplayMode(.large)
+        .searchable(text: $searchText, prompt: "Search products")
         .toolbar {
-            Button("Clear bought") {
-                clearBought()
+            ToolbarItemGroup(placement: .topBarTrailing) {
+                if !checkedIds.isEmpty {
+                    Button("Clear bought") {
+                        clearBought()
+                    }
+                }
             }
         }
     }
 
+    private var headerCard: some View {
+        AppCard {
+            VStack(alignment: .leading, spacing: 10) {
+                Text("Shopping list")
+                    .font(.title2.weight(.bold))
+
+                Text("This list is generated automatically from the current meal plan. Mark products as bought to track your progress.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
+        }
+    }
+
+    private var filteredItems: [ShoppingItem] {
+        items.filter { item in
+            matchesFilter(item) && matchesSearch(item)
+        }
+    }
+
     private var grouped: [String: [ShoppingItem]] {
-        Dictionary(grouping: items, by: \.categoryKey)
+        Dictionary(grouping: filteredItems, by: \.categoryKey)
     }
 
     private var categoryKeysInUse: [String] {
@@ -37,15 +106,128 @@ struct ShoppingListView: View {
             "category.vegetable",
             "category.other"
         ]
+
         return order.filter { grouped[$0] != nil }
+    }
+
+    private var checkedIds: Set<String> {
+        let parts = checkedIdsString
+            .split(separator: ",")
+            .map(String.init)
+
+        return Set(parts.filter { !$0.isEmpty })
+    }
+
+    private var boughtItems: [ShoppingItem] {
+        items.filter { checkedIds.contains($0.id) }
+    }
+
+    private var remainingItems: [ShoppingItem] {
+        items.filter { !checkedIds.contains($0.id) }
+    }
+
+    @ViewBuilder
+    private func categorySection(
+        title: String,
+        icon: String,
+        items: [ShoppingItem]
+    ) -> some View {
+        AppCard {
+            HStack {
+                Label(title, systemImage: icon)
+                    .font(.headline)
+
+                Spacer()
+
+                Text("\(items.count)")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.secondary)
+            }
+
+            VStack(spacing: 10) {
+                ForEach(items) { item in
+                    ShoppingItemRow(
+                        item: item,
+                        isChecked: checkedIds.contains(item.id)
+                    ) {
+                        toggleChecked(item.id)
+                    }
+                }
+            }
+        }
+    }
+
+    private var emptyPlanState: some View {
+        AppCard {
+            VStack(alignment: .leading, spacing: 10) {
+                Text("No shopping items yet")
+                    .font(.headline)
+
+                Text("Generate a meal plan first. Once the plan contains recipes, this screen will show the aggregated ingredients you need to buy.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
+        }
+    }
+
+    private var filteredEmptyState: some View {
+        AppCard {
+            VStack(alignment: .leading, spacing: 10) {
+                Text("Nothing found")
+                    .font(.headline)
+
+                Text("Try another search phrase or switch the current filter.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
+        }
+    }
+
+    private func matchesFilter(_ item: ShoppingItem) -> Bool {
+        switch filter {
+        case .all:
+            return true
+        case .toBuy:
+            return !checkedIds.contains(item.id)
+        case .bought:
+            return checkedIds.contains(item.id)
+        }
+    }
+
+    private func matchesSearch(_ item: ShoppingItem) -> Bool {
+        let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        guard !query.isEmpty else { return true }
+
+        return item.name.localizedCaseInsensitiveContains(query)
+    }
+
+    private func toggleChecked(_ id: String) {
+        var set = checkedIds
+
+        if set.contains(id) {
+            set.remove(id)
+        } else {
+            set.insert(id)
+        }
+
+        saveCheckedIds(set)
+    }
+
+    private func saveCheckedIds(_ set: Set<String>) {
+        checkedIdsString = set.sorted().joined(separator: ",")
+    }
+
+    private func clearBought() {
+        checkedIdsString = ""
     }
 
     private func categoryTitle(for key: String) -> String {
         switch key {
         case "category.meat":
-            return "Meat"
+            return "Protein"
         case "category.grain":
-            return "Grains"
+            return "Grains & legumes"
         case "category.vegetable":
             return "Vegetables"
         default:
@@ -53,59 +235,16 @@ struct ShoppingListView: View {
         }
     }
 
-    private var checkedIds: Set<String> {
-        let parts = checkedIdsString.split(separator: ",").map(String.init)
-        return Set(parts.filter { !$0.isEmpty })
-    }
-
-    private func saveCheckedIds(_ set: Set<String>) {
-        checkedIdsString = set.sorted().joined(separator: ",")
-    }
-
-    private func toggleChecked(_ id: String) {
-        var set = checkedIds
-        if set.contains(id) {
-            set.remove(id)
-        } else {
-            set.insert(id)
+    private func categoryIcon(for key: String) -> String {
+        switch key {
+        case "category.meat":
+            return "drumstick"
+        case "category.grain":
+            return "leaf"
+        case "category.vegetable":
+            return "carrot"
+        default:
+            return "basket"
         }
-        saveCheckedIds(set)
-    }
-
-    private func clearBought() {
-        checkedIdsString = ""
-    }
-
-    @ViewBuilder
-    private func row(for item: ShoppingItem) -> some View {
-        let isChecked = checkedIds.contains(item.id)
-
-        Button {
-            toggleChecked(item.id)
-        } label: {
-            HStack(spacing: 12) {
-                Image(systemName: isChecked ? "checkmark.circle.fill" : "circle")
-                    .imageScale(.large)
-
-                Text(item.name)
-
-                Spacer()
-
-                Text(formattedWeight(item.grams))
-                    .foregroundStyle(.secondary)
-            }
-            .contentShape(Rectangle())
-        }
-        .buttonStyle(.plain)
-        .opacity(isChecked ? 0.55 : 1.0)
-    }
-
-    private func formattedWeight(_ grams: Double) -> String {
-        let measurement: Measurement<UnitMass> =
-            grams >= 1000
-            ? Measurement(value: grams / 1000.0, unit: .kilograms)
-            : Measurement(value: grams, unit: .grams)
-
-        return measurement.formatted(.measurement(width: .abbreviated))
     }
 }

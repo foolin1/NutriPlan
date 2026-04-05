@@ -3,7 +3,6 @@ import Combine
 
 @MainActor
 final class AppState: ObservableObject {
-
     @Published var userProfile: UserProfile? {
         didSet {
             persistProfile()
@@ -20,6 +19,10 @@ final class AppState: ObservableObject {
     }
 
     func completeOnboarding(with profile: UserProfile) {
+        userProfile = profile
+    }
+
+    func updateProfile(_ profile: UserProfile) {
         userProfile = profile
     }
 

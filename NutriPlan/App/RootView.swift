@@ -8,7 +8,7 @@ struct RootView: View {
             if appState.userProfile == nil {
                 OnboardingView()
             } else {
-                ContentView()
+                MainTabView()
             }
         }
     }

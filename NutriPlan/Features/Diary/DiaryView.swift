@@ -1,65 +1,56 @@
 import SwiftUI
 
 struct DiaryView: View {
-
     @ObservedObject var vm: PlanViewModel
 
     var body: some View {
         let actualSummary = vm.actualSummary()
 
-        List {
-            if vm.diaryDay.entries.isEmpty {
-                Section {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Diary is empty")
-                            .font(.headline)
-                        Text("Add meals from your daily plan to see what you actually ate.")
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                headerCard
+
+                if vm.diaryDay.entries.isEmpty {
+                    emptyState
+                } else {
+                    SectionTitleView(
+                        "Actual total",
+                        subtitle: "Nutrition values based on the meals already added to the diary."
+                    )
+
+                    AppCard {
+                        RecipeSummaryGrid(
+                            caloriesText: "\(Int(actualSummary.macros.calories)) kcal",
+                            proteinText: String(format: "%.1f g", actualSummary.macros.protein),
+                            fatText: String(format: "%.1f g", actualSummary.macros.fat),
+                            carbsText: String(format: "%.1f g", actualSummary.macros.carbs),
+                            ironText: actualSummary.nutrients["iron"].map { String(format: "%.2f mg", $0) }
+                        )
                     }
-                    .padding(.vertical, 8)
-                }
-            } else {
-                Section("Actual total") {
-                    GoalInfoRow(title: "Calories", value: "\(Int(actualSummary.macros.calories)) kcal")
-                    GoalInfoRow(title: "Protein", value: String(format: "%.1f g", actualSummary.macros.protein))
-                    GoalInfoRow(title: "Fat", value: String(format: "%.1f g", actualSummary.macros.fat))
-                    GoalInfoRow(title: "Carbs", value: String(format: "%.1f g", actualSummary.macros.carbs))
 
-                    if let iron = actualSummary.nutrients["iron"] {
-                        GoalInfoRow(title: "Iron", value: String(format: "%.2f mg", iron))
-                    }
-                }
+                    ForEach(MealType.allCases) { mealType in
+                        let entries = vm.diaryDay.entries.filter { $0.mealType == mealType }
 
-                ForEach(MealType.allCases) { mealType in
-                    let entries = vm.diaryDay.entries.filter { $0.mealType == mealType }
+                        if !entries.isEmpty {
+                            SectionTitleView(
+                                mealType.rawValue,
+                                subtitle: "Meals logged in the diary for this part of the day."
+                            )
 
-                    if !entries.isEmpty {
-                        Section(mealType.rawValue) {
-                            ForEach(entries) { entry in
-                                let s = vm.summary(for: entry.recipe)
+                            VStack(spacing: 12) {
+                                ForEach(entries) { entry in
+                                    let summary = vm.summary(for: entry.recipe)
 
-                                VStack(alignment: .leading, spacing: 6) {
-                                    Text(entry.title)
-                                        .font(.headline)
-
-                                    Text("Calories: \(Int(s.macros.calories))")
-                                        .font(.subheadline)
-
-                                    Text("P: \(s.macros.protein, specifier: "%.1f")  F: \(s.macros.fat, specifier: "%.1f")  C: \(s.macros.carbs, specifier: "%.1f")")
-                                        .font(.caption)
-
-                                    if let iron = s.nutrients["iron"] {
-                                        Text("Iron: \(iron, specifier: "%.2f") mg")
-                                            .font(.caption2)
-                                    }
-                                }
-                                .padding(.vertical, 6)
-                                .swipeActions(edge: .trailing) {
-                                    Button(role: .destructive) {
+                                    DiaryEntryCard(
+                                        title: entry.title,
+                                        mealType: entry.mealType.rawValue,
+                                        caloriesText: "\(Int(summary.macros.calories)) kcal",
+                                        proteinText: String(format: "%.1f g", summary.macros.protein),
+                                        fatText: String(format: "%.1f g", summary.macros.fat),
+                                        carbsText: String(format: "%.1f g", summary.macros.carbs),
+                                        ironText: summary.nutrients["iron"].map { String(format: "%.2f mg", $0) }
+                                    ) {
                                         vm.removeDiaryEntry(id: entry.id)
-                                    } label: {
-                                        Text("Delete")
                                     }
                                 }
                             }
@@ -67,28 +58,45 @@ struct DiaryView: View {
                     }
                 }
             }
+            .padding(16)
         }
+        .background(Color(.systemGroupedBackground).ignoresSafeArea())
         .navigationTitle("Diary")
+        .navigationBarTitleDisplayMode(.large)
         .toolbar {
             if !vm.diaryDay.entries.isEmpty {
-                Button("Clear") {
-                    vm.clearDiary()
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Clear") {
+                        vm.clearDiary()
+                    }
                 }
             }
         }
     }
-}
 
-private struct GoalInfoRow: View {
-    let title: String
-    let value: String
+    private var headerCard: some View {
+        AppCard {
+            VStack(alignment: .leading, spacing: 10) {
+                Text("Food diary")
+                    .font(.title2.weight(.bold))
 
-    var body: some View {
-        HStack {
-            Text(title)
-            Spacer()
-            Text(value)
-                .foregroundStyle(.secondary)
+                Text("This screen stores the meals that were actually consumed and is later used for comparison with the daily plan.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
+        }
+    }
+
+    private var emptyState: some View {
+        AppCard {
+            VStack(alignment: .leading, spacing: 10) {
+                Text("Diary is empty")
+                    .font(.headline)
+
+                Text("Add meals from your daily plan to see what you actually ate and compare plan with fact.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
         }
     }
 }
