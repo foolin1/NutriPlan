@@ -6,6 +6,10 @@ struct RecipeDetailView: View {
 
     @State private var pickedIndex: Int? = nil
 
+    private let portionStep: Double = 25
+    private let minIngredientGrams: Double = 25
+    private let maxIngredientGrams: Double = 500
+
     var body: some View {
         Group {
             if let meal = vm.meal(with: mealId) {
@@ -21,10 +25,88 @@ struct RecipeDetailView: View {
         let recipe = meal.recipe
         let summary = vm.summary(for: recipe)
         let iron = summary.nutrients["iron"]
+        let scoreBreakdown = vm.recipeSelectionBreakdown(
+            for: recipe,
+            mealType: meal.type
+        )
 
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 headerCard(for: meal)
+
+                SectionTitleView(
+                    "Why this recipe was selected",
+                    subtitle: "The planner estimates how well the recipe matches the target for this meal."
+                )
+
+                AppCard {
+                    VStack(alignment: .leading, spacing: 12) {
+                        HStack {
+                            Text("Selection score")
+                                .font(.headline)
+
+                            Spacer()
+
+                            StatPill(text: "\(Int(scoreBreakdown.totalScore.rounded())) / 100")
+                        }
+
+                        Text(selectionSummary(for: scoreBreakdown))
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+
+                        Divider()
+
+                        InfoValueRow(
+                            title: "Target calories",
+                            value: "\(Int(scoreBreakdown.mealTargetCalories.rounded())) kcal"
+                        )
+                        InfoValueRow(
+                            title: "Recipe calories",
+                            value: "\(Int(scoreBreakdown.actualCalories.rounded())) kcal"
+                        )
+
+                        InfoValueRow(
+                            title: "Target protein",
+                            value: String(format: "%.1f g", scoreBreakdown.mealTargetProtein)
+                        )
+                        InfoValueRow(
+                            title: "Recipe protein",
+                            value: String(format: "%.1f g", scoreBreakdown.actualProtein)
+                        )
+
+                        InfoValueRow(
+                            title: "Penalty",
+                            value: String(
+                                format: "%.1f",
+                                scoreBreakdown.caloriePenalty
+                                + scoreBreakdown.proteinPenalty
+                                + scoreBreakdown.fatPenalty
+                                + scoreBreakdown.carbsPenalty
+                            )
+                        )
+
+                        if scoreBreakdown.nutrientBonus > 0 {
+                            InfoValueRow(
+                                title: "Micronutrient bonus",
+                                value: String(format: "+%.1f", scoreBreakdown.nutrientBonus)
+                            )
+                        }
+
+                        if scoreBreakdown.tagBonus > 0 {
+                            InfoValueRow(
+                                title: "Meal tag bonus",
+                                value: String(format: "+%.1f", scoreBreakdown.tagBonus)
+                            )
+                        }
+
+                        if scoreBreakdown.ironAmount > 0 {
+                            InfoValueRow(
+                                title: "Iron",
+                                value: String(format: "%.2f mg", scoreBreakdown.ironAmount)
+                            )
+                        }
+                    }
+                }
 
                 SectionTitleView(
                     "Recipe summary",
@@ -69,29 +151,56 @@ struct RecipeDetailView: View {
                     .buttonStyle(.plain)
 
                     if vm.isMealLogged(mealId) {
-                        Text("This meal is already present in the diary. If you changed ingredients, use this action to refresh the diary entry.")
+                        Text("If you changed ingredients or portion size, use this action to refresh the diary entry.")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
                 }
 
                 SectionTitleView(
-                    "Ingredients",
-                    subtitle: "Tap any ingredient to open smart substitutions with close nutritional match."
+                    "Ingredients and portion tuning",
+                    subtitle: "Tap an ingredient to replace it, or change its weight by a fixed step of 25 g."
                 )
 
                 VStack(spacing: 12) {
                     ForEach(Array(recipe.ingredients.enumerated()), id: \.offset) { index, ingredient in
-                        RecipeIngredientCard(
-                            title: vm.foodName(for: ingredient.foodId),
-                            gramsText: "\(Int(ingredient.grams)) g",
-                            caloriesText: "\(Int(ingredientMacros(for: ingredient).calories))",
-                            proteinText: String(format: "%.1f", ingredientMacros(for: ingredient).protein),
-                            fatText: String(format: "%.1f", ingredientMacros(for: ingredient).fat),
-                            carbsText: String(format: "%.1f", ingredientMacros(for: ingredient).carbs),
-                            ironText: ingredientIronText(for: ingredient)
-                        ) {
-                            pickedIndex = index
+                        VStack(spacing: 10) {
+                            RecipeIngredientCard(
+                                title: vm.foodName(for: ingredient.foodId),
+                                gramsText: "\(Int(ingredient.grams)) g",
+                                caloriesText: "\(Int(ingredientMacros(for: ingredient).calories))",
+                                proteinText: String(format: "%.1f", ingredientMacros(for: ingredient).protein),
+                                fatText: String(format: "%.1f", ingredientMacros(for: ingredient).fat),
+                                carbsText: String(format: "%.1f", ingredientMacros(for: ingredient).carbs),
+                                ironText: ingredientIronText(for: ingredient)
+                            ) {
+                                pickedIndex = index
+                            }
+
+                            IngredientPortionControl(
+                                grams: ingredient.grams,
+                                step: portionStep,
+                                canDecrease: ingredient.grams > minIngredientGrams,
+                                canIncrease: ingredient.grams < maxIngredientGrams,
+                                onDecrease: {
+                                    vm.decreaseIngredientPortion(
+                                        mealId: mealId,
+                                        ingredientIndex: index,
+                                        step: portionStep,
+                                        minGrams: minIngredientGrams,
+                                        maxGrams: maxIngredientGrams
+                                    )
+                                },
+                                onIncrease: {
+                                    vm.increaseIngredientPortion(
+                                        mealId: mealId,
+                                        ingredientIndex: index,
+                                        step: portionStep,
+                                        minGrams: minIngredientGrams,
+                                        maxGrams: maxIngredientGrams
+                                    )
+                                }
+                            )
                         }
                     }
                 }
@@ -160,7 +269,7 @@ struct RecipeDetailView: View {
                 Text(vm.displayTitle(for: recipe))
                     .font(.title2.weight(.bold))
 
-                Text("Open ingredient substitutions to keep the meal flexible without losing the overall nutritional direction.")
+                Text("The meal is selected by a recipe score that considers target calories, macros and micronutrient focus.")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
 
@@ -173,6 +282,16 @@ struct RecipeDetailView: View {
                     )
                 }
             }
+        }
+    }
+
+    private func selectionSummary(for breakdown: RecipeScoreBreakdown) -> String {
+        if breakdown.totalScore >= 90 {
+            return "This recipe is very close to the target values for the current meal."
+        } else if breakdown.totalScore >= 75 {
+            return "This recipe is a good match with moderate deviation from the target."
+        } else {
+            return "This recipe is acceptable, but it deviates more noticeably from the target values."
         }
     }
 

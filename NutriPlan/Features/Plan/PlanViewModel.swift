@@ -16,6 +16,8 @@ final class PlanViewModel: ObservableObject {
     private let sessionStore: PlanSessionStore
 
     private var excludedAllergens: Set<String> = []
+    private var excludedProducts: Set<String> = []
+    private var excludedGroups: Set<String> = []
     private var requiredTags: Set<String> = []
     private var allRecipes: [Recipe] = []
     private var currentGoal: NutritionGoal?
@@ -41,6 +43,8 @@ final class PlanViewModel: ObservableObject {
 
     func configureSession(profile: UserProfile?, goal: NutritionGoal?) {
         excludedAllergens = Set(profile?.excludedAllergens.map(normalizeText) ?? [])
+        excludedProducts = Set(profile?.excludedProducts.map(normalizeText) ?? [])
+        excludedGroups = Set(profile?.excludedGroups.map(normalizeText) ?? [])
         currentNutrientFocus = profile?.nutrientFocus ?? .none
         currentGoal = goal
 
@@ -84,6 +88,8 @@ final class PlanViewModel: ObservableObject {
             recipes: allRecipes,
             foodsById: foodsById,
             excludedAllergens: excludedAllergens,
+            excludedProducts: excludedProducts,
+            excludedGroups: excludedGroups,
             nutrientFocus: currentNutrientFocus
         )
     }
@@ -158,6 +164,19 @@ final class PlanViewModel: ObservableObject {
         summary(for: recipe).nutrients["iron", default: 0]
     }
 
+    func recipeSelectionBreakdown(
+        for recipe: Recipe,
+        mealType: MealType
+    ) -> RecipeScoreBreakdown {
+        RecipeScorer.evaluate(
+            recipe: recipe,
+            mealType: mealType,
+            goal: currentGoal,
+            foodsById: foodsById,
+            nutrientFocus: currentNutrientFocus
+        )
+    }
+
     func foodName(for id: String) -> String {
         let raw = foodsById[id]?.name ?? id
         return shortenFoodName(raw)
@@ -211,6 +230,8 @@ final class PlanViewModel: ObservableObject {
             foods: foodRepo.getAllFoods(),
             foodsById: foodsById,
             excludedAllergens: excludedAllergens,
+            excludedProducts: excludedProducts,
+            excludedGroups: excludedGroups,
             requiredTags: requiredTags
         )
     }
@@ -309,6 +330,9 @@ final class PlanViewModel: ObservableObject {
                 .map(normalizeText)
                 .sorted(),
             excludedProducts: (profile?.excludedProducts ?? [])
+                .map(normalizeText)
+                .sorted(),
+            excludedGroups: (profile?.excludedGroups ?? [])
                 .map(normalizeText)
                 .sorted(),
             targetCalories: goal?.targetCalories,

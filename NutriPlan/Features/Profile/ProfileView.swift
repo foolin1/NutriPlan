@@ -10,8 +10,11 @@ struct ProfileView: View {
     @State private var activityLevel: ActivityLevel = .moderate
     @State private var goalType: GoalType = .maintainWeight
     @State private var nutrientFocus: NutrientFocus = .none
+
     @State private var allergensText: String = ""
     @State private var excludedProductsText: String = ""
+    @State private var excludedGroups: Set<String> = []
+
     @State private var showSavedMessage = false
 
     var body: some View {
@@ -64,6 +67,30 @@ struct ProfileView: View {
                         .foregroundStyle(.secondary)
                 }
 
+                Section("Excluded product groups") {
+                    ForEach(FoodGroupCatalog.all) { option in
+                        Toggle(
+                            isOn: Binding(
+                                get: { excludedGroups.contains(option.id) },
+                                set: { isOn in
+                                    if isOn {
+                                        excludedGroups.insert(option.id)
+                                    } else {
+                                        excludedGroups.remove(option.id)
+                                    }
+                                }
+                            )
+                        ) {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(option.title)
+                                Text(option.subtitle)
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+                    }
+                }
+
                 Section("Restrictions") {
                     TextField("Allergens (comma separated)", text: $allergensText)
                     TextField("Excluded products (comma separated)", text: $excludedProductsText)
@@ -81,6 +108,11 @@ struct ProfileView: View {
                         GoalRow(title: "Current goal", value: currentProfile.goalType.rawValue)
                         GoalRow(title: "Current activity", value: currentProfile.activityLevel.rawValue)
                         GoalRow(title: "Micronutrient focus", value: currentProfile.nutrientFocus.displayName)
+
+                        GoalRow(
+                            title: "Excluded groups",
+                            value: groupsSummary(from: currentProfile.excludedGroups)
+                        )
                     }
                 }
 
@@ -97,8 +129,7 @@ struct ProfileView: View {
                 } footer: {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("After saving, the daily target is recalculated automatically.")
-
-                        Text("If the updated profile changes calories, goal, activity or restrictions, the daily plan is rebuilt automatically. Diary entries are preserved as factual history.")
+                        Text("Excluded groups are applied internally during plan generation and ingredient substitutions.")
                     }
                     .font(.caption)
                     .foregroundStyle(.secondary)
@@ -106,7 +137,7 @@ struct ProfileView: View {
 
                 if showSavedMessage {
                     Section {
-                        Text("Profile saved. Target and current daily plan were updated.")
+                        Text("Profile saved. Target, restrictions and current daily plan were updated.")
                             .font(.subheadline)
                             .foregroundStyle(.green)
                     }
@@ -143,6 +174,7 @@ struct ProfileView: View {
         nutrientFocus = profile.nutrientFocus
         allergensText = profile.excludedAllergens.joined(separator: ", ")
         excludedProductsText = profile.excludedProducts.joined(separator: ", ")
+        excludedGroups = Set(profile.excludedGroups)
     }
 
     private func buildProfile() -> UserProfile {
@@ -155,7 +187,8 @@ struct ProfileView: View {
             goalType: goalType,
             nutrientFocus: nutrientFocus,
             excludedAllergens: parseList(from: allergensText),
-            excludedProducts: parseList(from: excludedProductsText)
+            excludedProducts: parseList(from: excludedProductsText),
+            excludedGroups: excludedGroups.sorted()
         )
     }
 
@@ -164,6 +197,15 @@ struct ProfileView: View {
             .split(separator: ",")
             .map { $0.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() }
             .filter { !$0.isEmpty }
+    }
+
+    private func groupsSummary(from groups: [String]) -> String {
+        if groups.isEmpty { return "None" }
+
+        return groups
+            .sorted()
+            .map { FoodGroupCatalog.title(for: $0) }
+            .joined(separator: ", ")
     }
 
     private func makeSavedProfileFingerprint() -> String {
@@ -182,6 +224,11 @@ struct ProfileView: View {
             .sorted()
             .joined(separator: "|")
 
+        let excludedGroups = profile.excludedGroups
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() }
+            .sorted()
+            .joined(separator: "|")
+
         return [
             profile.sex.rawValue,
             String(profile.age),
@@ -191,7 +238,8 @@ struct ProfileView: View {
             profile.goalType.rawValue,
             profile.nutrientFocus.displayName,
             allergens,
-            excludedProducts
+            excludedProducts,
+            excludedGroups
         ].joined(separator: "#")
     }
 }

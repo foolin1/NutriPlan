@@ -11,10 +11,14 @@ struct Food: Identifiable, Codable, Hashable {
     /// Микронутриенты на 100г: [nutrientId: amount]
     let nutrientsPer100g: [String: Double]
 
-    /// Метки (под замены/фильтры): "dairy", "meat", "vegan", "nuts" и т.п.
+    /// Теги для логики ранжирования и замен
     let tags: Set<String>
 
-    /// Аллергены (для фильтра): "lactose", "nuts", "gluten" и т.п.
+    /// Внутренние группы для ограничений:
+    /// citrus, berries, dairy, nuts, legumes, seafood, eggs, poultry и т.д.
+    let groups: Set<String>
+
+    /// Аллергены
     let allergens: Set<String>
 
     init(
@@ -23,6 +27,7 @@ struct Food: Identifiable, Codable, Hashable {
         macrosPer100g: Macros,
         nutrientsPer100g: [String: Double] = [:],
         tags: Set<String> = [],
+        groups: Set<String> = [],
         allergens: Set<String> = []
     ) {
         self.id = id
@@ -30,6 +35,7 @@ struct Food: Identifiable, Codable, Hashable {
         self.macrosPer100g = macrosPer100g
         self.nutrientsPer100g = nutrientsPer100g
         self.tags = tags
+        self.groups = groups
         self.allergens = allergens
     }
 }

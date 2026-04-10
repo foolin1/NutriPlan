@@ -17,7 +17,7 @@ struct SubstitutionPickerView: View {
                             Text("Replace ingredient")
                                 .font(.title2.weight(.bold))
 
-                            Text("Choose an alternative with close nutritional values for the same ingredient weight.")
+                            Text("Candidates are ranked by nutritional closeness for the same ingredient weight.")
                                 .font(.subheadline)
                                 .foregroundStyle(.secondary)
 
@@ -34,7 +34,7 @@ struct SubstitutionPickerView: View {
                                 Text("No substitutions found")
                                     .font(.headline)
 
-                                Text("Try another ingredient. Suitable alternatives were not found for the current restrictions and product set.")
+                                Text("Suitable alternatives were not found for the current restrictions and product set.")
                                     .font(.subheadline)
                                     .foregroundStyle(.secondary)
                             }
@@ -42,24 +42,61 @@ struct SubstitutionPickerView: View {
                     } else {
                         SectionTitleView(
                             "Suggested replacements",
-                            subtitle: "Candidates are sorted by closeness to the original nutritional profile."
+                            subtitle: "The higher the score, the closer the replacement is to the original nutritional profile."
                         )
 
                         VStack(spacing: 12) {
                             ForEach(Array(candidates.enumerated()), id: \.element.id) { index, candidate in
-                                SubstitutionCandidateCard(
-                                    name: shorten(candidate.name),
-                                    matchLabel: matchLabel(for: candidate.deltaMacros),
-                                    matchDescription: matchDescription(for: candidate.deltaMacros),
-                                    caloriesDelta: formattedDelta(candidate.deltaMacros.calories),
-                                    proteinDelta: formattedDelta(candidate.deltaMacros.protein),
-                                    fatDelta: formattedDelta(candidate.deltaMacros.fat),
-                                    carbsDelta: formattedDelta(candidate.deltaMacros.carbs),
-                                    isBest: index == 0
-                                ) {
+                                Button {
                                     onSelect(candidate)
                                     dismiss()
+                                } label: {
+                                    AppCard {
+                                        VStack(alignment: .leading, spacing: 12) {
+                                            HStack(alignment: .top) {
+                                                VStack(alignment: .leading, spacing: 6) {
+                                                    Text(shorten(candidate.name))
+                                                        .font(.headline)
+                                                        .foregroundStyle(.primary)
+
+                                                    Text(scoreDescription(for: candidate.score))
+                                                        .font(.subheadline)
+                                                        .foregroundStyle(.secondary)
+                                                }
+
+                                                Spacer()
+
+                                                if index == 0 {
+                                                    StatPill(text: "Best match")
+                                                } else {
+                                                    StatPill(text: scoreBadge(for: candidate.score))
+                                                }
+                                            }
+
+                                            Divider()
+
+                                            HStack(spacing: 16) {
+                                                metricBlock(title: "Score", value: "\(Int(candidate.score.rounded())) / 100")
+                                                metricBlock(title: "Penalty", value: String(format: "%.1f", candidate.weightedPenalty))
+                                                metricBlock(title: "Tag bonus", value: String(format: "+%.1f", candidate.tagBonus))
+                                            }
+
+                                            HStack(spacing: 16) {
+                                                metricBlock(title: "Δ kcal", value: formattedDelta(candidate.deltaMacros.calories))
+                                                metricBlock(title: "Δ P", value: formattedDelta(candidate.deltaMacros.protein))
+                                                metricBlock(title: "Δ F", value: formattedDelta(candidate.deltaMacros.fat))
+                                                metricBlock(title: "Δ C", value: formattedDelta(candidate.deltaMacros.carbs))
+                                            }
+
+                                            if let ironDelta = candidate.ironDelta {
+                                                Text("Δ iron: \(formattedDelta(ironDelta)) mg")
+                                                    .font(.caption)
+                                                    .foregroundStyle(.secondary)
+                                            }
+                                        }
+                                    }
                                 }
+                                .buttonStyle(.plain)
                             }
                         }
                     }
@@ -93,36 +130,39 @@ struct SubstitutionPickerView: View {
         String(format: "%+.1f", value)
     }
 
-    private func matchLabel(for delta: Macros) -> String {
-        let score = closenessScore(for: delta)
-
+    private func scoreBadge(for score: Double) -> String {
         switch score {
-        case 0..<25:
-            return "Best"
-        case 25..<60:
-            return "Close"
+        case 90...:
+            return "Very close"
+        case 75..<90:
+            return "Good match"
         default:
             return "Flexible"
         }
     }
 
-    private func matchDescription(for delta: Macros) -> String {
-        let score = closenessScore(for: delta)
-
+    private func scoreDescription(for score: Double) -> String {
         switch score {
-        case 0..<25:
-            return "Very close nutritional match to the original ingredient."
-        case 25..<60:
-            return "Good replacement with small nutritional deviation."
+        case 90...:
+            return "Very small nutritional deviation from the original ingredient."
+        case 75..<90:
+            return "Good nutritional match with moderate deviation."
         default:
-            return "Usable alternative, but nutritional values differ more noticeably."
+            return "Usable alternative, but the nutritional deviation is more noticeable."
         }
     }
 
-    private func closenessScore(for delta: Macros) -> Double {
-        abs(delta.calories) * 0.4
-        + abs(delta.protein) * 4.0
-        + abs(delta.fat) * 3.0
-        + abs(delta.carbs) * 2.0
+    @ViewBuilder
+    private func metricBlock(title: String, value: String) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(title)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+
+            Text(value)
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(.primary)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }

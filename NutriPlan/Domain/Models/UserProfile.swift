@@ -75,8 +75,10 @@ struct UserProfile: Codable, Hashable {
     var activityLevel: ActivityLevel
     var goalType: GoalType
     var nutrientFocus: NutrientFocus
+
     var excludedAllergens: [String]
     var excludedProducts: [String]
+    var excludedGroups: [String]
 
     init(
         sex: BiologicalSex,
@@ -87,7 +89,8 @@ struct UserProfile: Codable, Hashable {
         goalType: GoalType,
         nutrientFocus: NutrientFocus = .none,
         excludedAllergens: [String] = [],
-        excludedProducts: [String] = []
+        excludedProducts: [String] = [],
+        excludedGroups: [String] = []
     ) {
         self.sex = sex
         self.age = age
@@ -98,6 +101,7 @@ struct UserProfile: Codable, Hashable {
         self.nutrientFocus = nutrientFocus
         self.excludedAllergens = excludedAllergens
         self.excludedProducts = excludedProducts
+        self.excludedGroups = excludedGroups
     }
 
     enum CodingKeys: String, CodingKey {
@@ -110,6 +114,7 @@ struct UserProfile: Codable, Hashable {
         case nutrientFocus
         case excludedAllergens
         case excludedProducts
+        case excludedGroups
     }
 
     init(from decoder: Decoder) throws {
@@ -121,10 +126,10 @@ struct UserProfile: Codable, Hashable {
         weightKg = try container.decode(Double.self, forKey: .weightKg)
         activityLevel = try container.decode(ActivityLevel.self, forKey: .activityLevel)
         goalType = try container.decode(GoalType.self, forKey: .goalType)
-
         nutrientFocus = try container.decodeIfPresent(NutrientFocus.self, forKey: .nutrientFocus) ?? .none
         excludedAllergens = try container.decodeIfPresent([String].self, forKey: .excludedAllergens) ?? []
         excludedProducts = try container.decodeIfPresent([String].self, forKey: .excludedProducts) ?? []
+        excludedGroups = try container.decodeIfPresent([String].self, forKey: .excludedGroups) ?? []
     }
 
     func encode(to encoder: Encoder) throws {
@@ -139,5 +144,6 @@ struct UserProfile: Codable, Hashable {
         try container.encode(nutrientFocus, forKey: .nutrientFocus)
         try container.encode(excludedAllergens, forKey: .excludedAllergens)
         try container.encode(excludedProducts, forKey: .excludedProducts)
+        try container.encode(excludedGroups, forKey: .excludedGroups)
     }
 }

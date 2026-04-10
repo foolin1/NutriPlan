@@ -1,187 +1,112 @@
 import Foundation
 
 enum MealPlanBuilder {
-
     static func buildDayPlan(
         goal: NutritionGoal?,
         recipes: [Recipe],
         foodsById: [String: Food],
         excludedAllergens: Set<String> = [],
+        excludedProducts: Set<String> = [],
+        excludedGroups: Set<String> = [],
         nutrientFocus: NutrientFocus = .none
     ) -> DayPlan {
-
         let allowedRecipes = recipes.filter {
-            isRecipeAllowed($0, foodsById: foodsById, excludedAllergens: excludedAllergens)
-        }
-
-        let breakfast = selectRecipe(
-            from: allowedRecipes,
-            requiredTag: "breakfast",
-            fallbackStrategy: .lowestCalories,
-            foodsById: foodsById,
-            nutrientFocus: nutrientFocus
-        )
-
-        let lunch = selectRecipe(
-            from: allowedRecipes,
-            requiredTag: "lunch",
-            fallbackStrategy: .highestCalories,
-            foodsById: foodsById,
-            nutrientFocus: nutrientFocus
-        )
-
-        let dinner = selectRecipe(
-            from: allowedRecipes,
-            requiredTag: "dinner",
-            fallbackStrategy: .highestCalories,
-            foodsById: foodsById,
-            nutrientFocus: nutrientFocus
-        )
-
-        let snack = selectRecipe(
-            from: allowedRecipes,
-            requiredTag: "snack",
-            fallbackStrategy: .lowestCalories,
-            foodsById: foodsById,
-            nutrientFocus: nutrientFocus
-        )
-
-        var meals: [PlannedMeal] = []
-
-        if let breakfast {
-            meals.append(PlannedMeal(type: .breakfast, recipe: breakfast))
-        }
-        if let lunch {
-            meals.append(PlannedMeal(type: .lunch, recipe: lunch))
-        }
-        if let dinner {
-            meals.append(PlannedMeal(type: .dinner, recipe: dinner))
-        }
-        if let snack {
-            meals.append(PlannedMeal(type: .snack, recipe: snack))
-        }
-
-        return DayPlan(meals: meals)
-    }
-
-    private enum FallbackStrategy {
-        case lowestCalories
-        case highestCalories
-    }
-
-    private static func selectRecipe(
-        from recipes: [Recipe],
-        requiredTag: String,
-        fallbackStrategy: FallbackStrategy,
-        foodsById: [String: Food],
-        nutrientFocus: NutrientFocus
-    ) -> Recipe? {
-
-        let tagged = recipes.filter { $0.tags.contains(requiredTag) }
-
-        if let bestTagged = selectBest(
-            from: tagged,
-            strategy: fallbackStrategy,
-            foodsById: foodsById,
-            nutrientFocus: nutrientFocus
-        ) {
-            return bestTagged
-        }
-
-        return selectBest(
-            from: recipes,
-            strategy: fallbackStrategy,
-            foodsById: foodsById,
-            nutrientFocus: nutrientFocus
-        )
-    }
-
-    private static func selectBest(
-        from recipes: [Recipe],
-        strategy: FallbackStrategy,
-        foodsById: [String: Food],
-        nutrientFocus: NutrientFocus
-    ) -> Recipe? {
-
-        guard !recipes.isEmpty else { return nil }
-
-        return recipes.max {
-            score(
-                for: $0,
-                strategy: strategy,
+            isRecipeAllowed(
+                $0,
                 foodsById: foodsById,
-                nutrientFocus: nutrientFocus
-            ) < score(
-                for: $1,
-                strategy: strategy,
-                foodsById: foodsById,
-                nutrientFocus: nutrientFocus
+                excludedAllergens: excludedAllergens,
+                excludedProducts: excludedProducts,
+                excludedGroups: excludedGroups
             )
         }
-    }
 
-    private static func score(
-        for recipe: Recipe,
-        strategy: FallbackStrategy,
-        foodsById: [String: Food],
-        nutrientFocus: NutrientFocus
-    ) -> Double {
-
-        let calories = totalCalories(for: recipe, foodsById: foodsById)
-        let iron = nutrientAmount(for: recipe, nutrientId: "iron", foodsById: foodsById)
-
-        let calorieBase: Double
-        switch strategy {
-        case .lowestCalories:
-            calorieBase = -calories
-        case .highestCalories:
-            calorieBase = calories
+        guard !allowedRecipes.isEmpty else {
+            return .empty
         }
 
-        let nutrientBonus: Double
-        switch nutrientFocus {
-        case .none:
-            nutrientBonus = 0
-        case .iron:
-            nutrientBonus = iron * 120.0
+        // Для каждого приема пищи сначала отбираем локально лучшие рецепты,
+        // а затем оптимизируем уже комбинацию всего дня.
+        let candidateLimitPerMeal = 4
+        var candidatePools: [MealType: [Recipe]] = [:]
+
+        for mealType in MealType.allCases {
+            let preferredTag = RecipeScorer.mealTag(for: mealType)
+
+            let taggedRecipes = allowedRecipes.filter {
+                $0.tags.contains(preferredTag)
+            }
+
+            let poolSource = taggedRecipes.isEmpty ? allowedRecipes : taggedRecipes
+
+            let rankedRecipes = poolSource.sorted {
+                let left = RecipeScorer.evaluate(
+                    recipe: $0,
+                    mealType: mealType,
+                    goal: goal,
+                    foodsById: foodsById,
+                    nutrientFocus: nutrientFocus
+                )
+
+                let right = RecipeScorer.evaluate(
+                    recipe: $1,
+                    mealType: mealType,
+                    goal: goal,
+                    foodsById: foodsById,
+                    nutrientFocus: nutrientFocus
+                )
+
+                return left.totalScore > right.totalScore
+            }
+
+            candidatePools[mealType] = Array(
+                rankedRecipes.prefix(candidateLimitPerMeal)
+            )
         }
 
-        return calorieBase + nutrientBonus
-    }
-
-    private static func totalCalories(for recipe: Recipe, foodsById: [String: Food]) -> Double {
-        let summary = NutritionCalculator.summarize(
-            ingredients: recipe.ingredients,
-            foodsById: foodsById
+        return DayPlanOptimizer.buildOptimizedDayPlan(
+            goal: goal,
+            candidatePools: candidatePools,
+            foodsById: foodsById,
+            nutrientFocus: nutrientFocus
         )
-        return summary.macros.calories
-    }
-
-    private static func nutrientAmount(
-        for recipe: Recipe,
-        nutrientId: String,
-        foodsById: [String: Food]
-    ) -> Double {
-        let summary = NutritionCalculator.summarize(
-            ingredients: recipe.ingredients,
-            foodsById: foodsById
-        )
-        return summary.nutrients[nutrientId, default: 0]
     }
 
     private static func isRecipeAllowed(
         _ recipe: Recipe,
         foodsById: [String: Food],
-        excludedAllergens: Set<String>
+        excludedAllergens: Set<String>,
+        excludedProducts: Set<String>,
+        excludedGroups: Set<String>
     ) -> Bool {
-
         for ingredient in recipe.ingredients {
-            guard let food = foodsById[ingredient.foodId] else { continue }
+            guard let food = foodsById[ingredient.foodId] else {
+                continue
+            }
+
             if !excludedAllergens.isDisjoint(with: food.allergens) {
                 return false
+            }
+
+            if !excludedGroups.isDisjoint(with: food.groups) {
+                return false
+            }
+
+            let normalizedName = normalize(food.name)
+            let normalizedId = normalize(food.id)
+
+            for excluded in excludedProducts {
+                if normalizedName.contains(excluded) || normalizedId.contains(excluded) {
+                    return false
+                }
             }
         }
 
         return true
+    }
+
+    private static func normalize(_ value: String) -> String {
+        value
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .lowercased()
     }
 }

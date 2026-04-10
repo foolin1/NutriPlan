@@ -7,11 +7,102 @@ struct PlanView: View {
     var body: some View {
         let plannedSummary = vm.daySummary()
         let nutrientFocus = appState.userProfile?.nutrientFocus ?? .none
+        let optimization = DayPlanOptimizer.evaluate(
+            meals: vm.dayPlan.meals,
+            goal: appState.nutritionGoal,
+            foodsById: vm.foodsById,
+            nutrientFocus: nutrientFocus
+        )
 
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
                     topHeader
+
+                    SectionTitleView(
+                        "Day optimization",
+                        subtitle: "The planner now chooses the best combination of meals for the whole day, not each meal independently."
+                    )
+
+                    AppCard {
+                        VStack(alignment: .leading, spacing: 12) {
+                            HStack {
+                                Text("Daily score")
+                                    .font(.headline)
+
+                                Spacer()
+
+                                StatPill(text: "\(Int(optimization.totalScore.rounded())) / 100")
+                            }
+
+                            Text(dayOptimizationSummary(for: optimization))
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+
+                            Divider()
+
+                            InfoValueRow(
+                                title: "Target calories",
+                                value: "\(Int(optimization.targetCalories.rounded())) kcal"
+                            )
+                            InfoValueRow(
+                                title: "Actual calories",
+                                value: "\(Int(optimization.actualCalories.rounded())) kcal"
+                            )
+
+                            InfoValueRow(
+                                title: "Target protein",
+                                value: String(format: "%.1f g", optimization.targetProtein)
+                            )
+                            InfoValueRow(
+                                title: "Actual protein",
+                                value: String(format: "%.1f g", optimization.actualProtein)
+                            )
+
+                            InfoValueRow(
+                                title: "Target fat",
+                                value: String(format: "%.1f g", optimization.targetFat)
+                            )
+                            InfoValueRow(
+                                title: "Actual fat",
+                                value: String(format: "%.1f g", optimization.actualFat)
+                            )
+
+                            InfoValueRow(
+                                title: "Target carbs",
+                                value: String(format: "%.1f g", optimization.targetCarbs)
+                            )
+                            InfoValueRow(
+                                title: "Actual carbs",
+                                value: String(format: "%.1f g", optimization.actualCarbs)
+                            )
+
+                            Divider()
+
+                            InfoValueRow(
+                                title: "Coverage bonus",
+                                value: String(format: "+%.1f", optimization.coverageBonus)
+                            )
+                            InfoValueRow(
+                                title: "Meal quality bonus",
+                                value: String(format: "+%.1f", optimization.mealQualityBonus)
+                            )
+
+                            if optimization.nutrientBonus > 0 {
+                                InfoValueRow(
+                                    title: "Nutrient bonus",
+                                    value: String(format: "+%.1f", optimization.nutrientBonus)
+                                )
+                            }
+
+                            if optimization.ironAmount > 0 {
+                                InfoValueRow(
+                                    title: "Iron in plan",
+                                    value: String(format: "%.2f mg", optimization.ironAmount)
+                                )
+                            }
+                        }
+                    }
 
                     if let goal = appState.nutritionGoal {
                         SectionTitleView(
@@ -82,10 +173,20 @@ struct PlanView: View {
                 Text("Daily meal plan")
                     .font(.title2.weight(.bold))
 
-                Text("Here you can review the generated meals, inspect recipe composition and open meal details.")
+                Text("The plan is generated as an optimized combination of meals for the whole day.")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
+        }
+    }
+
+    private func dayOptimizationSummary(for breakdown: DayPlanScoreBreakdown) -> String {
+        if breakdown.totalScore >= 90 {
+            return "The full-day combination is very close to the daily target."
+        } else if breakdown.totalScore >= 75 {
+            return "The full-day combination is good, with moderate deviation from the daily target."
+        } else {
+            return "The planner found an acceptable daily combination, but deviations are more noticeable."
         }
     }
 

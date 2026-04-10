@@ -8,8 +8,10 @@ struct PlanInputSignature: Codable, Equatable {
     let activityLevel: ActivityLevel?
     let goalType: GoalType?
     let nutrientFocus: NutrientFocus?
+
     let excludedAllergens: [String]
     let excludedProducts: [String]
+    let excludedGroups: [String]
 
     let targetCalories: Int?
     let proteinGrams: Int?

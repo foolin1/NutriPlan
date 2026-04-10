@@ -1,0 +1,253 @@
+[
+  {
+    "id": "oatmeal_banana_bowl",
+    "name": "Oatmeal Banana Bowl",
+    "ingredients": [
+      { "foodId": "oats", "grams": 60 },
+      { "foodId": "milk", "grams": 180 },
+      { "foodId": "banana", "grams": 100 },
+      { "foodId": "peanut_butter", "grams": 15 }
+    ],
+    "cookTimeMinutes": 10,
+    "tags": ["breakfast", "bowl"],
+    "isModified": false
+  },
+  {
+    "id": "berries_yogurt_bowl",
+    "name": "Berries Yogurt Bowl",
+    "ingredients": [
+      { "foodId": "greek_yogurt", "grams": 220 },
+      { "foodId": "blueberries", "grams": 70 },
+      { "foodId": "strawberries", "grams": 80 },
+      { "foodId": "oats", "grams": 30 }
+    ],
+    "cookTimeMinutes": 5,
+    "tags": ["breakfast", "bowl"],
+    "isModified": false
+  },
+  {
+    "id": "cottage_berries_bowl",
+    "name": "Cottage Cheese Berries Bowl",
+    "ingredients": [
+      { "foodId": "cottage_cheese", "grams": 220 },
+      { "foodId": "raspberries", "grams": 80 },
+      { "foodId": "blueberries", "grams": 60 }
+    ],
+    "cookTimeMinutes": 5,
+    "tags": ["breakfast", "bowl", "high_protein"],
+    "isModified": false
+  },
+  {
+    "id": "eggs_tomato_plate",
+    "name": "Eggs Tomato Plate",
+    "ingredients": [
+      { "foodId": "eggs", "grams": 120 },
+      { "foodId": "tomato", "grams": 120 },
+      { "foodId": "avocado", "grams": 60 }
+    ],
+    "cookTimeMinutes": 8,
+    "tags": ["breakfast", "plate", "high_protein"],
+    "isModified": false
+  },
+  {
+    "id": "tofu_veggie_breakfast",
+    "name": "Tofu Veggie Breakfast",
+    "ingredients": [
+      { "foodId": "tofu", "grams": 180 },
+      { "foodId": "spinach", "grams": 60 },
+      { "foodId": "tomato", "grams": 100 },
+      { "foodId": "olive_oil", "grams": 8 }
+    ],
+    "cookTimeMinutes": 12,
+    "tags": ["breakfast", "plate", "vegan"],
+    "isModified": false
+  },
+  {
+    "id": "chicken_rice_bowl",
+    "name": "Chicken Rice Bowl",
+    "ingredients": [
+      { "foodId": "chicken_breast", "grams": 180 },
+      { "foodId": "rice", "grams": 200 },
+      { "foodId": "broccoli", "grams": 90 }
+    ],
+    "cookTimeMinutes": 25,
+    "tags": ["lunch", "bowl", "high_protein"],
+    "isModified": false
+  },
+  {
+    "id": "turkey_quinoa_bowl",
+    "name": "Turkey Quinoa Bowl",
+    "ingredients": [
+      { "foodId": "turkey_breast", "grams": 180 },
+      { "foodId": "quinoa", "grams": 200 },
+      { "foodId": "bell_pepper", "grams": 80 }
+    ],
+    "cookTimeMinutes": 25,
+    "tags": ["lunch", "bowl", "high_protein"],
+    "isModified": false
+  },
+  {
+    "id": "salmon_potato_plate",
+    "name": "Salmon Potato Plate",
+    "ingredients": [
+      { "foodId": "salmon", "grams": 160 },
+      { "foodId": "potato", "grams": 220 },
+      { "foodId": "broccoli", "grams": 100 }
+    ],
+    "cookTimeMinutes": 30,
+    "tags": ["lunch", "plate"],
+    "isModified": false
+  },
+  {
+    "id": "tuna_pasta_plate",
+    "name": "Tuna Pasta Plate",
+    "ingredients": [
+      { "foodId": "tuna", "grams": 150 },
+      { "foodId": "wholegrain_pasta", "grams": 220 },
+      { "foodId": "tomato", "grams": 100 }
+    ],
+    "cookTimeMinutes": 20,
+    "tags": ["lunch", "plate", "high_protein"],
+    "isModified": false
+  },
+  {
+    "id": "lentils_spinach_plate",
+    "name": "Lentils Spinach Plate",
+    "ingredients": [
+      { "foodId": "lentils", "grams": 230 },
+      { "foodId": "spinach", "grams": 120 },
+      { "foodId": "avocado", "grams": 60 }
+    ],
+    "cookTimeMinutes": 20,
+    "tags": ["lunch", "plate", "iron_rich", "vegan"],
+    "isModified": false
+  },
+  {
+    "id": "chickpea_quinoa_salad",
+    "name": "Chickpea Quinoa Salad",
+    "ingredients": [
+      { "foodId": "chickpeas", "grams": 180 },
+      { "foodId": "quinoa", "grams": 160 },
+      { "foodId": "cucumber", "grams": 100 },
+      { "foodId": "tomato", "grams": 100 }
+    ],
+    "cookTimeMinutes": 15,
+    "tags": ["lunch", "salad", "vegan"],
+    "isModified": false
+  },
+  {
+    "id": "chicken_buckwheat_plate",
+    "name": "Chicken Buckwheat Plate",
+    "ingredients": [
+      { "foodId": "chicken_breast", "grams": 180 },
+      { "foodId": "buckwheat", "grams": 220 },
+      { "foodId": "zucchini", "grams": 100 }
+    ],
+    "cookTimeMinutes": 25,
+    "tags": ["dinner", "plate", "high_protein"],
+    "isModified": false
+  },
+  {
+    "id": "turkey_rice_plate",
+    "name": "Turkey Rice Plate",
+    "ingredients": [
+      { "foodId": "turkey_breast", "grams": 180 },
+      { "foodId": "rice", "grams": 200 },
+      { "foodId": "spinach", "grams": 80 }
+    ],
+    "cookTimeMinutes": 25,
+    "tags": ["dinner", "plate", "high_protein"],
+    "isModified": false
+  },
+  {
+    "id": "salmon_quinoa_plate",
+    "name": "Salmon Quinoa Plate",
+    "ingredients": [
+      { "foodId": "salmon", "grams": 150 },
+      { "foodId": "quinoa", "grams": 180 },
+      { "foodId": "broccoli", "grams": 100 }
+    ],
+    "cookTimeMinutes": 30,
+    "tags": ["dinner", "plate"],
+    "isModified": false
+  },
+  {
+    "id": "black_beans_rice_bowl",
+    "name": "Black Beans Rice Bowl",
+    "ingredients": [
+      { "foodId": "black_beans", "grams": 220 },
+      { "foodId": "rice", "grams": 180 },
+      { "foodId": "bell_pepper", "grams": 90 }
+    ],
+    "cookTimeMinutes": 20,
+    "tags": ["dinner", "bowl", "vegan"],
+    "isModified": false
+  },
+  {
+    "id": "tofu_buckwheat_bowl",
+    "name": "Tofu Buckwheat Bowl",
+    "ingredients": [
+      { "foodId": "tofu", "grams": 190 },
+      { "foodId": "buckwheat", "grams": 200 },
+      { "foodId": "spinach", "grams": 90 }
+    ],
+    "cookTimeMinutes": 20,
+    "tags": ["dinner", "bowl", "vegan", "iron_rich"],
+    "isModified": false
+  },
+  {
+    "id": "yogurt_berries_snack",
+    "name": "Yogurt Berries Snack",
+    "ingredients": [
+      { "foodId": "greek_yogurt", "grams": 180 },
+      { "foodId": "blueberries", "grams": 80 }
+    ],
+    "cookTimeMinutes": 5,
+    "tags": ["snack", "bowl"],
+    "isModified": false
+  },
+  {
+    "id": "apple_nuts_snack",
+    "name": "Apple Nuts Snack",
+    "ingredients": [
+      { "foodId": "apple", "grams": 140 },
+      { "foodId": "almonds", "grams": 25 }
+    ],
+    "cookTimeMinutes": 3,
+    "tags": ["snack", "plate"],
+    "isModified": false
+  },
+  {
+    "id": "orange_yogurt_snack",
+    "name": "Orange Yogurt Snack",
+    "ingredients": [
+      { "foodId": "orange", "grams": 150 },
+      { "foodId": "greek_yogurt", "grams": 160 }
+    ],
+    "cookTimeMinutes": 3,
+    "tags": ["snack", "plate"],
+    "isModified": false
+  },
+  {
+    "id": "banana_peanut_snack",
+    "name": "Banana Peanut Snack",
+    "ingredients": [
+      { "foodId": "banana", "grams": 120 },
+      { "foodId": "peanut_butter", "grams": 20 }
+    ],
+    "cookTimeMinutes": 3,
+    "tags": ["snack", "plate"],
+    "isModified": false
+  },
+  {
+    "id": "pumpkin_berries_snack",
+    "name": "Pumpkin Seeds Berries Snack",
+    "ingredients": [
+      { "foodId": "pumpkin_seeds", "grams": 25 },
+      { "foodId": "strawberries", "grams": 120 }
+    ],
+    "cookTimeMinutes": 3,
+    "tags": ["snack", "plate", "iron_rich"],
+    "isModified": false
+  }
+]
