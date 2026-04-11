@@ -61,7 +61,6 @@
 		8B0B9E652F8AC29F00B41AE7 /* ManualDiaryEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9E642F8AC29F00B41AE7 /* ManualDiaryEntryView.swift */; };
 		8B0B9E672F8ACDE200B41AE7 /* DayPlanPortionOptimizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9E662F8ACDE200B41AE7 /* DayPlanPortionOptimizer.swift */; };
 		8B0B9E692F8AD33500B41AE7 /* DayPlanCalorieTopUpService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9E682F8AD33500B41AE7 /* DayPlanCalorieTopUpService.swift */; };
-		8B0B9E872F8AE6F900B41AE7 /* NutriPlanTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9E852F8AE6F900B41AE7 /* NutriPlanTests.swift */; };
 		8B0B9E8E2F8AE7A700B41AE7 /* TestDataFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9E8D2F8AE7A700B41AE7 /* TestDataFactory.swift */; };
 		8B0B9E902F8AE7BF00B41AE7 /* GoalCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9E8F2F8AE7BF00B41AE7 /* GoalCalculatorTests.swift */; };
 		8B0B9E922F8AE7DA00B41AE7 /* MealPlanBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9E912F8AE7DA00B41AE7 /* MealPlanBuilderTests.swift */; };
@@ -69,6 +68,17 @@
 		8B0B9E962F8AE80400B41AE7 /* DayPlanTopUpTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9E952F8AE80400B41AE7 /* DayPlanTopUpTests.swift */; };
 		8B0B9E982F8AE81700B41AE7 /* ManualDiaryEntryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9E972F8AE81700B41AE7 /* ManualDiaryEntryTests.swift */; };
 		8B0B9E9A2F8AE8C400B41AE7 /* ShoppingListBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9E992F8AE8C400B41AE7 /* ShoppingListBuilderTests.swift */; };
+		8B0B9E9C2F8AF24700B41AE7 /* RepositoryTestDoubles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9E9B2F8AF24700B41AE7 /* RepositoryTestDoubles.swift */; };
+		8B0B9E9E2F8AF28C00B41AE7 /* DayPlanPortionOptimizerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9E9D2F8AF28C00B41AE7 /* DayPlanPortionOptimizerTests.swift */; };
+		8B0B9EA02F8AF2B800B41AE7 /* DayPlanCalorieTopUpServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9E9F2F8AF2B800B41AE7 /* DayPlanCalorieTopUpServiceTests.swift */; };
+		8B0B9EA22F8AF2E800B41AE7 /* PlanViewModelShuffleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9EA12F8AF2E800B41AE7 /* PlanViewModelShuffleTests.swift */; };
+		8B0B9EA42F8AF31700B41AE7 /* PlanAdjusterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9EA32F8AF31700B41AE7 /* PlanAdjusterTests.swift */; };
+		8B0B9EA62F8AF83200B41AE7 /* MealPlanRestrictionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9EA52F8AF83200B41AE7 /* MealPlanRestrictionsTests.swift */; };
+		8B0B9EA82F8AF89A00B41AE7 /* PlanComparisonServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9EA72F8AF89A00B41AE7 /* PlanComparisonServiceTests.swift */; };
+		8B0B9EAA2F8AF8D400B41AE7 /* ManualDiaryOrderingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9EA92F8AF8D400B41AE7 /* ManualDiaryOrderingTests.swift */; };
+		8B0B9EAC2F8AFA4F00B41AE7 /* PlanViewModelSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9EAB2F8AFA4F00B41AE7 /* PlanViewModelSessionTests.swift */; };
+		8B0B9EAE2F8AFAB500B41AE7 /* DiarySyncTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9EAD2F8AFAB500B41AE7 /* DiarySyncTests.swift */; };
+		8B0B9EB02F8AFAF400B41AE7 /* DisplayTitleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9EAF2F8AFAF400B41AE7 /* DisplayTitleTests.swift */; };
 		8B94CA432F54778A000CB887 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B94CA402F54778A000CB887 /* ContentView.swift */; };
 		8B94CA442F54778A000CB887 /* NutriPlanApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B94CA412F54778A000CB887 /* NutriPlanApp.swift */; };
 		8B94CA452F54778A000CB887 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B94CA3F2F54778A000CB887 /* Assets.xcassets */; };
@@ -156,7 +166,6 @@
 		8B0B9E662F8ACDE200B41AE7 /* DayPlanPortionOptimizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayPlanPortionOptimizer.swift; sourceTree = "<group>"; };
 		8B0B9E682F8AD33500B41AE7 /* DayPlanCalorieTopUpService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayPlanCalorieTopUpService.swift; sourceTree = "<group>"; };
 		8B0B9E7C2F8AE6C800B41AE7 /* NutriPlanTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NutriPlanTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		8B0B9E852F8AE6F900B41AE7 /* NutriPlanTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutriPlanTests.swift; sourceTree = "<group>"; };
 		8B0B9E8D2F8AE7A700B41AE7 /* TestDataFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestDataFactory.swift; sourceTree = "<group>"; };
 		8B0B9E8F2F8AE7BF00B41AE7 /* GoalCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalCalculatorTests.swift; sourceTree = "<group>"; };
 		8B0B9E912F8AE7DA00B41AE7 /* MealPlanBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealPlanBuilderTests.swift; sourceTree = "<group>"; };
@@ -164,6 +173,17 @@
 		8B0B9E952F8AE80400B41AE7 /* DayPlanTopUpTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayPlanTopUpTests.swift; sourceTree = "<group>"; };
 		8B0B9E972F8AE81700B41AE7 /* ManualDiaryEntryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManualDiaryEntryTests.swift; sourceTree = "<group>"; };
 		8B0B9E992F8AE8C400B41AE7 /* ShoppingListBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingListBuilderTests.swift; sourceTree = "<group>"; };
+		8B0B9E9B2F8AF24700B41AE7 /* RepositoryTestDoubles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryTestDoubles.swift; sourceTree = "<group>"; };
+		8B0B9E9D2F8AF28C00B41AE7 /* DayPlanPortionOptimizerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayPlanPortionOptimizerTests.swift; sourceTree = "<group>"; };
+		8B0B9E9F2F8AF2B800B41AE7 /* DayPlanCalorieTopUpServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayPlanCalorieTopUpServiceTests.swift; sourceTree = "<group>"; };
+		8B0B9EA12F8AF2E800B41AE7 /* PlanViewModelShuffleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanViewModelShuffleTests.swift; sourceTree = "<group>"; };
+		8B0B9EA32F8AF31700B41AE7 /* PlanAdjusterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanAdjusterTests.swift; sourceTree = "<group>"; };
+		8B0B9EA52F8AF83200B41AE7 /* MealPlanRestrictionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealPlanRestrictionsTests.swift; sourceTree = "<group>"; };
+		8B0B9EA72F8AF89A00B41AE7 /* PlanComparisonServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanComparisonServiceTests.swift; sourceTree = "<group>"; };
+		8B0B9EA92F8AF8D400B41AE7 /* ManualDiaryOrderingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManualDiaryOrderingTests.swift; sourceTree = "<group>"; };
+		8B0B9EAB2F8AFA4F00B41AE7 /* PlanViewModelSessionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanViewModelSessionTests.swift; sourceTree = "<group>"; };
+		8B0B9EAD2F8AFAB500B41AE7 /* DiarySyncTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiarySyncTests.swift; sourceTree = "<group>"; };
+		8B0B9EAF2F8AFAF400B41AE7 /* DisplayTitleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayTitleTests.swift; sourceTree = "<group>"; };
 		8B7D9B702F545AD3006A4CFD /* NutriPlan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NutriPlan.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B94CA3F2F54778A000CB887 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8B94CA402F54778A000CB887 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -301,7 +321,6 @@
 				8B0B9E8A2F8AE72600B41AE7 /* Planning */,
 				8B0B9E892F8AE71C00B41AE7 /* Core */,
 				8B0B9E882F8AE6FF00B41AE7 /* Support */,
-				8B0B9E852F8AE6F900B41AE7 /* NutriPlanTests.swift */,
 			);
 			path = NutriPlanTests;
 			sourceTree = "<group>";
@@ -310,6 +329,7 @@
 			isa = PBXGroup;
 			children = (
 				8B0B9E8D2F8AE7A700B41AE7 /* TestDataFactory.swift */,
+				8B0B9E9B2F8AF24700B41AE7 /* RepositoryTestDoubles.swift */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -318,6 +338,10 @@
 			isa = PBXGroup;
 			children = (
 				8B0B9E8F2F8AE7BF00B41AE7 /* GoalCalculatorTests.swift */,
+				8B0B9EA32F8AF31700B41AE7 /* PlanAdjusterTests.swift */,
+				8B0B9EA72F8AF89A00B41AE7 /* PlanComparisonServiceTests.swift */,
+				8B0B9EAB2F8AFA4F00B41AE7 /* PlanViewModelSessionTests.swift */,
+				8B0B9EAF2F8AFAF400B41AE7 /* DisplayTitleTests.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -328,6 +352,10 @@
 				8B0B9E912F8AE7DA00B41AE7 /* MealPlanBuilderTests.swift */,
 				8B0B9E932F8AE7F200B41AE7 /* SubstitutionEngineTests.swift */,
 				8B0B9E952F8AE80400B41AE7 /* DayPlanTopUpTests.swift */,
+				8B0B9E9D2F8AF28C00B41AE7 /* DayPlanPortionOptimizerTests.swift */,
+				8B0B9E9F2F8AF2B800B41AE7 /* DayPlanCalorieTopUpServiceTests.swift */,
+				8B0B9EA12F8AF2E800B41AE7 /* PlanViewModelShuffleTests.swift */,
+				8B0B9EA52F8AF83200B41AE7 /* MealPlanRestrictionsTests.swift */,
 			);
 			path = Planning;
 			sourceTree = "<group>";
@@ -336,6 +364,8 @@
 			isa = PBXGroup;
 			children = (
 				8B0B9E972F8AE81700B41AE7 /* ManualDiaryEntryTests.swift */,
+				8B0B9EA92F8AF8D400B41AE7 /* ManualDiaryOrderingTests.swift */,
+				8B0B9EAD2F8AFAB500B41AE7 /* DiarySyncTests.swift */,
 			);
 			path = Diary;
 			sourceTree = "<group>";
@@ -671,14 +701,24 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8B0B9EA02F8AF2B800B41AE7 /* DayPlanCalorieTopUpServiceTests.swift in Sources */,
+				8B0B9EA22F8AF2E800B41AE7 /* PlanViewModelShuffleTests.swift in Sources */,
 				8B0B9E962F8AE80400B41AE7 /* DayPlanTopUpTests.swift in Sources */,
 				8B0B9E902F8AE7BF00B41AE7 /* GoalCalculatorTests.swift in Sources */,
 				8B0B9E922F8AE7DA00B41AE7 /* MealPlanBuilderTests.swift in Sources */,
 				8B0B9E8E2F8AE7A700B41AE7 /* TestDataFactory.swift in Sources */,
+				8B0B9E9C2F8AF24700B41AE7 /* RepositoryTestDoubles.swift in Sources */,
 				8B0B9E942F8AE7F200B41AE7 /* SubstitutionEngineTests.swift in Sources */,
-				8B0B9E872F8AE6F900B41AE7 /* NutriPlanTests.swift in Sources */,
+				8B0B9EAC2F8AFA4F00B41AE7 /* PlanViewModelSessionTests.swift in Sources */,
 				8B0B9E982F8AE81700B41AE7 /* ManualDiaryEntryTests.swift in Sources */,
+				8B0B9EAA2F8AF8D400B41AE7 /* ManualDiaryOrderingTests.swift in Sources */,
 				8B0B9E9A2F8AE8C400B41AE7 /* ShoppingListBuilderTests.swift in Sources */,
+				8B0B9EA82F8AF89A00B41AE7 /* PlanComparisonServiceTests.swift in Sources */,
+				8B0B9EB02F8AFAF400B41AE7 /* DisplayTitleTests.swift in Sources */,
+				8B0B9EA42F8AF31700B41AE7 /* PlanAdjusterTests.swift in Sources */,
+				8B0B9EAE2F8AFAB500B41AE7 /* DiarySyncTests.swift in Sources */,
+				8B0B9EA62F8AF83200B41AE7 /* MealPlanRestrictionsTests.swift in Sources */,
+				8B0B9E9E2F8AF28C00B41AE7 /* DayPlanPortionOptimizerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
