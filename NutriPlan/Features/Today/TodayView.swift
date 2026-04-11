@@ -22,73 +22,73 @@ struct TodayView: View {
 
                     if let goal = appState.nutritionGoal {
                         SectionTitleView(
-                            "Today overview",
-                            subtitle: "Your target, planned nutrition and actual intake for the current day."
+                            "Сводка дня",
+                            subtitle: "Текущая цель, план питания и фактические показатели за сегодняшний день."
                         )
 
                         AppCard {
-                            Text("Daily target")
+                            Text("Дневная цель")
                                 .font(.headline)
 
-                            InfoValueRow(title: "Calories", value: "\(goal.targetCalories) kcal")
-                            InfoValueRow(title: "Protein", value: "\(goal.proteinGrams) g")
-                            InfoValueRow(title: "Fat", value: "\(goal.fatGrams) g")
-                            InfoValueRow(title: "Carbs", value: "\(goal.carbsGrams) g")
+                            InfoValueRow(title: "Калории", value: "\(goal.targetCalories) ккал")
+                            InfoValueRow(title: "Белки", value: "\(goal.proteinGrams) г")
+                            InfoValueRow(title: "Жиры", value: "\(goal.fatGrams) г")
+                            InfoValueRow(title: "Углеводы", value: "\(goal.carbsGrams) г")
                         }
 
                         AppCard {
                             HStack {
-                                Text("Planned total")
+                                Text("План на день")
                                     .font(.headline)
 
                                 Spacer()
 
                                 if nutrientFocus == .iron {
-                                    StatPill(text: "Iron focus")
+                                    StatPill(text: "Фокус: железо")
                                 }
                             }
 
-                            InfoValueRow(title: "Calories", value: "\(Int(plannedSummary.macros.calories)) kcal")
-                            InfoValueRow(title: "Protein", value: String(format: "%.1f g", plannedSummary.macros.protein))
-                            InfoValueRow(title: "Fat", value: String(format: "%.1f g", plannedSummary.macros.fat))
-                            InfoValueRow(title: "Carbs", value: String(format: "%.1f g", plannedSummary.macros.carbs))
+                            InfoValueRow(title: "Калории", value: "\(Int(plannedSummary.macros.calories)) ккал")
+                            InfoValueRow(title: "Белки", value: String(format: "%.1f г", plannedSummary.macros.protein))
+                            InfoValueRow(title: "Жиры", value: String(format: "%.1f г", plannedSummary.macros.fat))
+                            InfoValueRow(title: "Углеводы", value: String(format: "%.1f г", plannedSummary.macros.carbs))
 
                             if nutrientFocus == .iron {
                                 Divider()
                                 InfoValueRow(
-                                    title: "Planned iron",
-                                    value: String(format: "%.2f mg", plannedSummary.nutrients["iron", default: 0])
+                                    title: "Железо по плану",
+                                    value: String(format: "%.2f мг", plannedSummary.nutrients["iron", default: 0])
                                 )
                             }
                         }
 
                         AppCard {
                             HStack {
-                                Text("Actual total")
+                                Text("Факт за день")
                                     .font(.headline)
 
                                 Spacer()
 
                                 if vm.diaryDay.entries.isEmpty {
-                                    StatPill(text: "No diary yet")
+                                    StatPill(text: "Дневник пуст")
                                 }
                             }
 
                             if vm.diaryDay.entries.isEmpty {
-                                Text("Add meals from your plan to the diary to compare planned and actual nutrition.")
+                                Text("Можно переносить блюда из плана или добавлять продукты вручную, если фактическое питание отличалось от плана.")
                                     .font(.subheadline)
                                     .foregroundStyle(.secondary)
                             } else {
-                                InfoValueRow(title: "Calories", value: "\(Int(actualSummary.macros.calories)) kcal")
-                                InfoValueRow(title: "Protein", value: String(format: "%.1f g", actualSummary.macros.protein))
-                                InfoValueRow(title: "Fat", value: String(format: "%.1f g", actualSummary.macros.fat))
-                                InfoValueRow(title: "Carbs", value: String(format: "%.1f g", actualSummary.macros.carbs))
+                                InfoValueRow(title: "Калории", value: "\(Int(actualSummary.macros.calories)) ккал")
+                                InfoValueRow(title: "Белки", value: String(format: "%.1f г", actualSummary.macros.protein))
+                                InfoValueRow(title: "Жиры", value: String(format: "%.1f г", actualSummary.macros.fat))
+                                InfoValueRow(title: "Углеводы", value: String(format: "%.1f г", actualSummary.macros.carbs))
 
                                 if nutrientFocus == .iron {
                                     Divider()
                                     InfoValueRow(
-                                        title: "Actual iron",
-                                        value: String(format: "%.2f mg", actualSummary.nutrients["iron", default: 0])
+                                        title: "Железо по факту",
+                                        value: String(format: "%.2f мг", actualSummary.nutrients["iron", default: 0])
                                     )
                                 }
                             }
@@ -96,8 +96,8 @@ struct TodayView: View {
                     }
 
                     SectionTitleView(
-                        "Quick actions",
-                        subtitle: "Fast access to the main daily scenarios."
+                        "Быстрые действия",
+                        subtitle: "Переход к основным сценариям текущего дня."
                     )
 
                     LazyVGrid(columns: actionColumns, spacing: 12) {
@@ -106,8 +106,8 @@ struct TodayView: View {
                         } label: {
                             QuickActionTile(
                                 systemImage: "book.pages",
-                                title: "Diary",
-                                subtitle: "See what you actually ate today."
+                                title: "Дневник",
+                                subtitle: "Посмотри записи за день и при необходимости добавь продукты вручную."
                             )
                         }
                         .buttonStyle(.plain)
@@ -115,8 +115,8 @@ struct TodayView: View {
                         if vm.diaryDay.entries.isEmpty {
                             QuickActionTile(
                                 systemImage: "chart.bar.xaxis",
-                                title: "Plan vs actual",
-                                subtitle: "Available after adding entries to the diary."
+                                title: "План vs факт",
+                                subtitle: "Сравнение станет доступно, когда в дневнике появятся записи."
                             )
                         } else {
                             NavigationLink {
@@ -124,8 +124,8 @@ struct TodayView: View {
                             } label: {
                                 QuickActionTile(
                                     systemImage: "chart.bar.xaxis",
-                                    title: "Plan vs actual",
-                                    subtitle: "Compare your target, plan and actual nutrition."
+                                    title: "План vs факт",
+                                    subtitle: "Сравни цель, план и фактическое питание."
                                 )
                             }
                             .buttonStyle(.plain)
@@ -134,8 +134,8 @@ struct TodayView: View {
 
                     if let adjustment {
                         SectionTitleView(
-                            "Tomorrow recommendation",
-                            subtitle: "The app adjusts the next day target based on today."
+                            "Рекомендация на завтра",
+                            subtitle: "Приложение корректирует цель следующего дня по итогам сегодняшнего питания."
                         )
 
                         AppCard {
@@ -148,16 +148,16 @@ struct TodayView: View {
 
                             Divider()
 
-                            InfoValueRow(title: "Calories", value: "\(adjustment.nextDayGoal.targetCalories) kcal")
-                            InfoValueRow(title: "Protein", value: "\(adjustment.nextDayGoal.proteinGrams) g")
-                            InfoValueRow(title: "Fat", value: "\(adjustment.nextDayGoal.fatGrams) g")
-                            InfoValueRow(title: "Carbs", value: "\(adjustment.nextDayGoal.carbsGrams) g")
+                            InfoValueRow(title: "Калории", value: "\(adjustment.nextDayGoal.targetCalories) ккал")
+                            InfoValueRow(title: "Белки", value: "\(adjustment.nextDayGoal.proteinGrams) г")
+                            InfoValueRow(title: "Жиры", value: "\(adjustment.nextDayGoal.fatGrams) г")
+                            InfoValueRow(title: "Углеводы", value: "\(adjustment.nextDayGoal.carbsGrams) г")
 
                             if !adjustment.hints.isEmpty {
                                 Divider()
 
                                 VStack(alignment: .leading, spacing: 6) {
-                                    Text("Hints")
+                                    Text("Подсказки")
                                         .font(.subheadline.weight(.semibold))
 
                                     ForEach(adjustment.hints, id: \.self) { hint in
@@ -171,8 +171,8 @@ struct TodayView: View {
                     }
 
                     SectionTitleView(
-                        "Today's meals",
-                        subtitle: "Preview the meals generated for the current day."
+                        "Блюда на сегодня",
+                        subtitle: "Список блюд, подобранных системой на текущий день."
                     )
 
                     VStack(spacing: 12) {
@@ -189,7 +189,7 @@ struct TodayView: View {
                 .padding(16)
             }
             .background(Color(.systemGroupedBackground).ignoresSafeArea())
-            .navigationTitle("Today")
+            .navigationTitle("Сегодня")
             .navigationBarTitleDisplayMode(.large)
         }
     }
@@ -201,10 +201,10 @@ struct TodayView: View {
                     .font(.headline)
                     .foregroundStyle(.secondary)
 
-                Text("Your daily nutrition dashboard")
+                Text("Главный экран питания на сегодня")
                     .font(.title2.weight(.bold))
 
-                Text("Track the current day, compare plan and fact, and adjust the next recommendation without leaving the main screen.")
+                Text("Следи за текущим днём, сравнивай план и факт и получай рекомендации на следующий день без перехода между множеством экранов.")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
@@ -218,7 +218,7 @@ struct TodayView: View {
         AppCard {
             HStack(alignment: .top) {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text(meal.type.rawValue)
+                    Text(meal.type.ruTitle)
                         .font(.caption.weight(.semibold))
                         .foregroundStyle(.secondary)
 
@@ -226,18 +226,18 @@ struct TodayView: View {
                         .font(.headline)
                         .multilineTextAlignment(.leading)
 
-                    Text("Calories: \(Int(summary.macros.calories))")
+                    Text("Калории: \(Int(summary.macros.calories))")
                         .font(.subheadline)
 
                     Text(
-                        "P: \(summary.macros.protein, specifier: "%.1f")  F: \(summary.macros.fat, specifier: "%.1f")  C: \(summary.macros.carbs, specifier: "%.1f")"
+                        "Б: \(summary.macros.protein, specifier: "%.1f")  Ж: \(summary.macros.fat, specifier: "%.1f")  У: \(summary.macros.carbs, specifier: "%.1f")"
                     )
                     .font(.caption)
                     .foregroundStyle(.secondary)
 
                     if nutrientFocus == .iron,
                        let iron = summary.nutrients["iron"] {
-                        Text("Iron: \(iron, specifier: "%.2f") mg")
+                        Text("Железо: \(iron, specifier: "%.2f") мг")
                             .font(.caption2)
                             .foregroundStyle(.secondary)
                     }
@@ -251,7 +251,7 @@ struct TodayView: View {
                         .foregroundStyle(.tertiary)
 
                     if vm.isMealLogged(meal.id) {
-                        StatPill(text: "Added")
+                        StatPill(text: "Добавлено")
                     }
                 }
             }

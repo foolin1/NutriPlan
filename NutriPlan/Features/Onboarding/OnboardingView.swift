@@ -1,7 +1,6 @@
 import SwiftUI
 
 struct OnboardingView: View {
-
     @StateObject private var vm = OnboardingViewModel()
     @EnvironmentObject private var appState: AppState
 
@@ -10,40 +9,40 @@ struct OnboardingView: View {
 
         NavigationStack {
             Form {
-                Section("About you") {
-                    Picker("Sex", selection: $vm.sex) {
+                Section("Основная информация") {
+                    Picker("Пол", selection: $vm.sex) {
                         ForEach(BiologicalSex.allCases) { sex in
-                            Text(sex.rawValue).tag(sex)
+                            Text(sex.ruTitle).tag(sex)
                         }
                     }
 
-                    Stepper("Age: \(vm.age)", value: $vm.age, in: 14...100)
+                    Stepper("Возраст: \(vm.age)", value: $vm.age, in: 14...100)
 
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Height: \(Int(vm.heightCm)) cm")
+                        Text("Рост: \(Int(vm.heightCm)) см")
                         Slider(value: $vm.heightCm, in: 140...220, step: 1)
                     }
 
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Weight: \(Int(vm.weightKg)) kg")
+                        Text("Вес: \(Int(vm.weightKg)) кг")
                         Slider(value: $vm.weightKg, in: 40...180, step: 1)
                     }
 
-                    Picker("Activity level", selection: $vm.activityLevel) {
+                    Picker("Уровень активности", selection: $vm.activityLevel) {
                         ForEach(ActivityLevel.allCases) { level in
-                            Text(level.rawValue).tag(level)
+                            Text(level.ruTitle).tag(level)
                         }
                     }
 
-                    Picker("Goal", selection: $vm.goalType) {
+                    Picker("Цель", selection: $vm.goalType) {
                         ForEach(GoalType.allCases) { goal in
-                            Text(goal.rawValue).tag(goal)
+                            Text(goal.ruTitle).tag(goal)
                         }
                     }
                 }
 
-                Section("Micronutrient focus") {
-                    Picker("Focus", selection: $vm.nutrientFocus) {
+                Section("Фокус по микронутриентам") {
+                    Picker("Фокус", selection: $vm.nutrientFocus) {
                         ForEach(NutrientFocus.allCases) { focus in
                             Text(focus.displayName).tag(focus)
                         }
@@ -54,29 +53,29 @@ struct OnboardingView: View {
                         .foregroundStyle(.secondary)
                 }
 
-                Section("Restrictions") {
-                    TextField("Allergens (comma separated)", text: $vm.allergensText)
-                    TextField("Excluded products (comma separated)", text: $vm.excludedProductsText)
+                Section("Ограничения") {
+                    TextField("Аллергены (через запятую)", text: $vm.allergensText)
+                    TextField("Исключаемые продукты (через запятую)", text: $vm.excludedProductsText)
                 }
 
-                Section("Daily target preview") {
-                    GoalRow(title: "Calories", value: "\(previewGoal.targetCalories) kcal")
-                    GoalRow(title: "Protein", value: "\(previewGoal.proteinGrams) g")
-                    GoalRow(title: "Fat", value: "\(previewGoal.fatGrams) g")
-                    GoalRow(title: "Carbs", value: "\(previewGoal.carbsGrams) g")
+                Section("Предпросмотр дневной цели") {
+                    GoalRow(title: "Калории", value: "\(previewGoal.targetCalories) ккал")
+                    GoalRow(title: "Белки", value: "\(previewGoal.proteinGrams) г")
+                    GoalRow(title: "Жиры", value: "\(previewGoal.fatGrams) г")
+                    GoalRow(title: "Углеводы", value: "\(previewGoal.carbsGrams) г")
                 }
 
                 Section {
                     Button {
                         appState.completeOnboarding(with: vm.buildProfile())
                     } label: {
-                        Text("Continue")
+                        Text("Продолжить")
                             .frame(maxWidth: .infinity, alignment: .center)
                     }
                     .disabled(!vm.canContinue)
                 }
             }
-            .navigationTitle("NutriPlan setup")
+            .navigationTitle("Начальная настройка")
         }
     }
 }

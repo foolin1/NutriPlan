@@ -1,7 +1,7 @@
 [
   {
-    "id": "oatmeal_banana_bowl",
-    "name": "Oatmeal Banana Bowl",
+    "id": "oatmeal_banana_peanut_bowl",
+    "name": "Овсянка с бананом и арахисовой пастой",
     "ingredients": [
       { "foodId": "oats", "grams": 60 },
       { "foodId": "milk", "grams": 180 },
@@ -13,24 +13,38 @@
     "isModified": false
   },
   {
-    "id": "berries_yogurt_bowl",
-    "name": "Berries Yogurt Bowl",
+    "id": "oatmeal_berries_bowl",
+    "name": "Овсянка с ягодами",
     "ingredients": [
-      { "foodId": "greek_yogurt", "grams": 220 },
-      { "foodId": "blueberries", "grams": 70 },
-      { "foodId": "strawberries", "grams": 80 },
-      { "foodId": "oats", "grams": 30 }
+      { "foodId": "oats", "grams": 60 },
+      { "foodId": "milk", "grams": 180 },
+      { "foodId": "blueberries", "grams": 60 },
+      { "foodId": "strawberries", "grams": 80 }
     ],
-    "cookTimeMinutes": 5,
+    "cookTimeMinutes": 10,
     "tags": ["breakfast", "bowl"],
     "isModified": false
   },
   {
-    "id": "cottage_berries_bowl",
-    "name": "Cottage Cheese Berries Bowl",
+    "id": "oatmeal_kiwi_chia_bowl",
+    "name": "Овсянка с киви и чиа",
     "ingredients": [
-      { "foodId": "cottage_cheese", "grams": 220 },
-      { "foodId": "raspberries", "grams": 80 },
+      { "foodId": "oats", "grams": 55 },
+      { "foodId": "milk", "grams": 180 },
+      { "foodId": "kiwi", "grams": 90 },
+      { "foodId": "chia_seeds", "grams": 12 }
+    ],
+    "cookTimeMinutes": 10,
+    "tags": ["breakfast", "bowl"],
+    "isModified": false
+  },
+  {
+    "id": "yogurt_berries_oats_bowl",
+    "name": "Йогурт с ягодами и овсянкой",
+    "ingredients": [
+      { "foodId": "greek_yogurt", "grams": 220 },
+      { "foodId": "oats", "grams": 30 },
+      { "foodId": "raspberries", "grams": 70 },
       { "foodId": "blueberries", "grams": 60 }
     ],
     "cookTimeMinutes": 5,
@@ -38,8 +52,21 @@
     "isModified": false
   },
   {
-    "id": "eggs_tomato_plate",
-    "name": "Eggs Tomato Plate",
+    "id": "cottage_fruit_bowl",
+    "name": "Творог с фруктами",
+    "ingredients": [
+      { "foodId": "cottage_cheese", "grams": 220 },
+      { "foodId": "pear", "grams": 100 },
+      { "foodId": "apple", "grams": 80 },
+      { "foodId": "walnuts", "grams": 15 }
+    ],
+    "cookTimeMinutes": 5,
+    "tags": ["breakfast", "bowl", "high_protein"],
+    "isModified": false
+  },
+  {
+    "id": "eggs_tomato_avocado_plate",
+    "name": "Яйца с томатами и авокадо",
     "ingredients": [
       { "foodId": "eggs", "grams": 120 },
       { "foodId": "tomato", "grams": 120 },
@@ -50,12 +77,38 @@
     "isModified": false
   },
   {
-    "id": "tofu_veggie_breakfast",
-    "name": "Tofu Veggie Breakfast",
+    "id": "egg_whites_mushrooms_plate",
+    "name": "Яичные белки с грибами",
+    "ingredients": [
+      { "foodId": "egg_whites", "grams": 180 },
+      { "foodId": "mushrooms", "grams": 120 },
+      { "foodId": "tomato", "grams": 80 },
+      { "foodId": "olive_oil", "grams": 8 }
+    ],
+    "cookTimeMinutes": 10,
+    "tags": ["breakfast", "plate", "high_protein"],
+    "isModified": false
+  },
+  {
+    "id": "omelette_spinach_cheese_plate",
+    "name": "Омлет со шпинатом и сыром",
+    "ingredients": [
+      { "foodId": "eggs", "grams": 120 },
+      { "foodId": "spinach", "grams": 60 },
+      { "foodId": "hard_cheese", "grams": 20 },
+      { "foodId": "butter", "grams": 5 }
+    ],
+    "cookTimeMinutes": 10,
+    "tags": ["breakfast", "plate"],
+    "isModified": false
+  },
+  {
+    "id": "tofu_scramble_breakfast",
+    "name": "Тофу с овощами на завтрак",
     "ingredients": [
       { "foodId": "tofu", "grams": 180 },
-      { "foodId": "spinach", "grams": 60 },
       { "foodId": "tomato", "grams": 100 },
+      { "foodId": "spinach", "grams": 60 },
       { "foodId": "olive_oil", "grams": 8 }
     ],
     "cookTimeMinutes": 12,
@@ -63,32 +116,96 @@
     "isModified": false
   },
   {
-    "id": "chicken_rice_bowl",
-    "name": "Chicken Rice Bowl",
+    "id": "kefir_oats_berries_bowl",
+    "name": "Кефир с овсянкой и ягодами",
+    "ingredients": [
+      { "foodId": "kefir", "grams": 250 },
+      { "foodId": "oats", "grams": 35 },
+      { "foodId": "strawberries", "grams": 80 },
+      { "foodId": "blackcurrant", "grams": 50 }
+    ],
+    "cookTimeMinutes": 5,
+    "tags": ["breakfast", "bowl"],
+    "isModified": false
+  },
+  {
+    "id": "quinoa_breakfast_bowl",
+    "name": "Киноа с фруктами",
+    "ingredients": [
+      { "foodId": "quinoa", "grams": 180 },
+      { "foodId": "banana", "grams": 80 },
+      { "foodId": "kiwi", "grams": 70 },
+      { "foodId": "chia_seeds", "grams": 10 }
+    ],
+    "cookTimeMinutes": 12,
+    "tags": ["breakfast", "bowl"],
+    "isModified": false
+  },
+  {
+    "id": "cottage_pear_almonds_bowl",
+    "name": "Творог с грушей и миндалём",
+    "ingredients": [
+      { "foodId": "cottage_cheese", "grams": 220 },
+      { "foodId": "pear", "grams": 100 },
+      { "foodId": "almonds", "grams": 15 }
+    ],
+    "cookTimeMinutes": 5,
+    "tags": ["breakfast", "bowl", "high_protein"],
+    "isModified": false
+  },
+  {
+    "id": "yogurt_blackcurrant_chia_bowl",
+    "name": "Йогурт с чёрной смородиной и чиа",
+    "ingredients": [
+      { "foodId": "greek_yogurt", "grams": 220 },
+      { "foodId": "blackcurrant", "grams": 70 },
+      { "foodId": "chia_seeds", "grams": 10 }
+    ],
+    "cookTimeMinutes": 5,
+    "tags": ["breakfast", "bowl"],
+    "isModified": false
+  },
+  {
+    "id": "tempeh_vegetable_breakfast_plate",
+    "name": "Темпе с овощами",
+    "ingredients": [
+      { "foodId": "tempeh", "grams": 160 },
+      { "foodId": "bell_pepper", "grams": 90 },
+      { "foodId": "tomato", "grams": 90 },
+      { "foodId": "olive_oil", "grams": 8 }
+    ],
+    "cookTimeMinutes": 12,
+    "tags": ["breakfast", "plate", "vegan"],
+    "isModified": false
+  },
+
+  {
+    "id": "chicken_rice_broccoli_bowl",
+    "name": "Курица с рисом и брокколи",
     "ingredients": [
       { "foodId": "chicken_breast", "grams": 180 },
       { "foodId": "rice", "grams": 200 },
-      { "foodId": "broccoli", "grams": 90 }
+      { "foodId": "broccoli", "grams": 100 }
     ],
     "cookTimeMinutes": 25,
     "tags": ["lunch", "bowl", "high_protein"],
     "isModified": false
   },
   {
-    "id": "turkey_quinoa_bowl",
-    "name": "Turkey Quinoa Bowl",
+    "id": "turkey_quinoa_pepper_bowl",
+    "name": "Индейка с киноа и перцем",
     "ingredients": [
       { "foodId": "turkey_breast", "grams": 180 },
       { "foodId": "quinoa", "grams": 200 },
-      { "foodId": "bell_pepper", "grams": 80 }
+      { "foodId": "bell_pepper", "grams": 90 }
     ],
     "cookTimeMinutes": 25,
     "tags": ["lunch", "bowl", "high_protein"],
     "isModified": false
   },
   {
-    "id": "salmon_potato_plate",
-    "name": "Salmon Potato Plate",
+    "id": "salmon_potato_broccoli_plate",
+    "name": "Лосось с картофелем и брокколи",
     "ingredients": [
       { "foodId": "salmon", "grams": 160 },
       { "foodId": "potato", "grams": 220 },
@@ -99,8 +216,8 @@
     "isModified": false
   },
   {
-    "id": "tuna_pasta_plate",
-    "name": "Tuna Pasta Plate",
+    "id": "tuna_pasta_tomato_plate",
+    "name": "Тунец с пастой и томатами",
     "ingredients": [
       { "foodId": "tuna", "grams": 150 },
       { "foodId": "wholegrain_pasta", "grams": 220 },
@@ -111,8 +228,8 @@
     "isModified": false
   },
   {
-    "id": "lentils_spinach_plate",
-    "name": "Lentils Spinach Plate",
+    "id": "lentils_spinach_avocado_plate",
+    "name": "Чечевица со шпинатом и авокадо",
     "ingredients": [
       { "foodId": "lentils", "grams": 230 },
       { "foodId": "spinach", "grams": 120 },
@@ -124,7 +241,7 @@
   },
   {
     "id": "chickpea_quinoa_salad",
-    "name": "Chickpea Quinoa Salad",
+    "name": "Салат с нутом и киноа",
     "ingredients": [
       { "foodId": "chickpeas", "grams": 180 },
       { "foodId": "quinoa", "grams": 160 },
@@ -136,8 +253,107 @@
     "isModified": false
   },
   {
-    "id": "chicken_buckwheat_plate",
-    "name": "Chicken Buckwheat Plate",
+    "id": "beef_bulgur_plate",
+    "name": "Говядина с булгуром",
+    "ingredients": [
+      { "foodId": "lean_beef", "grams": 170 },
+      { "foodId": "bulgur", "grams": 220 },
+      { "foodId": "carrot", "grams": 80 }
+    ],
+    "cookTimeMinutes": 30,
+    "tags": ["lunch", "plate", "high_protein", "iron_rich"],
+    "isModified": false
+  },
+  {
+    "id": "cod_brown_rice_plate",
+    "name": "Треска с бурым рисом",
+    "ingredients": [
+      { "foodId": "cod", "grams": 180 },
+      { "foodId": "brown_rice", "grams": 200 },
+      { "foodId": "broccoli", "grams": 100 }
+    ],
+    "cookTimeMinutes": 25,
+    "tags": ["lunch", "plate", "high_protein"],
+    "isModified": false
+  },
+  {
+    "id": "shrimp_couscous_salad",
+    "name": "Салат с креветками и кускусом",
+    "ingredients": [
+      { "foodId": "shrimp", "grams": 160 },
+      { "foodId": "couscous", "grams": 180 },
+      { "foodId": "cucumber", "grams": 100 },
+      { "foodId": "tomato", "grams": 100 }
+    ],
+    "cookTimeMinutes": 20,
+    "tags": ["lunch", "salad", "high_protein"],
+    "isModified": false
+  },
+  {
+    "id": "tempeh_buckwheat_bowl",
+    "name": "Темпе с гречкой",
+    "ingredients": [
+      { "foodId": "tempeh", "grams": 170 },
+      { "foodId": "buckwheat", "grams": 220 },
+      { "foodId": "zucchini", "grams": 100 }
+    ],
+    "cookTimeMinutes": 22,
+    "tags": ["lunch", "bowl", "vegan"],
+    "isModified": false
+  },
+  {
+    "id": "kidney_beans_rice_plate",
+    "name": "Фасоль с рисом",
+    "ingredients": [
+      { "foodId": "kidney_beans", "grams": 220 },
+      { "foodId": "rice", "grams": 180 },
+      { "foodId": "bell_pepper", "grams": 90 }
+    ],
+    "cookTimeMinutes": 20,
+    "tags": ["lunch", "plate", "vegan"],
+    "isModified": false
+  },
+  {
+    "id": "veal_potato_mushrooms_plate",
+    "name": "Телятина с картофелем и грибами",
+    "ingredients": [
+      { "foodId": "veal", "grams": 170 },
+      { "foodId": "potato", "grams": 220 },
+      { "foodId": "mushrooms", "grams": 100 }
+    ],
+    "cookTimeMinutes": 30,
+    "tags": ["lunch", "plate", "high_protein"],
+    "isModified": false
+  },
+  {
+    "id": "chicken_sweet_potato_plate",
+    "name": "Курица с бататом",
+    "ingredients": [
+      { "foodId": "chicken_breast", "grams": 180 },
+      { "foodId": "sweet_potato", "grams": 220 },
+      { "foodId": "broccoli", "grams": 100 }
+    ],
+    "cookTimeMinutes": 28,
+    "tags": ["lunch", "plate", "high_protein"],
+    "isModified": false
+  },
+  {
+    "id": "tuna_bulgur_salad",
+    "name": "Салат с тунцом и булгуром",
+    "ingredients": [
+      { "foodId": "tuna", "grams": 150 },
+      { "foodId": "bulgur", "grams": 180 },
+      { "foodId": "cucumber", "grams": 100 },
+      { "foodId": "tomato", "grams": 100 }
+    ],
+    "cookTimeMinutes": 18,
+    "tags": ["lunch", "salad", "high_protein"],
+    "isModified": false
+  },
+
+  {
+    "id": "chicken_buckwheat_zucchini_plate",
+    "name": "Курица с гречкой и кабачком",
     "ingredients": [
       { "foodId": "chicken_breast", "grams": 180 },
       { "foodId": "buckwheat", "grams": 220 },
@@ -148,8 +364,8 @@
     "isModified": false
   },
   {
-    "id": "turkey_rice_plate",
-    "name": "Turkey Rice Plate",
+    "id": "turkey_rice_spinach_plate",
+    "name": "Индейка с рисом и шпинатом",
     "ingredients": [
       { "foodId": "turkey_breast", "grams": 180 },
       { "foodId": "rice", "grams": 200 },
@@ -160,8 +376,8 @@
     "isModified": false
   },
   {
-    "id": "salmon_quinoa_plate",
-    "name": "Salmon Quinoa Plate",
+    "id": "salmon_quinoa_broccoli_plate",
+    "name": "Лосось с киноа и брокколи",
     "ingredients": [
       { "foodId": "salmon", "grams": 150 },
       { "foodId": "quinoa", "grams": 180 },
@@ -172,8 +388,8 @@
     "isModified": false
   },
   {
-    "id": "black_beans_rice_bowl",
-    "name": "Black Beans Rice Bowl",
+    "id": "black_beans_rice_pepper_bowl",
+    "name": "Чёрная фасоль с рисом и перцем",
     "ingredients": [
       { "foodId": "black_beans", "grams": 220 },
       { "foodId": "rice", "grams": 180 },
@@ -184,8 +400,8 @@
     "isModified": false
   },
   {
-    "id": "tofu_buckwheat_bowl",
-    "name": "Tofu Buckwheat Bowl",
+    "id": "tofu_buckwheat_spinach_bowl",
+    "name": "Тофу с гречкой и шпинатом",
     "ingredients": [
       { "foodId": "tofu", "grams": 190 },
       { "foodId": "buckwheat", "grams": 200 },
@@ -196,8 +412,121 @@
     "isModified": false
   },
   {
-    "id": "yogurt_berries_snack",
-    "name": "Yogurt Berries Snack",
+    "id": "cod_potato_cauliflower_plate",
+    "name": "Треска с картофелем и цветной капустой",
+    "ingredients": [
+      { "foodId": "cod", "grams": 180 },
+      { "foodId": "potato", "grams": 220 },
+      { "foodId": "cauliflower", "grams": 120 }
+    ],
+    "cookTimeMinutes": 28,
+    "tags": ["dinner", "plate", "high_protein"],
+    "isModified": false
+  },
+  {
+    "id": "shrimp_rice_zucchini_plate",
+    "name": "Креветки с рисом и кабачком",
+    "ingredients": [
+      { "foodId": "shrimp", "grams": 170 },
+      { "foodId": "rice", "grams": 180 },
+      { "foodId": "zucchini", "grams": 120 }
+    ],
+    "cookTimeMinutes": 20,
+    "tags": ["dinner", "plate", "high_protein"],
+    "isModified": false
+  },
+  {
+    "id": "beef_quinoa_beet_plate",
+    "name": "Говядина с киноа и свёклой",
+    "ingredients": [
+      { "foodId": "lean_beef", "grams": 170 },
+      { "foodId": "quinoa", "grams": 180 },
+      { "foodId": "beetroot", "grams": 120 }
+    ],
+    "cookTimeMinutes": 30,
+    "tags": ["dinner", "plate", "iron_rich"],
+    "isModified": false
+  },
+  {
+    "id": "tempeh_bulgur_vegetables_bowl",
+    "name": "Темпе с булгуром и овощами",
+    "ingredients": [
+      { "foodId": "tempeh", "grams": 170 },
+      { "foodId": "bulgur", "grams": 200 },
+      { "foodId": "broccoli", "grams": 80 },
+      { "foodId": "carrot", "grams": 80 }
+    ],
+    "cookTimeMinutes": 24,
+    "tags": ["dinner", "bowl", "vegan"],
+    "isModified": false
+  },
+  {
+    "id": "seitan_pasta_mushrooms_plate",
+    "name": "Сейтан с пастой и грибами",
+    "ingredients": [
+      { "foodId": "seitan", "grams": 170 },
+      { "foodId": "wholegrain_pasta", "grams": 200 },
+      { "foodId": "mushrooms", "grams": 120 }
+    ],
+    "cookTimeMinutes": 22,
+    "tags": ["dinner", "plate", "high_protein"],
+    "isModified": false
+  },
+  {
+    "id": "veal_brown_rice_broccoli_plate",
+    "name": "Телятина с бурым рисом и брокколи",
+    "ingredients": [
+      { "foodId": "veal", "grams": 170 },
+      { "foodId": "brown_rice", "grams": 200 },
+      { "foodId": "broccoli", "grams": 100 }
+    ],
+    "cookTimeMinutes": 28,
+    "tags": ["dinner", "plate", "high_protein"],
+    "isModified": false
+  },
+  {
+    "id": "chickpea_bulgur_plate",
+    "name": "Нут с булгуром и овощами",
+    "ingredients": [
+      { "foodId": "chickpeas", "grams": 220 },
+      { "foodId": "bulgur", "grams": 180 },
+      { "foodId": "tomato", "grams": 100 },
+      { "foodId": "cucumber", "grams": 100 }
+    ],
+    "cookTimeMinutes": 20,
+    "tags": ["dinner", "plate", "vegan"],
+    "isModified": false
+  },
+  {
+    "id": "lentils_mushrooms_plate",
+    "name": "Чечевица с грибами",
+    "ingredients": [
+      { "foodId": "lentils", "grams": 230 },
+      { "foodId": "mushrooms", "grams": 120 },
+      { "foodId": "onion", "grams": 60 },
+      { "foodId": "olive_oil", "grams": 8 }
+    ],
+    "cookTimeMinutes": 22,
+    "tags": ["dinner", "plate", "vegan", "iron_rich"],
+    "isModified": false
+  },
+  {
+    "id": "tuna_sweet_potato_salad",
+    "name": "Салат с тунцом и бататом",
+    "ingredients": [
+      { "foodId": "tuna", "grams": 150 },
+      { "foodId": "sweet_potato", "grams": 180 },
+      { "foodId": "spinach", "grams": 80 },
+      { "foodId": "tomato", "grams": 80 }
+    ],
+    "cookTimeMinutes": 20,
+    "tags": ["dinner", "salad", "high_protein"],
+    "isModified": false
+  },
+
+  {
+    "id": "yogurt_blueberries_snack",
+    "name": "Йогурт с черникой",
     "ingredients": [
       { "foodId": "greek_yogurt", "grams": 180 },
       { "foodId": "blueberries", "grams": 80 }
@@ -207,8 +536,8 @@
     "isModified": false
   },
   {
-    "id": "apple_nuts_snack",
-    "name": "Apple Nuts Snack",
+    "id": "apple_almonds_snack",
+    "name": "Яблоко с миндалём",
     "ingredients": [
       { "foodId": "apple", "grams": 140 },
       { "foodId": "almonds", "grams": 25 }
@@ -219,7 +548,7 @@
   },
   {
     "id": "orange_yogurt_snack",
-    "name": "Orange Yogurt Snack",
+    "name": "Апельсин с йогуртом",
     "ingredients": [
       { "foodId": "orange", "grams": 150 },
       { "foodId": "greek_yogurt", "grams": 160 }
@@ -230,7 +559,7 @@
   },
   {
     "id": "banana_peanut_snack",
-    "name": "Banana Peanut Snack",
+    "name": "Банан с арахисовой пастой",
     "ingredients": [
       { "foodId": "banana", "grams": 120 },
       { "foodId": "peanut_butter", "grams": 20 }
@@ -241,13 +570,114 @@
   },
   {
     "id": "pumpkin_berries_snack",
-    "name": "Pumpkin Seeds Berries Snack",
+    "name": "Ягоды с тыквенными семечками",
     "ingredients": [
       { "foodId": "pumpkin_seeds", "grams": 25 },
       { "foodId": "strawberries", "grams": 120 }
     ],
     "cookTimeMinutes": 3,
     "tags": ["snack", "plate", "iron_rich"],
+    "isModified": false
+  },
+  {
+    "id": "pear_walnuts_snack",
+    "name": "Груша с грецким орехом",
+    "ingredients": [
+      { "foodId": "pear", "grams": 140 },
+      { "foodId": "walnuts", "grams": 20 }
+    ],
+    "cookTimeMinutes": 3,
+    "tags": ["snack", "plate"],
+    "isModified": false
+  },
+  {
+    "id": "kiwi_cottage_snack",
+    "name": "Киви с творогом",
+    "ingredients": [
+      { "foodId": "kiwi", "grams": 120 },
+      { "foodId": "cottage_cheese", "grams": 160 }
+    ],
+    "cookTimeMinutes": 3,
+    "tags": ["snack", "bowl", "high_protein"],
+    "isModified": false
+  },
+  {
+    "id": "kefir_banana_snack",
+    "name": "Кефир с бананом",
+    "ingredients": [
+      { "foodId": "kefir", "grams": 250 },
+      { "foodId": "banana", "grams": 100 }
+    ],
+    "cookTimeMinutes": 3,
+    "tags": ["snack", "bowl"],
+    "isModified": false
+  },
+  {
+    "id": "blackcurrant_yogurt_snack",
+    "name": "Йогурт с чёрной смородиной",
+    "ingredients": [
+      { "foodId": "greek_yogurt", "grams": 180 },
+      { "foodId": "blackcurrant", "grams": 70 }
+    ],
+    "cookTimeMinutes": 3,
+    "tags": ["snack", "bowl"],
+    "isModified": false
+  },
+  {
+    "id": "grapefruit_cashews_snack",
+    "name": "Грейпфрут с кешью",
+    "ingredients": [
+      { "foodId": "grapefruit", "grams": 160 },
+      { "foodId": "cashews", "grams": 20 }
+    ],
+    "cookTimeMinutes": 3,
+    "tags": ["snack", "plate"],
+    "isModified": false
+  },
+  {
+    "id": "cottage_strawberries_snack",
+    "name": "Творог с клубникой",
+    "ingredients": [
+      { "foodId": "cottage_cheese", "grams": 180 },
+      { "foodId": "strawberries", "grams": 100 }
+    ],
+    "cookTimeMinutes": 3,
+    "tags": ["snack", "bowl", "high_protein"],
+    "isModified": false
+  },
+  {
+    "id": "apple_peanut_snack",
+    "name": "Яблоко с арахисовой пастой",
+    "ingredients": [
+      { "foodId": "apple", "grams": 140 },
+      { "foodId": "peanut_butter", "grams": 18 }
+    ],
+    "cookTimeMinutes": 3,
+    "tags": ["snack", "plate"],
+    "isModified": false
+  },
+  {
+    "id": "chia_yogurt_snack",
+    "name": "Йогурт с семенами чиа",
+    "ingredients": [
+      { "foodId": "greek_yogurt", "grams": 180 },
+      { "foodId": "chia_seeds", "grams": 12 },
+      { "foodId": "blueberries", "grams": 60 }
+    ],
+    "cookTimeMinutes": 3,
+    "tags": ["snack", "bowl"],
+    "isModified": false
+  },
+  {
+    "id": "banana_kefir_oats_snack",
+    "name": "Кефир с бананом и овсянкой",
+    "ingredients": [
+      { "foodId": "kefir", "grams": 220 },
+      { "foodId": "banana", "grams": 90 },
+      { "foodId": "oats", "grams": 20 }
+    ],
+    "cookTimeMinutes": 5,
+    "tags": ["snack", "bowl"],
     "isModified": false
   }
 ]

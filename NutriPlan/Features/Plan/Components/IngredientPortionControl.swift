@@ -10,7 +10,7 @@ struct IngredientPortionControl: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            Text("Portion")
+            Text("Порция")
                 .font(.subheadline.weight(.medium))
 
             Spacer()
@@ -21,7 +21,7 @@ struct IngredientPortionControl: View {
             }
             .disabled(!canDecrease)
 
-            Text("\(Int(grams)) g")
+            Text("\(Int(grams)) г")
                 .font(.subheadline.weight(.semibold))
                 .frame(minWidth: 70)
 
@@ -31,7 +31,7 @@ struct IngredientPortionControl: View {
             }
             .disabled(!canIncrease)
 
-            StatPill(text: "Step \(Int(step)) g")
+            StatPill(text: "Шаг \(Int(step)) г")
         }
         .padding(14)
         .frame(maxWidth: .infinity, alignment: .leading)

@@ -8,7 +8,7 @@ struct ComparisonMetricCard: View {
             VStack(alignment: .leading, spacing: 12) {
                 HStack(alignment: .top) {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text(metric.title)
+                        Text(localizedMetricTitle(metric.title))
                             .font(.headline)
 
                         Text(statusText)
@@ -28,17 +28,17 @@ struct ComparisonMetricCard: View {
 
                 HStack(spacing: 12) {
                     valueBlock(
-                        title: "Planned",
+                        title: "План",
                         value: valueText(metric.planned)
                     )
 
                     valueBlock(
-                        title: "Actual",
+                        title: "Факт",
                         value: valueText(metric.actual)
                     )
 
                     valueBlock(
-                        title: "Completion",
+                        title: "Выполнение",
                         value: String(format: "%.0f%%", metric.completionPercent)
                     )
                 }
@@ -48,10 +48,10 @@ struct ComparisonMetricCard: View {
 
     private var deltaText: String {
         if metric.unit == "kcal" {
-            return String(format: "%+.0f %@", metric.delta, metric.unit)
+            return String(format: "%+.0f %@", metric.delta, localizedUnit(metric.unit))
         }
 
-        return String(format: "%+.1f %@", metric.delta, metric.unit)
+        return String(format: "%+.1f %@", metric.delta, localizedUnit(metric.unit))
     }
 
     private var statusText: String {
@@ -59,28 +59,58 @@ struct ComparisonMetricCard: View {
 
         switch metric.unit {
         case "kcal":
-            if absoluteDelta <= 100 { return "Very close to plan" }
-            if absoluteDelta <= 250 { return "Moderate deviation" }
-            return "Large deviation"
+            if absoluteDelta <= 100 { return "Очень близко к плану" }
+            if absoluteDelta <= 250 { return "Умеренное отклонение" }
+            return "Сильное отклонение"
         case "g":
-            if absoluteDelta <= 8 { return "Very close to plan" }
-            if absoluteDelta <= 18 { return "Moderate deviation" }
-            return "Large deviation"
+            if absoluteDelta <= 8 { return "Очень близко к плану" }
+            if absoluteDelta <= 18 { return "Умеренное отклонение" }
+            return "Сильное отклонение"
         case "mg":
-            if absoluteDelta <= 0.5 { return "Very close to plan" }
-            if absoluteDelta <= 1.5 { return "Moderate deviation" }
-            return "Large deviation"
+            if absoluteDelta <= 0.5 { return "Очень близко к плану" }
+            if absoluteDelta <= 1.5 { return "Умеренное отклонение" }
+            return "Сильное отклонение"
         default:
-            return "Comparison"
+            return "Сравнение"
         }
     }
 
     private func valueText(_ value: Double) -> String {
         if metric.unit == "kcal" {
-            return "\(Int(value.rounded())) \(metric.unit)"
+            return "\(Int(value.rounded())) \(localizedUnit(metric.unit))"
         }
 
-        return String(format: "%.1f %@", value, metric.unit)
+        return String(format: "%.1f %@", value, localizedUnit(metric.unit))
+    }
+
+    private func localizedMetricTitle(_ title: String) -> String {
+        switch title.lowercased() {
+        case "calories":
+            return "Калории"
+        case "protein":
+            return "Белки"
+        case "fat":
+            return "Жиры"
+        case "carbs":
+            return "Углеводы"
+        case "iron":
+            return "Железо"
+        default:
+            return title
+        }
+    }
+
+    private func localizedUnit(_ unit: String) -> String {
+        switch unit {
+        case "kcal":
+            return "ккал"
+        case "g":
+            return "г"
+        case "mg":
+            return "мг"
+        default:
+            return unit
+        }
     }
 
     @ViewBuilder

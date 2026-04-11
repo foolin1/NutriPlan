@@ -18,132 +18,18 @@ struct ProfileView: View {
     @State private var showSavedMessage = false
 
     var body: some View {
-        let draftProfile = buildProfile()
-        let previewGoal = GoalCalculator.calculate(for: draftProfile)
-
         NavigationStack {
             Form {
-                Section("Profile") {
-                    Picker("Sex", selection: $sex) {
-                        ForEach(BiologicalSex.allCases) { value in
-                            Text(value.rawValue).tag(value)
-                        }
-                    }
-
-                    Stepper("Age: \(age)", value: $age, in: 14...100)
-
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Height: \(Int(heightCm)) cm")
-                        Slider(value: $heightCm, in: 140...220, step: 1)
-                    }
-
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Weight: \(Int(weightKg)) kg")
-                        Slider(value: $weightKg, in: 40...180, step: 1)
-                    }
-
-                    Picker("Activity level", selection: $activityLevel) {
-                        ForEach(ActivityLevel.allCases) { value in
-                            Text(value.rawValue).tag(value)
-                        }
-                    }
-
-                    Picker("Goal", selection: $goalType) {
-                        ForEach(GoalType.allCases) { value in
-                            Text(value.rawValue).tag(value)
-                        }
-                    }
-                }
-
-                Section("Micronutrient focus") {
-                    Picker("Focus", selection: $nutrientFocus) {
-                        ForEach(NutrientFocus.allCases) { value in
-                            Text(value.displayName).tag(value)
-                        }
-                    }
-
-                    Text(nutrientFocus.descriptionText)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-
-                Section("Excluded product groups") {
-                    ForEach(FoodGroupCatalog.all) { option in
-                        Toggle(
-                            isOn: Binding(
-                                get: { excludedGroups.contains(option.id) },
-                                set: { isOn in
-                                    if isOn {
-                                        excludedGroups.insert(option.id)
-                                    } else {
-                                        excludedGroups.remove(option.id)
-                                    }
-                                }
-                            )
-                        ) {
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(option.title)
-                                Text(option.subtitle)
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
-                        }
-                    }
-                }
-
-                Section("Restrictions") {
-                    TextField("Allergens (comma separated)", text: $allergensText)
-                    TextField("Excluded products (comma separated)", text: $excludedProductsText)
-                }
-
-                Section("Target preview") {
-                    GoalRow(title: "Calories", value: "\(previewGoal.targetCalories) kcal")
-                    GoalRow(title: "Protein", value: "\(previewGoal.proteinGrams) g")
-                    GoalRow(title: "Fat", value: "\(previewGoal.fatGrams) g")
-                    GoalRow(title: "Carbs", value: "\(previewGoal.carbsGrams) g")
-                }
-
-                if let currentProfile = appState.userProfile {
-                    Section("Saved profile summary") {
-                        GoalRow(title: "Current goal", value: currentProfile.goalType.rawValue)
-                        GoalRow(title: "Current activity", value: currentProfile.activityLevel.rawValue)
-                        GoalRow(title: "Micronutrient focus", value: currentProfile.nutrientFocus.displayName)
-
-                        GoalRow(
-                            title: "Excluded groups",
-                            value: groupsSummary(from: currentProfile.excludedGroups)
-                        )
-                    }
-                }
-
-                Section {
-                    Button("Save profile") {
-                        appState.updateProfile(draftProfile)
-                        showSavedMessage = true
-                    }
-                    .disabled(!hasUnsavedChanges)
-
-                    Button("Reset onboarding", role: .destructive) {
-                        appState.resetProfile()
-                    }
-                } footer: {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("After saving, the daily target is recalculated automatically.")
-                        Text("Excluded groups are applied internally during plan generation and ingredient substitutions.")
-                    }
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                }
-
-                if showSavedMessage {
-                    Section {
-                        Text("Profile saved. Target, restrictions and current daily plan were updated.")
-                            .font(.subheadline)
-                            .foregroundStyle(.green)
-                    }
-                }
+                profileSection
+                nutrientFocusSection
+                excludedGroupsSection
+                restrictionsSection
+                previewSection
+                savedProfileSection
+                actionsSection
+                savedMessageSection
             }
-            .navigationTitle("Profile")
+            .navigationTitle("Профиль")
             .onAppear {
                 loadProfile()
             }
@@ -158,8 +44,160 @@ struct ProfileView: View {
         }
     }
 
+    private var draftProfile: UserProfile {
+        buildProfile()
+    }
+
+    private var previewGoal: NutritionGoal {
+        GoalCalculator.calculate(for: draftProfile)
+    }
+
     private var hasUnsavedChanges: Bool {
-        makeProfileFingerprint(buildProfile()) != makeSavedProfileFingerprint()
+        makeProfileFingerprint(draftProfile) != makeSavedProfileFingerprint()
+    }
+
+    private var profileSection: some View {
+        Section("Профиль") {
+            Picker("Пол", selection: $sex) {
+                ForEach(BiologicalSex.allCases) { value in
+                    Text(value.ruTitle).tag(value)
+                }
+            }
+
+            Stepper("Возраст: \(age)", value: $age, in: 14...100)
+
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Рост: \(Int(heightCm)) см")
+                Slider(value: $heightCm, in: 140...220, step: 1)
+            }
+
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Вес: \(Int(weightKg)) кг")
+                Slider(value: $weightKg, in: 40...180, step: 1)
+            }
+
+            Picker("Уровень активности", selection: $activityLevel) {
+                ForEach(ActivityLevel.allCases) { value in
+                    Text(value.ruTitle).tag(value)
+                }
+            }
+
+            Picker("Цель", selection: $goalType) {
+                ForEach(GoalType.allCases) { value in
+                    Text(value.ruTitle).tag(value)
+                }
+            }
+        }
+    }
+
+    private var nutrientFocusSection: some View {
+        Section("Фокус по микронутриентам") {
+            Picker("Фокус", selection: $nutrientFocus) {
+                ForEach(NutrientFocus.allCases) { value in
+                    Text(value.displayName).tag(value)
+                }
+            }
+
+            Text(nutrientFocus.descriptionText)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+    }
+
+    private var excludedGroupsSection: some View {
+        Section("Исключаемые группы продуктов") {
+            ForEach(FoodGroupCatalog.all) { option in
+                groupToggle(for: option)
+            }
+        }
+    }
+
+    private var restrictionsSection: some View {
+        Section("Ограничения") {
+            TextField("Аллергены (через запятую)", text: $allergensText)
+            TextField("Исключаемые продукты (через запятую)", text: $excludedProductsText)
+        }
+    }
+
+    private var previewSection: some View {
+        Section("Предпросмотр цели") {
+            GoalRow(title: "Калории", value: "\(previewGoal.targetCalories) ккал")
+            GoalRow(title: "Белки", value: "\(previewGoal.proteinGrams) г")
+            GoalRow(title: "Жиры", value: "\(previewGoal.fatGrams) г")
+            GoalRow(title: "Углеводы", value: "\(previewGoal.carbsGrams) г")
+        }
+    }
+
+    @ViewBuilder
+    private var savedProfileSection: some View {
+        if let currentProfile = appState.userProfile {
+            Section("Сохранённый профиль") {
+                GoalRow(title: "Текущая цель", value: currentProfile.goalType.ruTitle)
+                GoalRow(title: "Текущая активность", value: currentProfile.activityLevel.ruTitle)
+                GoalRow(title: "Фокус по микронутриентам", value: currentProfile.nutrientFocus.displayName)
+                GoalRow(
+                    title: "Исключённые группы",
+                    value: groupsSummary(from: currentProfile.excludedGroups)
+                )
+            }
+        }
+    }
+
+    private var actionsSection: some View {
+        Section {
+            Button("Сохранить профиль") {
+                appState.updateProfile(draftProfile)
+                showSavedMessage = true
+            }
+            .disabled(!hasUnsavedChanges)
+
+            Button("Сбросить начальную настройку", role: .destructive) {
+                appState.resetProfile()
+            }
+        } footer: {
+            VStack(alignment: .leading, spacing: 8) {
+                Text("После сохранения дневная цель пересчитывается автоматически.")
+                Text("Исключённые группы применяются внутри логики генерации плана и механизма замен.")
+            }
+            .font(.caption)
+            .foregroundStyle(.secondary)
+        }
+    }
+
+    @ViewBuilder
+    private var savedMessageSection: some View {
+        if showSavedMessage {
+            Section {
+                Text("Профиль сохранён. Цель, ограничения и текущий план были обновлены.")
+                    .font(.subheadline)
+                    .foregroundStyle(.green)
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func groupToggle(for option: FoodGroupOption) -> some View {
+        Toggle(isOn: bindingForGroup(option.id)) {
+            VStack(alignment: .leading, spacing: 4) {
+                Text(option.title)
+                Text(option.subtitle)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+        }
+    }
+
+    private func bindingForGroup(_ id: String) -> Binding<Bool> {
+        Binding(
+            get: { excludedGroups.contains(id) },
+            set: { isOn in
+                if isOn {
+                    excludedGroups.insert(id)
+                } else {
+                    excludedGroups.remove(id)
+                }
+            }
+        )
     }
 
     private func loadProfile() {
@@ -200,7 +238,7 @@ struct ProfileView: View {
     }
 
     private func groupsSummary(from groups: [String]) -> String {
-        if groups.isEmpty { return "None" }
+        if groups.isEmpty { return "Нет" }
 
         return groups
             .sorted()

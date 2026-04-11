@@ -30,7 +30,7 @@ struct SubstitutionCandidateCard: View {
 
                     VStack(alignment: .trailing, spacing: 8) {
                         if isBest {
-                            StatPill(text: "Best match")
+                            StatPill(text: "Лучшая замена")
                         } else {
                             StatPill(text: matchLabel)
                         }
@@ -44,10 +44,10 @@ struct SubstitutionCandidateCard: View {
                 Divider()
 
                 HStack(spacing: 16) {
-                    deltaBlock(title: "Δ kcal", value: caloriesDelta)
-                    deltaBlock(title: "Δ P", value: proteinDelta)
-                    deltaBlock(title: "Δ F", value: fatDelta)
-                    deltaBlock(title: "Δ C", value: carbsDelta)
+                    deltaBlock(title: "Δ ккал", value: caloriesDelta)
+                    deltaBlock(title: "Δ Б", value: proteinDelta)
+                    deltaBlock(title: "Δ Ж", value: fatDelta)
+                    deltaBlock(title: "Δ У", value: carbsDelta)
                 }
             }
             .padding(14)

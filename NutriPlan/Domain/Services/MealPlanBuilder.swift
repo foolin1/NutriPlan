@@ -10,7 +10,74 @@ enum MealPlanBuilder {
         excludedGroups: Set<String> = [],
         nutrientFocus: NutrientFocus = .none
     ) -> DayPlan {
-        let allowedRecipes = recipes.filter {
+        let allowedRecipes = filteredAllowedRecipes(
+            recipes: recipes,
+            foodsById: foodsById,
+            excludedAllergens: excludedAllergens,
+            excludedProducts: excludedProducts,
+            excludedGroups: excludedGroups
+        )
+
+        guard !allowedRecipes.isEmpty else {
+            return .empty
+        }
+
+        let candidatePools = buildCandidatePools(
+            goal: goal,
+            recipes: allowedRecipes,
+            foodsById: foodsById,
+            nutrientFocus: nutrientFocus
+        )
+
+        let basePlan = DayPlanOptimizer.buildOptimizedDayPlan(
+            goal: goal,
+            candidatePools: candidatePools,
+            foodsById: foodsById,
+            nutrientFocus: nutrientFocus
+        )
+
+        return finalizeDayPlan(
+            basePlan,
+            goal: goal,
+            allowedRecipes: allowedRecipes,
+            foodsById: foodsById,
+            nutrientFocus: nutrientFocus
+        )
+    }
+
+    static func finalizeDayPlan(
+        _ dayPlan: DayPlan,
+        goal: NutritionGoal?,
+        allowedRecipes: [Recipe],
+        foodsById: [String: Food],
+        nutrientFocus: NutrientFocus
+    ) -> DayPlan {
+        let portionAdjustedPlan = DayPlanPortionOptimizer.optimize(
+            dayPlan: dayPlan,
+            goal: goal,
+            foodsById: foodsById,
+            nutrientFocus: nutrientFocus
+        )
+
+        let toppedUpPlan = DayPlanCalorieTopUpService.topUpIfNeeded(
+            dayPlan: portionAdjustedPlan,
+            goal: goal,
+            allowedRecipes: allowedRecipes,
+            foodsById: foodsById,
+            nutrientFocus: nutrientFocus
+        )
+
+        return toppedUpPlan
+    }
+
+    static func filteredAllowedRecipes(
+        recipes: [Recipe],
+        foodsById: [String: Food],
+        excludedAllergens: Set<String>,
+        excludedProducts: Set<String>,
+        excludedGroups: Set<String>
+    ) -> [Recipe] {
+        recipes.filter {
             isRecipeAllowed(
                 $0,
                 foodsById: foodsById,
@@ -19,24 +86,25 @@ enum MealPlanBuilder {
                 excludedGroups: excludedGroups
             )
         }
+    }
 
-        guard !allowedRecipes.isEmpty else {
-            return .empty
-        }
-
-        // Для каждого приема пищи сначала отбираем локально лучшие рецепты,
-        // а затем оптимизируем уже комбинацию всего дня.
-        let candidateLimitPerMeal = 4
+    static func buildCandidatePools(
+        goal: NutritionGoal?,
+        recipes: [Recipe],
+        foodsById: [String: Food],
+        nutrientFocus: NutrientFocus
+    ) -> [MealType: [Recipe]] {
+        let candidateLimitPerMeal = 8
         var candidatePools: [MealType: [Recipe]] = [:]
 
         for mealType in MealType.allCases {
             let preferredTag = RecipeScorer.mealTag(for: mealType)
 
-            let taggedRecipes = allowedRecipes.filter {
+            let taggedRecipes = recipes.filter {
                 $0.tags.contains(preferredTag)
             }
 
-            let poolSource = taggedRecipes.isEmpty ? allowedRecipes : taggedRecipes
+            let poolSource = taggedRecipes.isEmpty ? recipes : taggedRecipes
 
             let rankedRecipes = poolSource.sorted {
                 let left = RecipeScorer.evaluate(
@@ -58,17 +126,10 @@ enum MealPlanBuilder {
                 return left.totalScore > right.totalScore
             }
 
-            candidatePools[mealType] = Array(
-                rankedRecipes.prefix(candidateLimitPerMeal)
-            )
+            candidatePools[mealType] = Array(rankedRecipes.prefix(candidateLimitPerMeal))
         }
 
-        return DayPlanOptimizer.buildOptimizedDayPlan(
-            goal: goal,
-            candidatePools: candidatePools,
-            foodsById: foodsById,
-            nutrientFocus: nutrientFocus
-        )
+        return candidatePools
     }
 
     private static func isRecipeAllowed(

@@ -54,6 +54,21 @@
 		8B0B9E522F894CC400B41AE7 /* BundleJSONLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9E512F894CC400B41AE7 /* BundleJSONLoader.swift */; };
 		8B0B9E5A2F8954C100B41AE7 /* foods.json in Resources */ = {isa = PBXBuildFile; fileRef = 8B0B9E572F8954C100B41AE7 /* foods.json */; };
 		8B0B9E5B2F8954C100B41AE7 /* recipes.json in Resources */ = {isa = PBXBuildFile; fileRef = 8B0B9E582F8954C100B41AE7 /* recipes.json */; };
+		8B0B9E5D2F895AC300B41AE7 /* DayPlanShuffleService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9E5C2F895AC300B41AE7 /* DayPlanShuffleService.swift */; };
+		8B0B9E5F2F8960C400B41AE7 /* TextExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9E5E2F8960C400B41AE7 /* TextExtensions.swift */; };
+		8B0B9E612F896FD400B41AE7 /* DisplayTextExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9E602F896FD400B41AE7 /* DisplayTextExtensions.swift */; };
+		8B0B9E632F8AC22F00B41AE7 /* PlanViewModel+ManualDiary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9E622F8AC22F00B41AE7 /* PlanViewModel+ManualDiary.swift */; };
+		8B0B9E652F8AC29F00B41AE7 /* ManualDiaryEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9E642F8AC29F00B41AE7 /* ManualDiaryEntryView.swift */; };
+		8B0B9E672F8ACDE200B41AE7 /* DayPlanPortionOptimizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9E662F8ACDE200B41AE7 /* DayPlanPortionOptimizer.swift */; };
+		8B0B9E692F8AD33500B41AE7 /* DayPlanCalorieTopUpService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9E682F8AD33500B41AE7 /* DayPlanCalorieTopUpService.swift */; };
+		8B0B9E872F8AE6F900B41AE7 /* NutriPlanTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9E852F8AE6F900B41AE7 /* NutriPlanTests.swift */; };
+		8B0B9E8E2F8AE7A700B41AE7 /* TestDataFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9E8D2F8AE7A700B41AE7 /* TestDataFactory.swift */; };
+		8B0B9E902F8AE7BF00B41AE7 /* GoalCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9E8F2F8AE7BF00B41AE7 /* GoalCalculatorTests.swift */; };
+		8B0B9E922F8AE7DA00B41AE7 /* MealPlanBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9E912F8AE7DA00B41AE7 /* MealPlanBuilderTests.swift */; };
+		8B0B9E942F8AE7F200B41AE7 /* SubstitutionEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9E932F8AE7F200B41AE7 /* SubstitutionEngineTests.swift */; };
+		8B0B9E962F8AE80400B41AE7 /* DayPlanTopUpTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9E952F8AE80400B41AE7 /* DayPlanTopUpTests.swift */; };
+		8B0B9E982F8AE81700B41AE7 /* ManualDiaryEntryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9E972F8AE81700B41AE7 /* ManualDiaryEntryTests.swift */; };
+		8B0B9E9A2F8AE8C400B41AE7 /* ShoppingListBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9E992F8AE8C400B41AE7 /* ShoppingListBuilderTests.swift */; };
 		8B94CA432F54778A000CB887 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B94CA402F54778A000CB887 /* ContentView.swift */; };
 		8B94CA442F54778A000CB887 /* NutriPlanApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B94CA412F54778A000CB887 /* NutriPlanApp.swift */; };
 		8B94CA452F54778A000CB887 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B94CA3F2F54778A000CB887 /* Assets.xcassets */; };
@@ -74,6 +89,16 @@
 		8B94CA6A2F5495B1000CB887 /* SubstitutionPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B94CA692F5495B1000CB887 /* SubstitutionPickerView.swift */; };
 		8B94CA6C2F5495EB000CB887 /* RecipeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B94CA6B2F5495EB000CB887 /* RecipeDetailView.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		8B0B9E802F8AE6C800B41AE7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8B7D9B682F545AD3006A4CFD /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8B7D9B6F2F545AD3006A4CFD;
+			remoteInfo = NutriPlan;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		8B0B9DEE2F65BDE800B41AE7 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
@@ -123,6 +148,22 @@
 		8B0B9E512F894CC400B41AE7 /* BundleJSONLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundleJSONLoader.swift; sourceTree = "<group>"; };
 		8B0B9E572F8954C100B41AE7 /* foods.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = foods.json; sourceTree = "<group>"; };
 		8B0B9E582F8954C100B41AE7 /* recipes.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = recipes.json; sourceTree = "<group>"; };
+		8B0B9E5C2F895AC300B41AE7 /* DayPlanShuffleService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayPlanShuffleService.swift; sourceTree = "<group>"; };
+		8B0B9E5E2F8960C400B41AE7 /* TextExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextExtensions.swift; sourceTree = "<group>"; };
+		8B0B9E602F896FD400B41AE7 /* DisplayTextExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayTextExtensions.swift; sourceTree = "<group>"; };
+		8B0B9E622F8AC22F00B41AE7 /* PlanViewModel+ManualDiary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlanViewModel+ManualDiary.swift"; sourceTree = "<group>"; };
+		8B0B9E642F8AC29F00B41AE7 /* ManualDiaryEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManualDiaryEntryView.swift; sourceTree = "<group>"; };
+		8B0B9E662F8ACDE200B41AE7 /* DayPlanPortionOptimizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayPlanPortionOptimizer.swift; sourceTree = "<group>"; };
+		8B0B9E682F8AD33500B41AE7 /* DayPlanCalorieTopUpService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayPlanCalorieTopUpService.swift; sourceTree = "<group>"; };
+		8B0B9E7C2F8AE6C800B41AE7 /* NutriPlanTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NutriPlanTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		8B0B9E852F8AE6F900B41AE7 /* NutriPlanTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutriPlanTests.swift; sourceTree = "<group>"; };
+		8B0B9E8D2F8AE7A700B41AE7 /* TestDataFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestDataFactory.swift; sourceTree = "<group>"; };
+		8B0B9E8F2F8AE7BF00B41AE7 /* GoalCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalCalculatorTests.swift; sourceTree = "<group>"; };
+		8B0B9E912F8AE7DA00B41AE7 /* MealPlanBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealPlanBuilderTests.swift; sourceTree = "<group>"; };
+		8B0B9E932F8AE7F200B41AE7 /* SubstitutionEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubstitutionEngineTests.swift; sourceTree = "<group>"; };
+		8B0B9E952F8AE80400B41AE7 /* DayPlanTopUpTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayPlanTopUpTests.swift; sourceTree = "<group>"; };
+		8B0B9E972F8AE81700B41AE7 /* ManualDiaryEntryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManualDiaryEntryTests.swift; sourceTree = "<group>"; };
+		8B0B9E992F8AE8C400B41AE7 /* ShoppingListBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingListBuilderTests.swift; sourceTree = "<group>"; };
 		8B7D9B702F545AD3006A4CFD /* NutriPlan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NutriPlan.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B94CA3F2F54778A000CB887 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8B94CA402F54778A000CB887 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -146,6 +187,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		8B0B9E792F8AE6C800B41AE7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8B7D9B6D2F545AD3006A4CFD /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -245,10 +293,66 @@
 			path = Data;
 			sourceTree = "<group>";
 		};
+		8B0B9E862F8AE6F900B41AE7 /* NutriPlanTests */ = {
+			isa = PBXGroup;
+			children = (
+				8B0B9E8C2F8AE73900B41AE7 /* Shopping */,
+				8B0B9E8B2F8AE73000B41AE7 /* Diary */,
+				8B0B9E8A2F8AE72600B41AE7 /* Planning */,
+				8B0B9E892F8AE71C00B41AE7 /* Core */,
+				8B0B9E882F8AE6FF00B41AE7 /* Support */,
+				8B0B9E852F8AE6F900B41AE7 /* NutriPlanTests.swift */,
+			);
+			path = NutriPlanTests;
+			sourceTree = "<group>";
+		};
+		8B0B9E882F8AE6FF00B41AE7 /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				8B0B9E8D2F8AE7A700B41AE7 /* TestDataFactory.swift */,
+			);
+			path = Support;
+			sourceTree = "<group>";
+		};
+		8B0B9E892F8AE71C00B41AE7 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				8B0B9E8F2F8AE7BF00B41AE7 /* GoalCalculatorTests.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		8B0B9E8A2F8AE72600B41AE7 /* Planning */ = {
+			isa = PBXGroup;
+			children = (
+				8B0B9E912F8AE7DA00B41AE7 /* MealPlanBuilderTests.swift */,
+				8B0B9E932F8AE7F200B41AE7 /* SubstitutionEngineTests.swift */,
+				8B0B9E952F8AE80400B41AE7 /* DayPlanTopUpTests.swift */,
+			);
+			path = Planning;
+			sourceTree = "<group>";
+		};
+		8B0B9E8B2F8AE73000B41AE7 /* Diary */ = {
+			isa = PBXGroup;
+			children = (
+				8B0B9E972F8AE81700B41AE7 /* ManualDiaryEntryTests.swift */,
+			);
+			path = Diary;
+			sourceTree = "<group>";
+		};
+		8B0B9E8C2F8AE73900B41AE7 /* Shopping */ = {
+			isa = PBXGroup;
+			children = (
+				8B0B9E992F8AE8C400B41AE7 /* ShoppingListBuilderTests.swift */,
+			);
+			path = Shopping;
+			sourceTree = "<group>";
+		};
 		8B7D9B672F545AD3006A4CFD = {
 			isa = PBXGroup;
 			children = (
 				8B94CA422F54778A000CB887 /* NutriPlan */,
+				8B0B9E862F8AE6F900B41AE7 /* NutriPlanTests */,
 				8B7D9B712F545AD3006A4CFD /* Products */,
 			);
 			sourceTree = "<group>";
@@ -257,6 +361,7 @@
 			isa = PBXGroup;
 			children = (
 				8B7D9B702F545AD3006A4CFD /* NutriPlan.app */,
+				8B0B9E7C2F8AE6C800B41AE7 /* NutriPlanTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -303,6 +408,7 @@
 			children = (
 				8B0B9E442F82D55900B41AE7 /* Components */,
 				8B0B9E082F65D5DA00B41AE7 /* DiaryView.swift */,
+				8B0B9E642F8AC29F00B41AE7 /* ManualDiaryEntryView.swift */,
 			);
 			path = Diary;
 			sourceTree = "<group>";
@@ -332,6 +438,7 @@
 				8B94CA6B2F5495EB000CB887 /* RecipeDetailView.swift */,
 				8B0B9E1E2F82AC5800B41AE7 /* PlanView.swift */,
 				8B0B9E472F82E7C800B41AE7 /* PlanViewModel+IngredientPortion.swift */,
+				8B0B9E622F8AC22F00B41AE7 /* PlanViewModel+ManualDiary.swift */,
 			);
 			path = Plan;
 			sourceTree = "<group>";
@@ -414,6 +521,8 @@
 				8B0B9E0C2F65DFD000B41AE7 /* PlanComparison.swift */,
 				8B0B9E132F65FB0D00B41AE7 /* PlanAdjustment.swift */,
 				8B0B9E172F66053A00B41AE7 /* NutrientFocus.swift */,
+				8B0B9E5E2F8960C400B41AE7 /* TextExtensions.swift */,
+				8B0B9E602F896FD400B41AE7 /* DisplayTextExtensions.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -430,6 +539,9 @@
 				8B0B9E152F65FB9C00B41AE7 /* PlanAdjuster.swift */,
 				8B0B9E4B2F82F0F300B41AE7 /* RecipeScorer.swift */,
 				8B0B9E4D2F82FE9C00B41AE7 /* DayPlanOptimizer.swift */,
+				8B0B9E5C2F895AC300B41AE7 /* DayPlanShuffleService.swift */,
+				8B0B9E662F8ACDE200B41AE7 /* DayPlanPortionOptimizer.swift */,
+				8B0B9E682F8AD33500B41AE7 /* DayPlanCalorieTopUpService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -456,6 +568,26 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		8B0B9E7B2F8AE6C800B41AE7 /* NutriPlanTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8B0B9E822F8AE6C800B41AE7 /* Build configuration list for PBXNativeTarget "NutriPlanTests" */;
+			buildPhases = (
+				8B0B9E782F8AE6C800B41AE7 /* Sources */,
+				8B0B9E792F8AE6C800B41AE7 /* Frameworks */,
+				8B0B9E7A2F8AE6C800B41AE7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8B0B9E812F8AE6C800B41AE7 /* PBXTargetDependency */,
+			);
+			name = NutriPlanTests;
+			packageProductDependencies = (
+			);
+			productName = NutriPlanTests;
+			productReference = 8B0B9E7C2F8AE6C800B41AE7 /* NutriPlanTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		8B7D9B6F2F545AD3006A4CFD /* NutriPlan */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8B7D9B7B2F545AD3006A4CFD /* Build configuration list for PBXNativeTarget "NutriPlan" */;
@@ -485,6 +617,10 @@
 				LastSwiftUpdateCheck = 2630;
 				LastUpgradeCheck = 2630;
 				TargetAttributes = {
+					8B0B9E7B2F8AE6C800B41AE7 = {
+						CreatedOnToolsVersion = 26.3;
+						TestTargetID = 8B7D9B6F2F545AD3006A4CFD;
+					};
 					8B7D9B6F2F545AD3006A4CFD = {
 						CreatedOnToolsVersion = 26.3;
 					};
@@ -505,11 +641,19 @@
 			projectRoot = "";
 			targets = (
 				8B7D9B6F2F545AD3006A4CFD /* NutriPlan */,
+				8B0B9E7B2F8AE6C800B41AE7 /* NutriPlanTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		8B0B9E7A2F8AE6C800B41AE7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8B7D9B6E2F545AD3006A4CFD /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -523,12 +667,28 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		8B0B9E782F8AE6C800B41AE7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8B0B9E962F8AE80400B41AE7 /* DayPlanTopUpTests.swift in Sources */,
+				8B0B9E902F8AE7BF00B41AE7 /* GoalCalculatorTests.swift in Sources */,
+				8B0B9E922F8AE7DA00B41AE7 /* MealPlanBuilderTests.swift in Sources */,
+				8B0B9E8E2F8AE7A700B41AE7 /* TestDataFactory.swift in Sources */,
+				8B0B9E942F8AE7F200B41AE7 /* SubstitutionEngineTests.swift in Sources */,
+				8B0B9E872F8AE6F900B41AE7 /* NutriPlanTests.swift in Sources */,
+				8B0B9E982F8AE81700B41AE7 /* ManualDiaryEntryTests.swift in Sources */,
+				8B0B9E9A2F8AE8C400B41AE7 /* ShoppingListBuilderTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8B7D9B6C2F545AD3006A4CFD /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				8B94CA512F547D1E000CB887 /* NutritionCalculator.swift in Sources */,
 				8B0B9DF72F65C09700B41AE7 /* RootView.swift in Sources */,
+				8B0B9E672F8ACDE200B41AE7 /* DayPlanPortionOptimizer.swift in Sources */,
 				8B0B9E3C2F82C90F00B41AE7 /* RecipeIngredientCard.swift in Sources */,
 				8B0B9E282F82B06000B41AE7 /* InfoValueRow.swift in Sources */,
 				8B94CA6C2F5495EB000CB887 /* RecipeDetailView.swift in Sources */,
@@ -536,12 +696,15 @@
 				8B0B9E032F65CAD900B41AE7 /* MealPlanBuilder.swift in Sources */,
 				8B0B9E4C2F82F0F300B41AE7 /* RecipeScorer.swift in Sources */,
 				8B0B9DF32F65BE4200B41AE7 /* GoalCalculator.swift in Sources */,
+				8B0B9E5F2F8960C400B41AE7 /* TextExtensions.swift in Sources */,
 				8B0B9E4E2F82FE9C00B41AE7 /* DayPlanOptimizer.swift in Sources */,
+				8B0B9E612F896FD400B41AE7 /* DisplayTextExtensions.swift in Sources */,
 				8B94CA5F2F548720000CB887 /* ShoppingItem.swift in Sources */,
 				8B0B9E072F65D4E000B41AE7 /* DiaryDay.swift in Sources */,
 				8B94CA432F54778A000CB887 /* ContentView.swift in Sources */,
 				8B0B9E352F82C41600B41AE7 /* ShoppingProgressCard.swift in Sources */,
 				8B94CA4D2F547CB6000CB887 /* Food.swift in Sources */,
+				8B0B9E692F8AD33500B41AE7 /* DayPlanCalorieTopUpService.swift in Sources */,
 				8B0B9DFD2F65CA7600B41AE7 /* MealType.swift in Sources */,
 				8B0B9E432F82D53600B41AE7 /* ComparisonMetricCard.swift in Sources */,
 				8B0B9E3E2F82C94B00B41AE7 /* SubstitutionCandidateCard.swift in Sources */,
@@ -551,8 +714,10 @@
 				8B94CA682F5491D4000CB887 /* SubstitutionEngine.swift in Sources */,
 				8B0B9E3A2F82C8AB00B41AE7 /* RecipeSummaryGrid.swift in Sources */,
 				8B94CA5D2F548308000CB887 /* PlanViewModel.swift in Sources */,
+				8B0B9E632F8AC22F00B41AE7 /* PlanViewModel+ManualDiary.swift in Sources */,
 				8B0B9E262F82B03C00B41AE7 /* AppCard.swift in Sources */,
 				8B0B9DF12F65BE1000B41AE7 /* NutritionGoal.swift in Sources */,
+				8B0B9E652F8AC29F00B41AE7 /* ManualDiaryEntryView.swift in Sources */,
 				8B0B9E522F894CC400B41AE7 /* BundleJSONLoader.swift in Sources */,
 				8B0B9E012F65CAC000B41AE7 /* DayPlan.swift in Sources */,
 				8B0B9E372F82C49700B41AE7 /* ShoppingItemRow.swift in Sources */,
@@ -588,6 +753,7 @@
 				8B0B9E092F65D5DA00B41AE7 /* DiaryView.swift in Sources */,
 				8B0B9E122F65E0FC00B41AE7 /* PlanComparisonView.swift in Sources */,
 				8B0B9E1D2F82AC2500B41AE7 /* TodayView.swift in Sources */,
+				8B0B9E5D2F895AC300B41AE7 /* DayPlanShuffleService.swift in Sources */,
 				8B0B9E222F82AD4400B41AE7 /* ProfileView.swift in Sources */,
 				8B94CA552F547DCB000CB887 /* FoodRepository.swift in Sources */,
 			);
@@ -595,7 +761,57 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		8B0B9E812F8AE6C800B41AE7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8B7D9B6F2F545AD3006A4CFD /* NutriPlan */;
+			targetProxy = 8B0B9E802F8AE6C800B41AE7 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		8B0B9E832F8AE6C800B41AE7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3Z4TN3B83Y;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.NutriPlanTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NutriPlan.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/NutriPlan";
+			};
+			name = Debug;
+		};
+		8B0B9E842F8AE6C800B41AE7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3Z4TN3B83Y;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.NutriPlanTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NutriPlan.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/NutriPlan";
+			};
+			name = Release;
+		};
 		8B7D9B792F545AD3006A4CFD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -782,6 +998,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		8B0B9E822F8AE6C800B41AE7 /* Build configuration list for PBXNativeTarget "NutriPlanTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8B0B9E832F8AE6C800B41AE7 /* Debug */,
+				8B0B9E842F8AE6C800B41AE7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		8B7D9B6B2F545AD3006A4CFD /* Build configuration list for PBXProject "NutriPlan" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

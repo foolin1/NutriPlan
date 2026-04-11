@@ -9,27 +9,27 @@ enum NutrientFocus: String, CaseIterable, Codable, Identifiable {
     var displayName: String {
         switch self {
         case .none:
-            return "No micronutrient focus"
+            return "Без дополнительного фокуса"
         case .iron:
-            return "Iron support"
+            return "Поддержка железа"
         }
     }
 
     var shortTitle: String {
         switch self {
         case .none:
-            return "None"
+            return "Нет"
         case .iron:
-            return "Iron"
+            return "Железо"
         }
     }
 
     var descriptionText: String {
         switch self {
         case .none:
-            return "The planner will focus on calories and macronutrients only."
+            return "Планировщик будет ориентироваться только на калории и макронутриенты."
         case .iron:
-            return "The planner will prefer meals richer in iron when possible."
+            return "Планировщик будет по возможности отдавать приоритет блюдам с более высоким содержанием железа."
         }
     }
 }

@@ -14,13 +14,13 @@ struct RecipeSummaryGrid: View {
 
     var body: some View {
         LazyVGrid(columns: columns, spacing: 12) {
-            metricTile(title: "Calories", value: caloriesText)
-            metricTile(title: "Protein", value: proteinText)
-            metricTile(title: "Fat", value: fatText)
-            metricTile(title: "Carbs", value: carbsText)
+            metricTile(title: "Калории", value: caloriesText)
+            metricTile(title: "Белки", value: proteinText)
+            metricTile(title: "Жиры", value: fatText)
+            metricTile(title: "Углеводы", value: carbsText)
 
             if let ironText {
-                metricTile(title: "Iron", value: ironText)
+                metricTile(title: "Железо", value: ironText)
             }
         }
     }

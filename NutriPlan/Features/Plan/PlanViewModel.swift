@@ -94,6 +94,51 @@ final class PlanViewModel: ObservableObject {
         )
     }
 
+    func shuffleDayPlan(goal: NutritionGoal?) {
+        currentGoal = goal
+
+        let allowedRecipes = MealPlanBuilder.filteredAllowedRecipes(
+            recipes: allRecipes,
+            foodsById: foodsById,
+            excludedAllergens: excludedAllergens,
+            excludedProducts: excludedProducts,
+            excludedGroups: excludedGroups
+        )
+
+        let candidatePools = MealPlanBuilder.buildCandidatePools(
+            goal: goal,
+            recipes: allowedRecipes,
+            foodsById: foodsById,
+            nutrientFocus: currentNutrientFocus
+        )
+
+        let rankedOptions = DayPlanShuffleService.buildRankedOptions(
+            goal: goal,
+            candidatePools: candidatePools,
+            foodsById: foodsById,
+            nutrientFocus: currentNutrientFocus,
+            maxOptions: 16
+        )
+
+        guard let selected = DayPlanShuffleService.shuffledOption(
+            from: rankedOptions,
+            currentMeals: dayPlan.meals
+        ) else {
+            rebuildDayPlan(goal: goal)
+            return
+        }
+
+        let rawPlan = DayPlan(meals: selected.meals)
+
+        dayPlan = MealPlanBuilder.finalizeDayPlan(
+            rawPlan,
+            goal: goal,
+            allowedRecipes: allowedRecipes,
+            foodsById: foodsById,
+            nutrientFocus: currentNutrientFocus
+        )
+    }
+
     func meal(with id: UUID) -> PlannedMeal? {
         dayPlan.meals.first(where: { $0.id == id })
     }
@@ -192,9 +237,7 @@ final class PlanViewModel: ObservableObject {
             let calories = food.macrosPer100g.calories * factor
 
             return TitleItem(
-                foodId: ing.foodId,
                 name: shortenFoodName(food.name),
-                grams: ing.grams,
                 calories: calories,
                 category: category(for: food)
             )
@@ -260,13 +303,19 @@ final class PlanViewModel: ObservableObject {
 
         dayPlan = DayPlan(meals: updatedMeals)
 
-        if let diaryIndex = diaryDay.entries.firstIndex(where: { $0.mealId == mealId }),
-           let updatedMeal = meal(with: mealId) {
-            var updatedEntries = diaryDay.entries
-            updatedEntries[diaryIndex].recipe = updatedMeal.recipe
-            updatedEntries[diaryIndex].title = displayTitle(for: updatedMeal.recipe)
-            diaryDay = DiaryDay(entries: sortedDiaryEntries(updatedEntries))
+        syncDiaryEntryIfNeeded(for: mealId)
+    }
+
+    private func syncDiaryEntryIfNeeded(for mealId: UUID) {
+        guard let diaryIndex = diaryDay.entries.firstIndex(where: { $0.mealId == mealId }),
+              let updatedMeal = meal(with: mealId) else {
+            return
         }
+
+        var updatedEntries = diaryDay.entries
+        updatedEntries[diaryIndex].recipe = updatedMeal.recipe
+        updatedEntries[diaryIndex].title = displayTitle(for: updatedMeal.recipe)
+        diaryDay = DiaryDay(entries: sortedDiaryEntries(updatedEntries))
     }
 
     func isMealLogged(_ mealId: UUID) -> Bool {
@@ -372,10 +421,10 @@ final class PlanViewModel: ObservableObject {
     }
 
     private func dishSuffix(for recipe: Recipe) -> String {
-        if recipe.tags.contains("salad") { return "Salad" }
-        if recipe.tags.contains("plate") { return "Plate" }
-        if recipe.tags.contains("bowl") { return "Bowl" }
-        return "Bowl"
+        if recipe.tags.contains("salad") { return "Салат" }
+        if recipe.tags.contains("plate") { return "Тарелка" }
+        if recipe.tags.contains("bowl") { return "Чаша" }
+        return "Чаша"
     }
 
     private enum TitleCategory {
@@ -386,15 +435,26 @@ final class PlanViewModel: ObservableObject {
     }
 
     private func category(for food: Food) -> TitleCategory {
-        if food.tags.contains("meat") {
+        if food.tags.contains("meat")
+            || food.tags.contains("egg")
+            || food.tags.contains("seafood")
+            || food.groups.contains("poultry")
+            || food.groups.contains("seafood")
+            || food.groups.contains("red_meat")
+            || food.groups.contains("eggs")
+            || food.groups.contains("protein_alt") {
             return .protein
         }
 
-        if food.tags.contains("grain") || food.tags.contains("legume") {
+        if food.tags.contains("grain")
+            || food.tags.contains("legume")
+            || food.groups.contains("grain")
+            || food.groups.contains("legumes") {
             return .carb
         }
 
-        if food.tags.contains("vegetable") {
+        if food.tags.contains("vegetable")
+            || food.groups.contains("vegetable") {
             return .veggie
         }
 
@@ -402,9 +462,7 @@ final class PlanViewModel: ObservableObject {
     }
 
     private struct TitleItem {
-        let foodId: String
         let name: String
-        let grams: Double
         let calories: Double
         let category: TitleCategory
     }

@@ -14,35 +14,35 @@ struct SubstitutionPickerView: View {
                 VStack(alignment: .leading, spacing: 20) {
                     AppCard {
                         VStack(alignment: .leading, spacing: 10) {
-                            Text("Replace ingredient")
+                            Text("Замена ингредиента")
                                 .font(.title2.weight(.bold))
 
-                            Text("Candidates are ranked by nutritional closeness for the same ingredient weight.")
+                            Text("Выбери наиболее подходящую замену для этого ингредиента.")
                                 .font(.subheadline)
                                 .foregroundStyle(.secondary)
 
                             Divider()
 
-                            InfoValueRow(title: "Original ingredient", value: shorten(originalName))
-                            InfoValueRow(title: "Weight", value: "\(Int(grams)) g")
+                            InfoValueRow(title: "Исходный ингредиент", value: shorten(originalName))
+                            InfoValueRow(title: "Вес", value: "\(Int(grams)) г")
                         }
                     }
 
                     if candidates.isEmpty {
                         AppCard {
                             VStack(alignment: .leading, spacing: 10) {
-                                Text("No substitutions found")
+                                Text("Замены не найдены")
                                     .font(.headline)
 
-                                Text("Suitable alternatives were not found for the current restrictions and product set.")
+                                Text("Для текущих ограничений и набора продуктов подходящих альтернатив не найдено.")
                                     .font(.subheadline)
                                     .foregroundStyle(.secondary)
                             }
                         }
                     } else {
                         SectionTitleView(
-                            "Suggested replacements",
-                            subtitle: "The higher the score, the closer the replacement is to the original nutritional profile."
+                            "Подходящие варианты",
+                            subtitle: "Сверху показаны самые близкие замены."
                         )
 
                         VStack(spacing: 12) {
@@ -59,7 +59,7 @@ struct SubstitutionPickerView: View {
                                                         .font(.headline)
                                                         .foregroundStyle(.primary)
 
-                                                    Text(scoreDescription(for: candidate.score))
+                                                    Text(matchDescription(for: candidate.score))
                                                         .font(.subheadline)
                                                         .foregroundStyle(.secondary)
                                                 }
@@ -67,29 +67,23 @@ struct SubstitutionPickerView: View {
                                                 Spacer()
 
                                                 if index == 0 {
-                                                    StatPill(text: "Best match")
+                                                    StatPill(text: "Лучшая замена")
                                                 } else {
-                                                    StatPill(text: scoreBadge(for: candidate.score))
+                                                    StatPill(text: matchLabel(for: candidate.score))
                                                 }
                                             }
 
                                             Divider()
 
                                             HStack(spacing: 16) {
-                                                metricBlock(title: "Score", value: "\(Int(candidate.score.rounded())) / 100")
-                                                metricBlock(title: "Penalty", value: String(format: "%.1f", candidate.weightedPenalty))
-                                                metricBlock(title: "Tag bonus", value: String(format: "+%.1f", candidate.tagBonus))
-                                            }
-
-                                            HStack(spacing: 16) {
-                                                metricBlock(title: "Δ kcal", value: formattedDelta(candidate.deltaMacros.calories))
-                                                metricBlock(title: "Δ P", value: formattedDelta(candidate.deltaMacros.protein))
-                                                metricBlock(title: "Δ F", value: formattedDelta(candidate.deltaMacros.fat))
-                                                metricBlock(title: "Δ C", value: formattedDelta(candidate.deltaMacros.carbs))
+                                                metricBlock(title: "Калории", value: deltaValue(candidate.deltaMacros.calories))
+                                                metricBlock(title: "Белки", value: deltaValue(candidate.deltaMacros.protein))
+                                                metricBlock(title: "Жиры", value: deltaValue(candidate.deltaMacros.fat))
+                                                metricBlock(title: "Углеводы", value: deltaValue(candidate.deltaMacros.carbs))
                                             }
 
                                             if let ironDelta = candidate.ironDelta {
-                                                Text("Δ iron: \(formattedDelta(ironDelta)) mg")
+                                                Text(ironDeltaDescription(ironDelta))
                                                     .font(.caption)
                                                     .foregroundStyle(.secondary)
                                             }
@@ -104,11 +98,11 @@ struct SubstitutionPickerView: View {
                 .padding(16)
             }
             .background(Color(.systemGroupedBackground).ignoresSafeArea())
-            .navigationTitle("Substitution")
+            .navigationTitle("Замена")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Close") {
+                    Button("Закрыть") {
                         dismiss()
                     }
                 }
@@ -126,29 +120,45 @@ struct SubstitutionPickerView: View {
         return result.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
-    private func formattedDelta(_ value: Double) -> String {
-        String(format: "%+.1f", value)
-    }
-
-    private func scoreBadge(for score: Double) -> String {
+    private func matchLabel(for score: Double) -> String {
         switch score {
         case 90...:
-            return "Very close"
+            return "Очень близко"
         case 75..<90:
-            return "Good match"
+            return "Хороший вариант"
         default:
-            return "Flexible"
+            return "Допустимо"
         }
     }
 
-    private func scoreDescription(for score: Double) -> String {
+    private func matchDescription(for score: Double) -> String {
         switch score {
         case 90...:
-            return "Very small nutritional deviation from the original ingredient."
+            return "Эта замена очень близка по пищевой ценности."
         case 75..<90:
-            return "Good nutritional match with moderate deviation."
+            return "Эта замена хорошо подходит и сохраняет общий баланс блюда."
         default:
-            return "Usable alternative, but the nutritional deviation is more noticeable."
+            return "Эту замену можно использовать, но отклонение будет заметнее."
+        }
+    }
+
+    private func deltaValue(_ value: Double) -> String {
+        if abs(value) < 0.05 {
+            return "Без изменений"
+        } else if value > 0 {
+            return String(format: "+%.1f", value)
+        } else {
+            return String(format: "%.1f", value)
+        }
+    }
+
+    private func ironDeltaDescription(_ value: Double) -> String {
+        if abs(value) < 0.05 {
+            return "Содержание железа практически не изменится."
+        } else if value > 0 {
+            return String(format: "Железа станет немного больше: +%.2f мг.", value)
+        } else {
+            return String(format: "Железа станет немного меньше: %.2f мг.", value)
         }
     }
 

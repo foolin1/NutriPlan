@@ -15,10 +15,10 @@ struct ShoppingProgressCard: View {
             VStack(alignment: .leading, spacing: 14) {
                 HStack(alignment: .center) {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("Shopping progress")
+                        Text("Прогресс покупок")
                             .font(.headline)
 
-                        Text("Track what is already bought and what is still missing.")
+                        Text("Отмечай, что уже куплено, и отслеживай, что ещё осталось.")
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                     }
@@ -44,9 +44,9 @@ struct ShoppingProgressCard: View {
                 }
 
                 HStack(spacing: 12) {
-                    summaryTile(title: "Total", value: "\(totalCount)")
-                    summaryTile(title: "Bought", value: "\(boughtCount)")
-                    summaryTile(title: "Left", value: "\(remainingCount)")
+                    summaryTile(title: "Всего", value: "\(totalCount)")
+                    summaryTile(title: "Куплено", value: "\(boughtCount)")
+                    summaryTile(title: "Осталось", value: "\(remainingCount)")
                 }
             }
         }

@@ -35,14 +35,14 @@ struct RecipeDetailView: View {
                 headerCard(for: meal)
 
                 SectionTitleView(
-                    "Why this recipe was selected",
-                    subtitle: "The planner estimates how well the recipe matches the target for this meal."
+                    "Почему выбрано это блюдо",
+                    subtitle: "Краткое объяснение, насколько блюдо подходит под текущую цель."
                 )
 
                 AppCard {
                     VStack(alignment: .leading, spacing: 12) {
                         HStack {
-                            Text("Selection score")
+                            Text("Оценка выбора")
                                 .font(.headline)
 
                             Spacer()
@@ -54,78 +54,65 @@ struct RecipeDetailView: View {
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
 
+                        if !selectionHighlights(for: scoreBreakdown).isEmpty {
+                            Divider()
+
+                            VStack(alignment: .leading, spacing: 6) {
+                                ForEach(selectionHighlights(for: scoreBreakdown), id: \.self) { item in
+                                    Text("• \(item)")
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
+                            }
+                        }
+
                         Divider()
 
                         InfoValueRow(
-                            title: "Target calories",
-                            value: "\(Int(scoreBreakdown.mealTargetCalories.rounded())) kcal"
+                            title: "Целевые калории",
+                            value: "\(Int(scoreBreakdown.mealTargetCalories.rounded())) ккал"
                         )
                         InfoValueRow(
-                            title: "Recipe calories",
-                            value: "\(Int(scoreBreakdown.actualCalories.rounded())) kcal"
+                            title: "Калории блюда",
+                            value: "\(Int(scoreBreakdown.actualCalories.rounded())) ккал"
                         )
 
                         InfoValueRow(
-                            title: "Target protein",
-                            value: String(format: "%.1f g", scoreBreakdown.mealTargetProtein)
+                            title: "Целевые белки",
+                            value: String(format: "%.1f г", scoreBreakdown.mealTargetProtein)
                         )
                         InfoValueRow(
-                            title: "Recipe protein",
-                            value: String(format: "%.1f g", scoreBreakdown.actualProtein)
+                            title: "Белки блюда",
+                            value: String(format: "%.1f г", scoreBreakdown.actualProtein)
                         )
-
-                        InfoValueRow(
-                            title: "Penalty",
-                            value: String(
-                                format: "%.1f",
-                                scoreBreakdown.caloriePenalty
-                                + scoreBreakdown.proteinPenalty
-                                + scoreBreakdown.fatPenalty
-                                + scoreBreakdown.carbsPenalty
-                            )
-                        )
-
-                        if scoreBreakdown.nutrientBonus > 0 {
-                            InfoValueRow(
-                                title: "Micronutrient bonus",
-                                value: String(format: "+%.1f", scoreBreakdown.nutrientBonus)
-                            )
-                        }
-
-                        if scoreBreakdown.tagBonus > 0 {
-                            InfoValueRow(
-                                title: "Meal tag bonus",
-                                value: String(format: "+%.1f", scoreBreakdown.tagBonus)
-                            )
-                        }
 
                         if scoreBreakdown.ironAmount > 0 {
                             InfoValueRow(
-                                title: "Iron",
-                                value: String(format: "%.2f mg", scoreBreakdown.ironAmount)
+                                title: "Железо",
+                                value: String(format: "%.2f мг", scoreBreakdown.ironAmount)
                             )
                         }
                     }
                 }
 
                 SectionTitleView(
-                    "Recipe summary",
-                    subtitle: "Nutrition values for the current version of this meal."
+                    "Сводка по рецепту",
+                    subtitle: "Пищевые показатели для текущей версии блюда."
                 )
 
                 AppCard {
                     RecipeSummaryGrid(
-                        caloriesText: "\(Int(summary.macros.calories)) kcal",
-                        proteinText: String(format: "%.1f g", summary.macros.protein),
-                        fatText: String(format: "%.1f g", summary.macros.fat),
-                        carbsText: String(format: "%.1f g", summary.macros.carbs),
-                        ironText: iron.map { String(format: "%.2f mg", $0) }
+                        caloriesText: "\(Int(summary.macros.calories)) ккал",
+                        proteinText: String(format: "%.1f г", summary.macros.protein),
+                        fatText: String(format: "%.1f г", summary.macros.fat),
+                        carbsText: String(format: "%.1f г", summary.macros.carbs),
+                        ironText: iron.map { String(format: "%.2f мг", $0) }
                     )
                 }
 
                 SectionTitleView(
-                    "Actions",
-                    subtitle: "Add the meal to diary or update the existing diary entry."
+                    "Действия",
+                    subtitle: "Добавь блюдо в дневник или обнови существующую запись."
                 )
 
                 AppCard {
@@ -136,7 +123,7 @@ struct RecipeDetailView: View {
                             Image(systemName: vm.isMealLogged(mealId) ? "arrow.trianglehead.clockwise" : "plus.circle.fill")
                                 .font(.title3)
 
-                            Text(vm.isMealLogged(mealId) ? "Update diary entry" : "Add to diary")
+                            Text(vm.isMealLogged(mealId) ? "Обновить запись в дневнике" : "Добавить в дневник")
                                 .font(.headline)
 
                             Spacer()
@@ -151,15 +138,15 @@ struct RecipeDetailView: View {
                     .buttonStyle(.plain)
 
                     if vm.isMealLogged(mealId) {
-                        Text("If you changed ingredients or portion size, use this action to refresh the diary entry.")
+                        Text("Если ты изменил ингредиенты или вес порции, используй это действие, чтобы обновить запись в дневнике.")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
                 }
 
                 SectionTitleView(
-                    "Ingredients and portion tuning",
-                    subtitle: "Tap an ingredient to replace it, or change its weight by a fixed step of 25 g."
+                    "Ингредиенты и настройка порции",
+                    subtitle: "Нажми на ингредиент, чтобы заменить его, или измени вес с шагом 25 г."
                 )
 
                 VStack(spacing: 12) {
@@ -167,7 +154,7 @@ struct RecipeDetailView: View {
                         VStack(spacing: 10) {
                             RecipeIngredientCard(
                                 title: vm.foodName(for: ingredient.foodId),
-                                gramsText: "\(Int(ingredient.grams)) g",
+                                gramsText: "\(Int(ingredient.grams)) г",
                                 caloriesText: "\(Int(ingredientMacros(for: ingredient).calories))",
                                 proteinText: String(format: "%.1f", ingredientMacros(for: ingredient).protein),
                                 fatText: String(format: "%.1f", ingredientMacros(for: ingredient).fat),
@@ -231,7 +218,7 @@ struct RecipeDetailView: View {
                     )
                 }
             } else {
-                Text("Ingredient not found")
+                Text("Ингредиент не найден")
                     .padding()
             }
         }
@@ -239,10 +226,10 @@ struct RecipeDetailView: View {
 
     private var unavailableState: some View {
         VStack(spacing: 12) {
-            Text("Meal not found")
+            Text("Блюдо не найдено")
                 .font(.headline)
 
-            Text("This meal is no longer available.")
+            Text("Это блюдо больше недоступно.")
                 .foregroundStyle(.secondary)
         }
         .padding()
@@ -255,21 +242,21 @@ struct RecipeDetailView: View {
         AppCard {
             VStack(alignment: .leading, spacing: 12) {
                 HStack {
-                    StatPill(text: meal.type.rawValue)
+                    StatPill(text: meal.type.ruTitle)
 
                     if recipe.isModified {
-                        StatPill(text: "Modified")
+                        StatPill(text: "Изменено")
                     }
 
                     if vm.isMealLogged(mealId) {
-                        StatPill(text: "In diary")
+                        StatPill(text: "В дневнике")
                     }
                 }
 
                 Text(vm.displayTitle(for: recipe))
                     .font(.title2.weight(.bold))
 
-                Text("The meal is selected by a recipe score that considers target calories, macros and micronutrient focus.")
+                Text("Блюдо подобрано с учётом цели по питанию, текущих ограничений и типа приёма пищи.")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
 
@@ -277,8 +264,8 @@ struct RecipeDetailView: View {
                     Divider()
 
                     InfoValueRow(
-                        title: "Cook time",
-                        value: "\(cookTimeMinutes) min"
+                        title: "Время приготовления",
+                        value: "\(cookTimeMinutes) мин"
                     )
                 }
             }
@@ -287,12 +274,41 @@ struct RecipeDetailView: View {
 
     private func selectionSummary(for breakdown: RecipeScoreBreakdown) -> String {
         if breakdown.totalScore >= 90 {
-            return "This recipe is very close to the target values for the current meal."
+            return "Это блюдо очень хорошо соответствует цели для текущего приёма пищи."
         } else if breakdown.totalScore >= 75 {
-            return "This recipe is a good match with moderate deviation from the target."
+            return "Это блюдо в целом хорошо подходит, но немного отклоняется от целевых параметров."
         } else {
-            return "This recipe is acceptable, but it deviates more noticeably from the target values."
+            return "Это блюдо допустимо, но отклоняется от целевых значений заметнее."
         }
+    }
+
+    private func selectionHighlights(for breakdown: RecipeScoreBreakdown) -> [String] {
+        var result: [String] = []
+
+        let calorieGap = abs(breakdown.actualCalories - breakdown.mealTargetCalories)
+        let proteinGap = breakdown.mealTargetProtein - breakdown.actualProtein
+
+        if calorieGap <= 60 {
+            result.append("Калорийность блюда близка к целевому значению.")
+        } else if breakdown.actualCalories < breakdown.mealTargetCalories {
+            result.append("Блюдо немного легче по калорийности, чем целевое значение.")
+        } else {
+            result.append("Блюдо немного калорийнее целевого значения.")
+        }
+
+        if proteinGap <= 0 {
+            result.append("Содержание белка соответствует цели или выше неё.")
+        } else if proteinGap <= 5 {
+            result.append("Белка немного меньше целевого значения.")
+        } else {
+            result.append("Белка заметно меньше, чем желательно для этого приёма пищи.")
+        }
+
+        if breakdown.ironAmount >= 2 {
+            result.append("Блюдо даёт полезный вклад в потребление железа.")
+        }
+
+        return result
     }
 
     private func ingredientMacros(for ingredient: RecipeIngredient) -> Macros {
@@ -313,7 +329,7 @@ struct RecipeDetailView: View {
         let iron = food.nutrientsPer100g["iron", default: 0] * factor
 
         guard iron > 0 else { return nil }
-        return String(format: "%.2f mg", iron)
+        return String(format: "%.2f мг", iron)
     }
 }
 

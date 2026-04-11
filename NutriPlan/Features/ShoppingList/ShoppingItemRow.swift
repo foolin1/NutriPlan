@@ -26,7 +26,7 @@ struct ShoppingItemRow: View {
                 Spacer()
 
                 if isChecked {
-                    StatPill(text: "Bought")
+                    StatPill(text: "Куплено")
                 }
             }
             .padding(14)

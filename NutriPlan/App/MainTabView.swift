@@ -8,24 +8,24 @@ struct MainTabView: View {
         TabView {
             TodayView(vm: planViewModel)
                 .tabItem {
-                    Label("Today", systemImage: "sun.max")
+                    Label("Сегодня", systemImage: "sun.max")
                 }
 
             PlanView(vm: planViewModel)
                 .tabItem {
-                    Label("Plan", systemImage: "fork.knife")
+                    Label("План", systemImage: "fork.knife")
                 }
 
             NavigationStack {
                 ShoppingListView(items: shoppingItems)
             }
             .tabItem {
-                Label("Shopping", systemImage: "cart")
+                Label("Покупки", systemImage: "cart")
             }
 
             ProfileView()
                 .tabItem {
-                    Label("Profile", systemImage: "person.crop.circle")
+                    Label("Профиль", systemImage: "person.crop.circle")
                 }
         }
         .onAppear {

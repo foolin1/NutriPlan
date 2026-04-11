@@ -28,7 +28,7 @@ struct RecipeIngredientCard: View {
                     Spacer(minLength: 12)
 
                     VStack(alignment: .trailing, spacing: 8) {
-                        StatPill(text: "Replace")
+                        StatPill(text: "Заменить")
                         Image(systemName: "chevron.right")
                             .font(.caption.weight(.semibold))
                             .foregroundStyle(.tertiary)
@@ -38,14 +38,14 @@ struct RecipeIngredientCard: View {
                 Divider()
 
                 HStack(spacing: 16) {
-                    nutrientMiniBlock(title: "kcal", value: caloriesText)
-                    nutrientMiniBlock(title: "P", value: proteinText)
-                    nutrientMiniBlock(title: "F", value: fatText)
-                    nutrientMiniBlock(title: "C", value: carbsText)
+                    nutrientMiniBlock(title: "ккал", value: caloriesText)
+                    nutrientMiniBlock(title: "Б", value: proteinText)
+                    nutrientMiniBlock(title: "Ж", value: fatText)
+                    nutrientMiniBlock(title: "У", value: carbsText)
                 }
 
                 if let ironText {
-                    Text("Iron: \(ironText)")
+                    Text("Железо: \(ironText)")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }

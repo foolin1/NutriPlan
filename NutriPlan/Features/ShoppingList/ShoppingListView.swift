@@ -24,12 +24,12 @@ struct ShoppingListView: View {
                     )
 
                     SectionTitleView(
-                        "Filter",
-                        subtitle: "Search items or switch between all, pending and bought products."
+                        "Фильтр",
+                        subtitle: "Ищи продукты или переключайся между всеми, оставшимися и уже купленными."
                     )
 
                     AppCard {
-                        Picker("Filter", selection: $filter) {
+                        Picker("Фильтр", selection: $filter) {
                             ForEach(ShoppingFilter.allCases) { value in
                                 Text(value.rawValue).tag(value)
                             }
@@ -38,8 +38,8 @@ struct ShoppingListView: View {
                     }
 
                     SectionTitleView(
-                        "Shopping list",
-                        subtitle: "Items are grouped by category and aggregated from the current meal plan."
+                        "Список покупок",
+                        subtitle: "Позиции сгруппированы по категориям и собраны из текущего плана питания."
                     )
 
                     if filteredItems.isEmpty {
@@ -47,11 +47,11 @@ struct ShoppingListView: View {
                     } else {
                         VStack(spacing: 18) {
                             ForEach(categoryKeysInUse, id: \.self) { categoryKey in
-                                if let categoryItems = grouped[categoryKey] {
+                                if let categoryItems = groupedItems[categoryKey] {
                                     categorySection(
                                         title: categoryTitle(for: categoryKey),
                                         icon: categoryIcon(for: categoryKey),
-                                        items: categoryItems
+                                        categoryItems: categoryItems
                                     )
                                 }
                             }
@@ -62,13 +62,13 @@ struct ShoppingListView: View {
             .padding(16)
         }
         .background(Color(.systemGroupedBackground).ignoresSafeArea())
-        .navigationTitle("Shopping")
+        .navigationTitle("Покупки")
         .navigationBarTitleDisplayMode(.large)
-        .searchable(text: $searchText, prompt: "Search products")
+        .searchable(text: $searchText, prompt: "Поиск продуктов")
         .toolbar {
             ToolbarItemGroup(placement: .topBarTrailing) {
                 if !checkedIds.isEmpty {
-                    Button("Clear bought") {
+                    Button("Сбросить купленное") {
                         clearBought()
                     }
                 }
@@ -79,10 +79,10 @@ struct ShoppingListView: View {
     private var headerCard: some View {
         AppCard {
             VStack(alignment: .leading, spacing: 10) {
-                Text("Shopping list")
+                Text("Список покупок")
                     .font(.title2.weight(.bold))
 
-                Text("This list is generated automatically from the current meal plan. Mark products as bought to track your progress.")
+                Text("Этот список формируется автоматически на основе текущего плана питания. Отмечай купленные продукты, чтобы отслеживать прогресс.")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
@@ -90,12 +90,12 @@ struct ShoppingListView: View {
     }
 
     private var filteredItems: [ShoppingItem] {
-        items.filter { item in
-            matchesFilter(item) && matchesSearch(item)
+        items.filter { shoppingItem in
+            matchesFilter(shoppingItem) && matchesSearch(shoppingItem)
         }
     }
 
-    private var grouped: [String: [ShoppingItem]] {
+    private var groupedItems: [String: [ShoppingItem]] {
         Dictionary(grouping: filteredItems, by: \.categoryKey)
     }
 
@@ -107,7 +107,7 @@ struct ShoppingListView: View {
             "category.other"
         ]
 
-        return order.filter { grouped[$0] != nil }
+        return order.filter { groupedItems[$0] != nil }
     }
 
     private var checkedIds: Set<String> {
@@ -130,7 +130,7 @@ struct ShoppingListView: View {
     private func categorySection(
         title: String,
         icon: String,
-        items: [ShoppingItem]
+        categoryItems: [ShoppingItem]
     ) -> some View {
         AppCard {
             HStack {
@@ -139,18 +139,18 @@ struct ShoppingListView: View {
 
                 Spacer()
 
-                Text("\(items.count)")
+                Text("\(categoryItems.count)")
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(.secondary)
             }
 
             VStack(spacing: 10) {
-                ForEach(items) { item in
+                ForEach(categoryItems) { shoppingItem in
                     ShoppingItemRow(
-                        item: item,
-                        isChecked: checkedIds.contains(item.id)
+                        item: shoppingItem,
+                        isChecked: checkedIds.contains(shoppingItem.id)
                     ) {
-                        toggleChecked(item.id)
+                        toggleChecked(shoppingItem.id)
                     }
                 }
             }
@@ -160,10 +160,10 @@ struct ShoppingListView: View {
     private var emptyPlanState: some View {
         AppCard {
             VStack(alignment: .leading, spacing: 10) {
-                Text("No shopping items yet")
+                Text("Пока нет покупок")
                     .font(.headline)
 
-                Text("Generate a meal plan first. Once the plan contains recipes, this screen will show the aggregated ingredients you need to buy.")
+                Text("Сначала сформируй план питания. Когда в плане появятся блюда, здесь автоматически отобразятся нужные ингредиенты.")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
@@ -173,10 +173,10 @@ struct ShoppingListView: View {
     private var filteredEmptyState: some View {
         AppCard {
             VStack(alignment: .leading, spacing: 10) {
-                Text("Nothing found")
+                Text("Ничего не найдено")
                     .font(.headline)
 
-                Text("Try another search phrase or switch the current filter.")
+                Text("Попробуй другой поисковый запрос или переключи фильтр.")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
@@ -203,19 +203,19 @@ struct ShoppingListView: View {
     }
 
     private func toggleChecked(_ id: String) {
-        var set = checkedIds
+        var updated = checkedIds
 
-        if set.contains(id) {
-            set.remove(id)
+        if updated.contains(id) {
+            updated.remove(id)
         } else {
-            set.insert(id)
+            updated.insert(id)
         }
 
-        saveCheckedIds(set)
+        saveCheckedIds(updated)
     }
 
-    private func saveCheckedIds(_ set: Set<String>) {
-        checkedIdsString = set.sorted().joined(separator: ",")
+    private func saveCheckedIds(_ ids: Set<String>) {
+        checkedIdsString = ids.sorted().joined(separator: ",")
     }
 
     private func clearBought() {
@@ -225,13 +225,13 @@ struct ShoppingListView: View {
     private func categoryTitle(for key: String) -> String {
         switch key {
         case "category.meat":
-            return "Protein"
+            return "Белки"
         case "category.grain":
-            return "Grains & legumes"
+            return "Крупы и бобовые"
         case "category.vegetable":
-            return "Vegetables"
+            return "Овощи"
         default:
-            return "Other"
+            return "Другое"
         }
     }
 

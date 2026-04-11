@@ -1,9 +1,9 @@
 import Foundation
 
 enum ShoppingFilter: String, CaseIterable, Identifiable {
-    case all = "All"
-    case toBuy = "To Buy"
-    case bought = "Bought"
+    case all = "Все"
+    case toBuy = "Купить"
+    case bought = "Куплено"
 
     var id: String { rawValue }
 }

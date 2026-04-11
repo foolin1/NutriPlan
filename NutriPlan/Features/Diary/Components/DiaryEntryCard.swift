@@ -30,17 +30,17 @@ struct DiaryEntryCard: View {
                 }
 
                 HStack(spacing: 16) {
-                    nutrientBlock(title: "Calories", value: caloriesText)
-                    nutrientBlock(title: "Protein", value: proteinText)
+                    nutrientBlock(title: "Калории", value: caloriesText)
+                    nutrientBlock(title: "Белки", value: proteinText)
                 }
 
                 HStack(spacing: 16) {
-                    nutrientBlock(title: "Fat", value: fatText)
-                    nutrientBlock(title: "Carbs", value: carbsText)
+                    nutrientBlock(title: "Жиры", value: fatText)
+                    nutrientBlock(title: "Углеводы", value: carbsText)
                 }
 
                 if let ironText {
-                    Text("Iron: \(ironText)")
+                    Text("Железо: \(ironText)")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }

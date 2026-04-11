@@ -7,126 +7,109 @@ struct PlanView: View {
     var body: some View {
         let plannedSummary = vm.daySummary()
         let nutrientFocus = appState.userProfile?.nutrientFocus ?? .none
-        let optimization = DayPlanOptimizer.evaluate(
-            meals: vm.dayPlan.meals,
-            goal: appState.nutritionGoal,
-            foodsById: vm.foodsById,
-            nutrientFocus: nutrientFocus
-        )
 
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
                     topHeader
 
-                    SectionTitleView(
-                        "Day optimization",
-                        subtitle: "The planner now chooses the best combination of meals for the whole day, not each meal independently."
-                    )
+                    if let goal = appState.nutritionGoal {
+                        SectionTitleView(
+                            "Сводка плана",
+                            subtitle: "Общий обзор текущего рациона на день."
+                        )
 
-                    AppCard {
-                        VStack(alignment: .leading, spacing: 12) {
-                            HStack {
-                                Text("Daily score")
+                        AppCard {
+                            VStack(alignment: .leading, spacing: 12) {
+                                Text("Текущая цель")
                                     .font(.headline)
 
-                                Spacer()
+                                InfoValueRow(title: "Калории", value: "\(goal.targetCalories) ккал")
+                                InfoValueRow(title: "Белки", value: "\(goal.proteinGrams) г")
+                                InfoValueRow(title: "Жиры", value: "\(goal.fatGrams) г")
+                                InfoValueRow(title: "Углеводы", value: "\(goal.carbsGrams) г")
 
-                                StatPill(text: "\(Int(optimization.totalScore.rounded())) / 100")
-                            }
+                                Divider()
 
-                            Text(dayOptimizationSummary(for: optimization))
-                                .font(.subheadline)
-                                .foregroundStyle(.secondary)
+                                Text("Что получилось в плане")
+                                    .font(.headline)
 
-                            Divider()
+                                InfoValueRow(title: "Калории", value: "\(Int(plannedSummary.macros.calories)) ккал")
+                                InfoValueRow(title: "Белки", value: String(format: "%.1f г", plannedSummary.macros.protein))
+                                InfoValueRow(title: "Жиры", value: String(format: "%.1f г", plannedSummary.macros.fat))
+                                InfoValueRow(title: "Углеводы", value: String(format: "%.1f г", plannedSummary.macros.carbs))
 
-                            InfoValueRow(
-                                title: "Target calories",
-                                value: "\(Int(optimization.targetCalories.rounded())) kcal"
-                            )
-                            InfoValueRow(
-                                title: "Actual calories",
-                                value: "\(Int(optimization.actualCalories.rounded())) kcal"
-                            )
-
-                            InfoValueRow(
-                                title: "Target protein",
-                                value: String(format: "%.1f g", optimization.targetProtein)
-                            )
-                            InfoValueRow(
-                                title: "Actual protein",
-                                value: String(format: "%.1f g", optimization.actualProtein)
-                            )
-
-                            InfoValueRow(
-                                title: "Target fat",
-                                value: String(format: "%.1f g", optimization.targetFat)
-                            )
-                            InfoValueRow(
-                                title: "Actual fat",
-                                value: String(format: "%.1f g", optimization.actualFat)
-                            )
-
-                            InfoValueRow(
-                                title: "Target carbs",
-                                value: String(format: "%.1f g", optimization.targetCarbs)
-                            )
-                            InfoValueRow(
-                                title: "Actual carbs",
-                                value: String(format: "%.1f g", optimization.actualCarbs)
-                            )
-
-                            Divider()
-
-                            InfoValueRow(
-                                title: "Coverage bonus",
-                                value: String(format: "+%.1f", optimization.coverageBonus)
-                            )
-                            InfoValueRow(
-                                title: "Meal quality bonus",
-                                value: String(format: "+%.1f", optimization.mealQualityBonus)
-                            )
-
-                            if optimization.nutrientBonus > 0 {
-                                InfoValueRow(
-                                    title: "Nutrient bonus",
-                                    value: String(format: "+%.1f", optimization.nutrientBonus)
-                                )
-                            }
-
-                            if optimization.ironAmount > 0 {
-                                InfoValueRow(
-                                    title: "Iron in plan",
-                                    value: String(format: "%.2f mg", optimization.ironAmount)
-                                )
+                                if nutrientFocus == .iron {
+                                    Divider()
+                                    InfoValueRow(
+                                        title: "Железо в плане",
+                                        value: String(format: "%.2f мг", plannedSummary.nutrients["iron", default: 0])
+                                    )
+                                }
                             }
                         }
                     }
 
-                    if let goal = appState.nutritionGoal {
-                        SectionTitleView(
-                            "Plan summary",
-                            subtitle: "Overview of the generated nutrition plan for the current day."
-                        )
+                    SectionTitleView(
+                        "Действия с планом",
+                        subtitle: "Можно пересчитать текущий вариант или подобрать другой хороший план на день."
+                    )
 
-                        AppCard {
-                            Text("Current target")
-                                .font(.headline)
+                    AppCard {
+                        VStack(spacing: 12) {
+                            Button {
+                                vm.rebuildDayPlan(goal: appState.nutritionGoal)
+                            } label: {
+                                HStack {
+                                    Image(systemName: "arrow.clockwise.circle.fill")
+                                        .font(.title3)
 
-                            InfoValueRow(title: "Target calories", value: "\(goal.targetCalories) kcal")
-                            InfoValueRow(title: "Planned calories", value: "\(Int(plannedSummary.macros.calories)) kcal")
-                            InfoValueRow(title: "Protein", value: String(format: "%.1f g", plannedSummary.macros.protein))
-                            InfoValueRow(title: "Fat", value: String(format: "%.1f g", plannedSummary.macros.fat))
-                            InfoValueRow(title: "Carbs", value: String(format: "%.1f g", plannedSummary.macros.carbs))
+                                    VStack(alignment: .leading, spacing: 4) {
+                                        Text("Пересчитать")
+                                            .font(.headline)
 
-                            if nutrientFocus == .iron {
-                                Divider()
-                                InfoValueRow(
-                                    title: "Iron in plan",
-                                    value: String(format: "%.2f mg", plannedSummary.nutrients["iron", default: 0])
+                                        Text("Построить лучший вариант плана для текущего профиля.")
+                                            .font(.caption)
+                                            .foregroundStyle(.secondary)
+                                    }
+
+                                    Spacer()
+                                }
+                                .padding(14)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 16, style: .continuous)
+                                        .fill(Color.accentColor.opacity(0.12))
                                 )
                             }
+                            .buttonStyle(.plain)
+
+                            Button {
+                                vm.shuffleDayPlan(goal: appState.nutritionGoal)
+                            } label: {
+                                HStack {
+                                    Image(systemName: "shuffle.circle.fill")
+                                        .font(.title3)
+
+                                    VStack(alignment: .leading, spacing: 4) {
+                                        Text("Подобрать другой вариант")
+                                            .font(.headline)
+
+                                        Text("Показать другую подходящую комбинацию блюд на день.")
+                                            .font(.caption)
+                                            .foregroundStyle(.secondary)
+                                    }
+
+                                    Spacer()
+                                }
+                                .padding(14)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 16, style: .continuous)
+                                        .fill(Color.orange.opacity(0.12))
+                                )
+                            }
+                            .buttonStyle(.plain)
                         }
                     }
 
@@ -135,8 +118,8 @@ struct PlanView: View {
 
                         if !meals.isEmpty {
                             SectionTitleView(
-                                mealType.rawValue,
-                                subtitle: "Meals generated for this part of the day."
+                                mealType.ruTitle,
+                                subtitle: "Блюда, подобранные для этой части дня."
                             )
 
                             VStack(spacing: 12) {
@@ -155,38 +138,21 @@ struct PlanView: View {
                 .padding(16)
             }
             .background(Color(.systemGroupedBackground).ignoresSafeArea())
-            .navigationTitle("Plan")
+            .navigationTitle("План")
             .navigationBarTitleDisplayMode(.large)
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button("Rebuild") {
-                        vm.rebuildDayPlan(goal: appState.nutritionGoal)
-                    }
-                }
-            }
         }
     }
 
     private var topHeader: some View {
         AppCard {
             VStack(alignment: .leading, spacing: 10) {
-                Text("Daily meal plan")
+                Text("План питания на день")
                     .font(.title2.weight(.bold))
 
-                Text("The plan is generated as an optimized combination of meals for the whole day.")
+                Text("Здесь можно просмотреть подобранные блюда и при необходимости пересчитать или заменить текущий вариант плана.")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
-        }
-    }
-
-    private func dayOptimizationSummary(for breakdown: DayPlanScoreBreakdown) -> String {
-        if breakdown.totalScore >= 90 {
-            return "The full-day combination is very close to the daily target."
-        } else if breakdown.totalScore >= 75 {
-            return "The full-day combination is good, with moderate deviation from the daily target."
-        } else {
-            return "The planner found an acceptable daily combination, but deviations are more noticeable."
         }
     }
 
@@ -202,7 +168,7 @@ struct PlanView: View {
                         Text(vm.displayTitle(for: meal.recipe))
                             .font(.headline)
 
-                        Text(meal.type.rawValue)
+                        Text(meal.type.ruTitle)
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
@@ -211,25 +177,24 @@ struct PlanView: View {
 
                     VStack(alignment: .trailing, spacing: 6) {
                         if nutrientFocus == .iron && ironAmount >= 3.0 {
-                            StatPill(text: "Iron support")
+                            StatPill(text: "Поддержка железа")
                         }
 
                         if vm.isMealLogged(meal.id) {
-                            StatPill(text: "Added to diary")
+                            StatPill(text: "В дневнике")
                         }
                     }
                 }
 
                 Divider()
 
-                InfoValueRow(title: "Calories", value: "\(Int(summary.macros.calories)) kcal")
-                InfoValueRow(title: "Protein", value: String(format: "%.1f g", summary.macros.protein))
-                InfoValueRow(title: "Fat", value: String(format: "%.1f g", summary.macros.fat))
-                InfoValueRow(title: "Carbs", value: String(format: "%.1f g", summary.macros.carbs))
+                InfoValueRow(title: "Калории", value: "\(Int(summary.macros.calories)) ккал")
+                InfoValueRow(title: "Белки", value: String(format: "%.1f г", summary.macros.protein))
+                InfoValueRow(title: "Жиры", value: String(format: "%.1f г", summary.macros.fat))
+                InfoValueRow(title: "Углеводы", value: String(format: "%.1f г", summary.macros.carbs))
 
-                if nutrientFocus == .iron,
-                   let iron = summary.nutrients["iron"] {
-                    InfoValueRow(title: "Iron", value: String(format: "%.2f mg", iron))
+                if nutrientFocus == .iron, let iron = summary.nutrients["iron"] {
+                    InfoValueRow(title: "Железо", value: String(format: "%.2f мг", iron))
                 }
 
                 HStack {

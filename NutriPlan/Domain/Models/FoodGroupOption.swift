@@ -8,14 +8,14 @@ struct FoodGroupOption: Identifiable, Hashable {
 
 enum FoodGroupCatalog {
     static let all: [FoodGroupOption] = [
-        .init(id: "citrus", title: "Citrus", subtitle: "Orange, lemon, grapefruit and similar fruits"),
-        .init(id: "berries", title: "Berries", subtitle: "Blueberries, strawberries, raspberries and similar fruits"),
-        .init(id: "dairy", title: "Dairy", subtitle: "Milk, yogurt, cottage cheese and similar products"),
-        .init(id: "nuts", title: "Nuts", subtitle: "Almonds, walnuts, peanut butter and similar products"),
-        .init(id: "legumes", title: "Legumes", subtitle: "Lentils, chickpeas, beans and similar products"),
-        .init(id: "seafood", title: "Seafood", subtitle: "Salmon, tuna and other fish or seafood"),
-        .init(id: "eggs", title: "Eggs", subtitle: "Whole eggs and egg-based products"),
-        .init(id: "poultry", title: "Poultry", subtitle: "Chicken, turkey and similar products")
+        .init(id: "citrus", title: "Цитрусовые", subtitle: "Апельсин, лимон, грейпфрут и похожие фрукты"),
+        .init(id: "berries", title: "Ягоды", subtitle: "Черника, клубника, малина и похожие ягоды"),
+        .init(id: "dairy", title: "Молочные продукты", subtitle: "Молоко, йогурт, творог и похожие продукты"),
+        .init(id: "nuts", title: "Орехи", subtitle: "Миндаль, грецкий орех, арахисовая паста и похожие продукты"),
+        .init(id: "legumes", title: "Бобовые", subtitle: "Чечевица, нут, фасоль и похожие продукты"),
+        .init(id: "seafood", title: "Рыба и морепродукты", subtitle: "Лосось, тунец и другие морепродукты"),
+        .init(id: "eggs", title: "Яйца", subtitle: "Яйца и продукты на их основе"),
+        .init(id: "poultry", title: "Птица", subtitle: "Курица, индейка и похожие продукты")
     ]
 
     static func title(for id: String) -> String {
