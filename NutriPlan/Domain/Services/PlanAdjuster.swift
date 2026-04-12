@@ -1,12 +1,10 @@
 import Foundation
 
 enum PlanAdjuster {
-
     static func recommend(
         baseGoal: NutritionGoal,
         actual: NutritionSummary
     ) -> PlanAdjustment {
-
         let actualCalories = actual.macros.calories
         let actualProtein = actual.macros.protein
         let actualFat = actual.macros.fat
@@ -17,22 +15,24 @@ enum PlanAdjuster {
         let fatDelta = actualFat - Double(baseGoal.fatGrams)
         let carbsDelta = actualCarbs - Double(baseGoal.carbsGrams)
 
-        // Мягкая корректировка: не переносим весь "долг" или "избыток" на завтра,
-        // а компенсируем только часть.
         let calorieCorrection = clamp(calorieDelta * 0.35, min: -180, max: 180)
-        let nextCalories = max(1200, Int((Double(baseGoal.targetCalories) - calorieCorrection).rounded()))
+        let nextCalories = max(
+            1200,
+            Int((Double(baseGoal.targetCalories) - calorieCorrection).rounded())
+        )
 
         var nextProtein = baseGoal.proteinGrams
         var nextFat = baseGoal.fatGrams
 
-        // Если белка заметно не хватило — чуть повышаем цель по белку на завтра
         if proteinDelta < -10 {
             nextProtein += Int(min(20, abs(proteinDelta) * 0.5).rounded())
         }
 
-        // Если жиров было заметно больше — немного снижаем жиры на завтра
         if fatDelta > 12 {
-            nextFat = max(35, baseGoal.fatGrams - Int(min(10, (fatDelta - 12) * 0.3).rounded()))
+            nextFat = max(
+                35,
+                baseGoal.fatGrams - Int(min(10, (fatDelta - 12) * 0.3).rounded())
+            )
         } else if fatDelta < -10 {
             nextFat += Int(min(8, abs(fatDelta) * 0.2).rounded())
         }
@@ -51,44 +51,43 @@ enum PlanAdjuster {
 
         let statusTitle: String
         if abs(calorieDelta) <= 120 && abs(proteinDelta) <= 10 {
-            statusTitle = "You are close to the target"
+            statusTitle = "Ты близок к целевым значениям"
         } else if calorieDelta > 120 {
-            statusTitle = "Light calorie reduction for tomorrow"
+            statusTitle = "Завтра стоит немного снизить калорийность"
         } else if calorieDelta < -120 {
-            statusTitle = "Slight increase for tomorrow"
+            statusTitle = "Завтра стоит немного повысить калорийность"
         } else {
-            statusTitle = "Small adjustment for tomorrow"
+            statusTitle = "На завтра можно слегка скорректировать цель"
         }
 
         let summary = """
-        Tomorrow’s target is softly adjusted from \(baseGoal.targetCalories) kcal to \(nextGoal.targetCalories) kcal, \
-        while keeping the plan balanced and avoiding harsh compensation.
+        Цель на завтра была мягко скорректирована с \(baseGoal.targetCalories) ккал до \(nextGoal.targetCalories) ккал, чтобы сохранить сбалансированный рацион без слишком резкой компенсации.
         """
 
         var hints: [String] = []
 
         if calorieDelta > 150 {
-            hints.append("Reduce total calories slightly tomorrow instead of making a sharp cut.")
+            hints.append("Немного снизить калорийность завтра будет полезнее, чем делать резкое ограничение.")
         } else if calorieDelta < -150 {
-            hints.append("Increase calories a little tomorrow so the plan stays sustainable.")
+            hints.append("Стоит немного повысить калорийность завтра, чтобы рацион оставался устойчивым.")
         }
 
         if proteinDelta < -10 {
-            hints.append("Increase protein tomorrow to better support satiety and recovery.")
+            hints.append("Завтра лучше немного увеличить белок для сытости и восстановления.")
         }
 
         if fatDelta > 12 {
-            hints.append("Keep fats a little lower tomorrow and shift calories toward lean protein or complex carbs.")
+            hints.append("Жиры завтра можно немного уменьшить и сместить акцент в сторону нежирного белка и сложных углеводов.")
         }
 
         if carbsDelta > 25 {
-            hints.append("Slightly reduce dense carb portions tomorrow.")
+            hints.append("Плотные углеводные порции завтра можно немного сократить.")
         } else if carbsDelta < -25 {
-            hints.append("Add a bit more carbohydrate-rich food tomorrow for energy balance.")
+            hints.append("Завтра можно добавить немного больше сложных углеводов для энергии.")
         }
 
         if hints.isEmpty {
-            hints.append("Keep the current structure of the plan and follow the same targets tomorrow.")
+            hints.append("Можно сохранить текущую структуру питания и придерживаться похожих целей завтра.")
         }
 
         return PlanAdjustment(
@@ -99,7 +98,11 @@ enum PlanAdjuster {
         )
     }
 
-    private static func clamp(_ value: Double, min minValue: Double, max maxValue: Double) -> Double {
+    private static func clamp(
+        _ value: Double,
+        min minValue: Double,
+        max maxValue: Double
+    ) -> Double {
         Swift.max(minValue, Swift.min(maxValue, value))
     }
 }

@@ -11,12 +11,12 @@ struct DisplayTitleTests {
             recipeRepo: TestRecipeRepository(recipes: TestDataFactory.highCalorieRecipes),
             sessionStore: TestSessionStore()
         )
-
+        
         let title = vm.displayTitle(for: TestDataFactory.lunch)
-
+        
         #expect(title == TestDataFactory.lunch.name)
     }
-
+    
     @Test("Для изменённого рецепта заголовок собирается из основных ингредиентов")
     func displayTitleForModifiedRecipe() {
         let vm = PlanViewModel(
@@ -24,7 +24,7 @@ struct DisplayTitleTests {
             recipeRepo: TestRecipeRepository(recipes: TestDataFactory.highCalorieRecipes),
             sessionStore: TestSessionStore()
         )
-
+        
         let modifiedRecipe = Recipe(
             id: "custom_modified",
             name: "Пользовательский рецепт",
@@ -37,12 +37,11 @@ struct DisplayTitleTests {
             tags: ["lunch", "plate"],
             isModified: true
         )
-
+        
         let title = vm.displayTitle(for: modifiedRecipe)
-
+        
         #expect(title != modifiedRecipe.name)
         #expect(title.contains("Куриная грудка"))
-        #expect(title.contains("Рис"))
-        #expect(title.contains("Тарелка"))
+        #expect(title.contains("рис"))
     }
 }

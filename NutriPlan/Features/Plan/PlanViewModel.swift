@@ -243,15 +243,13 @@ final class PlanViewModel: ObservableObject {
             )
         }
 
-        let suffix = dishSuffix(for: recipe)
-
         if let protein = items
             .filter({ $0.category == .protein })
             .max(by: { $0.calories < $1.calories }),
            let carb = items
             .filter({ $0.category == .carb })
             .max(by: { $0.calories < $1.calories }) {
-            return "\(protein.name) + \(carb.name) \(suffix)"
+            return "\(protein.name) + \(lowercasedFirstLetter(carb.name))"
         }
 
         let top = items
@@ -260,7 +258,7 @@ final class PlanViewModel: ObservableObject {
             .map { $0.name }
 
         if top.count == 2 {
-            return "\(top[0]) + \(top[1]) \(suffix)"
+            return "\(top[0]) + \(lowercasedFirstLetter(top[1]))"
         }
 
         return recipe.name
@@ -475,5 +473,10 @@ final class PlanViewModel: ObservableObject {
         )
 
         return result.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+    
+    private func lowercasedFirstLetter(_ value: String) -> String {
+        guard let first = value.first else { return value }
+        return first.lowercased() + value.dropFirst()
     }
 }
