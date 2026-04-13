@@ -17,18 +17,22 @@ struct DiaryView: View {
                     actionsCard
 
                     SectionTitleView(
-                        "Фактический итог",
-                        subtitle: "Пищевые показатели на основе блюд и продуктов, добавленных в дневник."
+                        "Итог по факту",
+                        subtitle: "Сводка строится на основе блюд и продуктов, которые реально были добавлены в дневник."
                     )
 
                     AppCard {
-                        RecipeSummaryGrid(
-                            caloriesText: "\(Int(actualSummary.macros.calories)) ккал",
-                            proteinText: String(format: "%.1f г", actualSummary.macros.protein),
-                            fatText: String(format: "%.1f г", actualSummary.macros.fat),
-                            carbsText: String(format: "%.1f г", actualSummary.macros.carbs),
-                            ironText: actualSummary.nutrients["iron"].map { String(format: "%.2f мг", $0) }
-                        )
+                        VStack(spacing: 10) {
+                            InfoValueRow(title: "Калории", value: "\(Int(actualSummary.macros.calories)) ккал")
+                            InfoValueRow(title: "Белки", value: String(format: "%.1f г", actualSummary.macros.protein))
+                            InfoValueRow(title: "Жиры", value: String(format: "%.1f г", actualSummary.macros.fat))
+                            InfoValueRow(title: "Углеводы", value: String(format: "%.1f г", actualSummary.macros.carbs))
+
+                            if let iron = actualSummary.nutrients["iron"] {
+                                Divider()
+                                InfoValueRow(title: "Железо", value: String(format: "%.2f мг", iron))
+                            }
+                        }
                     }
 
                     ForEach(MealType.allCases) { mealType in
@@ -37,16 +41,17 @@ struct DiaryView: View {
                         if !entries.isEmpty {
                             SectionTitleView(
                                 mealType.ruTitle,
-                                subtitle: "Записи дневника для этого приёма пищи."
+                                subtitle: "Фактические записи по этому приёму пищи."
                             )
 
                             VStack(spacing: 12) {
                                 ForEach(entries) { entry in
                                     let summary = vm.summary(for: entry.recipe)
 
-                                    DiaryEntryCard(
+                                    DiaryLoggedEntryCard(
                                         title: entry.title,
                                         mealType: entry.mealType.ruTitle,
+                                        sourceText: entry.mealId == nil ? "Добавлено вручную" : "Перенесено из плана",
                                         caloriesText: "\(Int(summary.macros.calories)) ккал",
                                         proteinText: String(format: "%.1f г", summary.macros.protein),
                                         fatText: String(format: "%.1f г", summary.macros.fat),
@@ -90,7 +95,7 @@ struct DiaryView: View {
                 Text("Дневник питания")
                     .font(.title2.weight(.bold))
 
-                Text("Здесь можно хранить то, что было съедено фактически: либо переносить блюда из плана, либо добавлять продукты вручную.")
+                Text("Здесь хранится фактическое питание за текущий день. Можно переносить блюда из плана или добавлять отдельные продукты вручную.")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
@@ -98,37 +103,69 @@ struct DiaryView: View {
     }
 
     private var actionsCard: some View {
-        AppCard {
-            VStack(alignment: .leading, spacing: 12) {
-                Text("Действия")
-                    .font(.headline)
+        VStack(spacing: 12) {
+            AppCard {
+                VStack(alignment: .leading, spacing: 12) {
+                    Text("Быстрые действия")
+                        .font(.headline)
 
-                Button {
-                    showManualEntrySheet = true
-                } label: {
-                    HStack {
-                        Image(systemName: "plus.circle.fill")
-                            .font(.title3)
+                    Button {
+                        showManualEntrySheet = true
+                    } label: {
+                        HStack {
+                            Image(systemName: "plus.circle.fill")
+                                .font(.title3)
 
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("Добавить вручную")
-                                .font(.headline)
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("Добавить продукт вручную")
+                                    .font(.headline)
 
-                            Text("Выбери продукт из каталога и укажи его количество.")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
+                                Text("Выбери продукт из каталога, укажи граммовку и приём пищи.")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+
+                            Spacer()
                         }
-
-                        Spacer()
+                        .padding(14)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(
+                            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                                .fill(Color.accentColor.opacity(0.12))
+                        )
                     }
-                    .padding(14)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(
-                        RoundedRectangle(cornerRadius: 16, style: .continuous)
-                            .fill(Color.accentColor.opacity(0.12))
-                    )
+                    .buttonStyle(.plain)
+
+                    NavigationLink {
+                        PlanComparisonView(vm: vm)
+                    } label: {
+                        HStack {
+                            Image(systemName: "chart.bar.xaxis")
+                                .font(.title3)
+
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("Открыть сравнение")
+                                    .font(.headline)
+
+                                Text("Сопоставь цель, план и фактическое питание за день.")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+
+                            Spacer()
+
+                            Image(systemName: "chevron.right")
+                                .foregroundStyle(.tertiary)
+                        }
+                        .padding(14)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(
+                            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                                .fill(Color(.secondarySystemGroupedBackground))
+                        )
+                    }
+                    .buttonStyle(.plain)
                 }
-                .buttonStyle(.plain)
             }
         }
     }
@@ -136,10 +173,10 @@ struct DiaryView: View {
     private var emptyState: some View {
         AppCard {
             VStack(alignment: .leading, spacing: 12) {
-                Text("Дневник пуст")
+                Text("Дневник пока пуст")
                     .font(.headline)
 
-                Text("Можно переносить блюда из плана или добавить продукт вручную, если ты ел не по предложенному меню.")
+                Text("Добавь продукт вручную, если фактическое питание отличалось от плана, или перенеси блюда из экрана плана.")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
 
@@ -156,6 +193,59 @@ struct DiaryView: View {
                         )
                 }
                 .buttonStyle(.plain)
+            }
+        }
+    }
+}
+
+private struct DiaryLoggedEntryCard: View {
+    let title: String
+    let mealType: String
+    let sourceText: String
+    let caloriesText: String
+    let proteinText: String
+    let fatText: String
+    let carbsText: String
+    let ironText: String?
+    let onDelete: () -> Void
+
+    var body: some View {
+        AppCard {
+            VStack(alignment: .leading, spacing: 10) {
+                HStack(alignment: .top) {
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text(mealType)
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(.secondary)
+
+                        Text(title)
+                            .font(.headline)
+
+                        Text(sourceText)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+
+                    Spacer()
+
+                    Button(role: .destructive, action: onDelete) {
+                        Image(systemName: "trash")
+                    }
+                }
+
+                Divider()
+
+                VStack(spacing: 8) {
+                    InfoValueRow(title: "Калории", value: caloriesText)
+                    InfoValueRow(title: "Белки", value: proteinText)
+                    InfoValueRow(title: "Жиры", value: fatText)
+                    InfoValueRow(title: "Углеводы", value: carbsText)
+
+                    if let ironText {
+                        Divider()
+                        InfoValueRow(title: "Железо", value: ironText)
+                    }
+                }
             }
         }
     }

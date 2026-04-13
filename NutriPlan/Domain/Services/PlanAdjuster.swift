@@ -15,32 +15,36 @@ enum PlanAdjuster {
         let fatDelta = actualFat - Double(baseGoal.fatGrams)
         let carbsDelta = actualCarbs - Double(baseGoal.carbsGrams)
 
-        let calorieCorrection = clamp(calorieDelta * 0.35, min: -180, max: 180)
-        let nextCalories = max(
-            1200,
-            Int((Double(baseGoal.targetCalories) - calorieCorrection).rounded())
+        let calorieCorrection = clamp(calorieDelta * 0.30, min: -180, max: 180)
+
+        let rawNextCalories = Double(baseGoal.targetCalories) - calorieCorrection
+        let boundedNextCalories = clamp(
+            rawNextCalories,
+            min: max(1200, Double(baseGoal.targetCalories - 220)),
+            max: Double(baseGoal.targetCalories + 220)
         )
+        let nextCalories = roundToNearest10(boundedNextCalories)
 
         var nextProtein = baseGoal.proteinGrams
         var nextFat = baseGoal.fatGrams
 
-        if proteinDelta < -10 {
-            nextProtein += Int(min(20, abs(proteinDelta) * 0.5).rounded())
+        if proteinDelta < -12 {
+            nextProtein += Int(min(18, abs(proteinDelta) * 0.45).rounded())
+        } else if proteinDelta > 25 {
+            nextProtein = max(70, baseGoal.proteinGrams - Int(min(10, (proteinDelta - 25) * 0.15).rounded()))
         }
 
         if fatDelta > 12 {
-            nextFat = max(
-                35,
-                baseGoal.fatGrams - Int(min(10, (fatDelta - 12) * 0.3).rounded())
-            )
-        } else if fatDelta < -10 {
-            nextFat += Int(min(8, abs(fatDelta) * 0.2).rounded())
+            nextFat = max(35, baseGoal.fatGrams - Int(min(10, (fatDelta - 12) * 0.30).rounded()))
+        } else if fatDelta < -12 {
+            nextFat += Int(min(8, abs(fatDelta) * 0.20).rounded())
         }
 
         let proteinCalories = Double(nextProtein * 4)
         let fatCalories = Double(nextFat * 9)
-        let remainingForCarbs = max(Double(nextCalories) - proteinCalories - fatCalories, 0)
-        let nextCarbs = Int((remainingForCarbs / 4.0).rounded())
+        let minimumCarbs = 90
+        let remainingForCarbs = max(Double(nextCalories) - proteinCalories - fatCalories, Double(minimumCarbs * 4))
+        let nextCarbs = max(minimumCarbs, Int((remainingForCarbs / 4.0).rounded()))
 
         let nextGoal = NutritionGoal(
             targetCalories: nextCalories,
@@ -49,46 +53,24 @@ enum PlanAdjuster {
             carbsGrams: nextCarbs
         )
 
-        let statusTitle: String
-        if abs(calorieDelta) <= 120 && abs(proteinDelta) <= 10 {
-            statusTitle = "Ты близок к целевым значениям"
-        } else if calorieDelta > 120 {
-            statusTitle = "Завтра стоит немного снизить калорийность"
-        } else if calorieDelta < -120 {
-            statusTitle = "Завтра стоит немного повысить калорийность"
-        } else {
-            statusTitle = "На завтра можно слегка скорректировать цель"
-        }
+        let statusTitle = makeStatusTitle(
+            calorieDelta: calorieDelta,
+            proteinDelta: proteinDelta,
+            fatDelta: fatDelta
+        )
 
-        let summary = """
-        Цель на завтра была мягко скорректирована с \(baseGoal.targetCalories) ккал до \(nextGoal.targetCalories) ккал, чтобы сохранить сбалансированный рацион без слишком резкой компенсации.
-        """
+        let summary = makeSummary(
+            baseGoal: baseGoal,
+            nextGoal: nextGoal,
+            calorieDelta: calorieDelta
+        )
 
-        var hints: [String] = []
-
-        if calorieDelta > 150 {
-            hints.append("Немного снизить калорийность завтра будет полезнее, чем делать резкое ограничение.")
-        } else if calorieDelta < -150 {
-            hints.append("Стоит немного повысить калорийность завтра, чтобы рацион оставался устойчивым.")
-        }
-
-        if proteinDelta < -10 {
-            hints.append("Завтра лучше немного увеличить белок для сытости и восстановления.")
-        }
-
-        if fatDelta > 12 {
-            hints.append("Жиры завтра можно немного уменьшить и сместить акцент в сторону нежирного белка и сложных углеводов.")
-        }
-
-        if carbsDelta > 25 {
-            hints.append("Плотные углеводные порции завтра можно немного сократить.")
-        } else if carbsDelta < -25 {
-            hints.append("Завтра можно добавить немного больше сложных углеводов для энергии.")
-        }
-
-        if hints.isEmpty {
-            hints.append("Можно сохранить текущую структуру питания и придерживаться похожих целей завтра.")
-        }
+        let hints = makeHints(
+            calorieDelta: calorieDelta,
+            proteinDelta: proteinDelta,
+            fatDelta: fatDelta,
+            carbsDelta: carbsDelta
+        )
 
         return PlanAdjustment(
             statusTitle: statusTitle,
@@ -98,11 +80,87 @@ enum PlanAdjuster {
         )
     }
 
-    private static func clamp(
-        _ value: Double,
-        min minValue: Double,
-        max maxValue: Double
-    ) -> Double {
+    private static func makeStatusTitle(
+        calorieDelta: Double,
+        proteinDelta: Double,
+        fatDelta: Double
+    ) -> String {
+        if abs(calorieDelta) <= 120 && abs(proteinDelta) <= 10 && abs(fatDelta) <= 10 {
+            return "План выполнен близко к цели"
+        }
+
+        if calorieDelta > 120 {
+            return "На завтра стоит немного снизить калорийность"
+        }
+
+        if calorieDelta < -120 {
+            return "На завтра стоит немного повысить калорийность"
+        }
+
+        return "На завтра предлагается небольшая корректировка"
+    }
+
+    private static func makeSummary(
+        baseGoal: NutritionGoal,
+        nextGoal: NutritionGoal,
+        calorieDelta: Double
+    ) -> String {
+        let direction: String
+        if calorieDelta > 120 {
+            direction = "После небольшого избытка"
+        } else if calorieDelta < -120 {
+            direction = "После недобора"
+        } else {
+            direction = "После небольшого отклонения"
+        }
+
+        return "\(direction) цель на следующий день мягко скорректирована: \(baseGoal.targetCalories) → \(nextGoal.targetCalories) ккал. Коррекция сделана без резких ограничений, чтобы сохранить устойчивость рациона."
+    }
+
+    private static func makeHints(
+        calorieDelta: Double,
+        proteinDelta: Double,
+        fatDelta: Double,
+        carbsDelta: Double
+    ) -> [String] {
+        var hints: [String] = []
+
+        if calorieDelta > 150 {
+            hints.append("Завтра лучше немного сократить общую калорийность, а не пытаться компенсировать всё сразу.")
+        } else if calorieDelta < -150 {
+            hints.append("Завтра лучше немного добрать калории, чтобы рацион оставался комфортным и стабильным.")
+        }
+
+        if proteinDelta < -12 {
+            hints.append("Стоит добавить чуть больше белка: нежирное мясо, яйца, рыбу, творог или бобовые.")
+        } else if proteinDelta > 25 {
+            hints.append("Белка было с запасом, поэтому завтра можно оставить порции без дополнительного увеличения.")
+        }
+
+        if fatDelta > 12 {
+            hints.append("Жиры были выше цели — завтра лучше сместить акцент в сторону более постных продуктов.")
+        } else if fatDelta < -12 {
+            hints.append("Жиров было маловато — завтра можно добавить немного источников полезных жиров.")
+        }
+
+        if carbsDelta > 25 {
+            hints.append("Плотные углеводные порции завтра лучше сделать чуть меньше.")
+        } else if carbsDelta < -25 {
+            hints.append("Завтра можно немного увеличить долю сложных углеводов для лучшего баланса энергии.")
+        }
+
+        if hints.isEmpty {
+            hints.append("Существенных отклонений нет — можно сохранить ту же структуру плана на следующий день.")
+        }
+
+        return hints
+    }
+
+    private static func roundToNearest10(_ value: Double) -> Int {
+        Int((value / 10.0).rounded() * 10.0)
+    }
+
+    private static func clamp(_ value: Double, min minValue: Double, max maxValue: Double) -> Double {
         Swift.max(minValue, Swift.min(maxValue, value))
     }
 }

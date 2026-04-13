@@ -1,68 +1,40 @@
 import SwiftUI
 
 struct ManualDiaryEntryView: View {
-    @ObservedObject var vm: PlanViewModel
     @Environment(\.dismiss) private var dismiss
+    @ObservedObject var vm: PlanViewModel
 
-    @State private var selectedMealType: MealType = .snack
-    @State private var selectedFoodId: String? = nil
-    @State private var grams: Double = 150
     @State private var searchText: String = ""
+    @State private var selectedMealType: MealType = .snack
+    @State private var gramsText: String = "100"
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
                     headerCard
-                    mealTypeCard
-                    gramsCard
-
-                    if let selectedFood = selectedFood {
-                        selectedFoodCard(selectedFood)
-                    }
+                    settingsCard
 
                     SectionTitleView(
-                        "Поиск продукта",
-                        subtitle: "Начни вводить название продукта, чтобы быстро найти его в каталоге."
+                        "Каталог продуктов",
+                        subtitle: "Выбери продукт, который был съеден фактически. Он будет добавлен в дневник как отдельная запись."
                     )
 
-                    if trimmedSearchText.isEmpty {
-                        AppCard {
-                            VStack(alignment: .leading, spacing: 10) {
-                                Text("Начни вводить название")
-                                    .font(.headline)
-
-                                Text("Список продуктов появится после ввода текста в строке поиска. Так будет удобнее, чем просматривать весь каталог вручную.")
-                                    .font(.subheadline)
-                                    .foregroundStyle(.secondary)
-                            }
-                        }
-                    } else if filteredFoods.isEmpty {
-                        AppCard {
-                            VStack(alignment: .leading, spacing: 10) {
-                                Text("Ничего не найдено")
-                                    .font(.headline)
-
-                                Text("Попробуй изменить запрос или ввести только часть названия.")
-                                    .font(.subheadline)
-                                    .foregroundStyle(.secondary)
-                            }
-                        }
+                    if filteredFoods.isEmpty {
+                        emptySearchState
                     } else {
-                        LazyVStack(spacing: 12) {
-                            ForEach(filteredFoods) { food in
-                                foodRow(food)
+                        VStack(spacing: 12) {
+                            ForEach(filteredFoods, id: \.id) { food in
+                                foodCard(for: food)
                             }
                         }
                     }
                 }
                 .padding(16)
-                .padding(.bottom, 120)
             }
             .background(Color(.systemGroupedBackground).ignoresSafeArea())
-            .navigationTitle("Добавить запись")
+            .navigationTitle("Добавить вручную")
             .navigationBarTitleDisplayMode(.inline)
-            .searchable(text: $searchText, prompt: "Поиск продукта")
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Button("Закрыть") {
@@ -70,186 +42,164 @@ struct ManualDiaryEntryView: View {
                     }
                 }
             }
-            .safeAreaInset(edge: .bottom) {
-                bottomActionBar
-            }
+            .searchable(text: $searchText, prompt: "Поиск продукта")
         }
     }
 
-    private var trimmedSearchText: String {
-        searchText.trimmingCharacters(in: .whitespacesAndNewlines)
-    }
-
-    private var selectedFood: Food? {
-        guard let selectedFoodId else { return nil }
-        return vm.foodsById[selectedFoodId]
-    }
-
     private var filteredFoods: [Food] {
-        guard !trimmedSearchText.isEmpty else { return [] }
+        let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
 
-        return vm.foodsById.values
-            .sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
-            .filter { food in
-                food.name.localizedCaseInsensitiveContains(trimmedSearchText)
-            }
+        guard !query.isEmpty else {
+            return Array(vm.allFoods.prefix(30))
+        }
+
+        return vm.allFoods.filter {
+            $0.name.localizedCaseInsensitiveContains(query)
+        }
+    }
+
+    private var validGrams: Double? {
+        let normalized = gramsText
+            .replacingOccurrences(of: ",", with: ".")
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+
+        guard let value = Double(normalized), value > 0 else {
+            return nil
+        }
+
+        return min(value, 1500)
     }
 
     private var headerCard: some View {
         AppCard {
             VStack(alignment: .leading, spacing: 10) {
-                Text("Ручное добавление в дневник")
+                Text("Ручное добавление")
                     .font(.title2.weight(.bold))
 
-                Text("Если ты ел не по плану, можно вручную добавить продукт из каталога и указать его количество.")
+                Text("Используй этот режим, если пользователь ел не по предложенному плану. Достаточно выбрать продукт, указать граммовку и приём пищи.")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
         }
     }
 
-    private var mealTypeCard: some View {
+    private var settingsCard: some View {
         AppCard {
-            VStack(alignment: .leading, spacing: 12) {
-                Text("Приём пищи")
+            VStack(alignment: .leading, spacing: 16) {
+                Text("Параметры записи")
                     .font(.headline)
 
-                Picker("Приём пищи", selection: $selectedMealType) {
-                    ForEach(MealType.allCases) { value in
-                        Text(value.ruTitle).tag(value)
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Приём пищи")
+                        .font(.subheadline.weight(.semibold))
+
+                    Picker("Приём пищи", selection: $selectedMealType) {
+                        ForEach(MealType.allCases) { mealType in
+                            Text(mealType.ruTitle).tag(mealType)
+                        }
                     }
-                }
-                .pickerStyle(.segmented)
-            }
-        }
-    }
-
-    private var gramsCard: some View {
-        AppCard {
-            VStack(alignment: .leading, spacing: 12) {
-                Text("Количество")
-                    .font(.headline)
-
-                HStack {
-                    Text("Вес")
-                    Spacer()
-                    Text("\(Int(grams)) г")
-                        .foregroundStyle(.secondary)
+                    .pickerStyle(.segmented)
                 }
 
-                Stepper(value: $grams, in: 25...1500, step: 25) {
-                    Text("Изменить количество")
-                }
-            }
-        }
-    }
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Граммовка")
+                        .font(.subheadline.weight(.semibold))
 
-    @ViewBuilder
-    private func selectedFoodCard(_ food: Food) -> some View {
-        let factor = grams / 100.0
-        let macros = food.macrosPer100g * factor
-        let iron = food.nutrientsPer100g["iron", default: 0] * factor
+                    TextField("Например, 120", text: $gramsText)
+                        .keyboardType(.decimalPad)
+                        .textFieldStyle(.roundedBorder)
 
-        AppCard {
-            VStack(alignment: .leading, spacing: 12) {
-                Text("Выбранный продукт")
-                    .font(.headline)
-
-                Text(food.name)
-                    .font(.title3.weight(.semibold))
-
-                RecipeSummaryGrid(
-                    caloriesText: "\(Int(macros.calories)) ккал",
-                    proteinText: String(format: "%.1f г", macros.protein),
-                    fatText: String(format: "%.1f г", macros.fat),
-                    carbsText: String(format: "%.1f г", macros.carbs),
-                    ironText: iron > 0 ? String(format: "%.2f мг", iron) : nil
-                )
-            }
-        }
-    }
-
-    @ViewBuilder
-    private func foodRow(_ food: Food) -> some View {
-        let isSelected = selectedFoodId == food.id
-
-        Button {
-            selectedFoodId = food.id
-        } label: {
-            AppCard {
-                HStack(alignment: .top, spacing: 12) {
-                    VStack(alignment: .leading, spacing: 6) {
-                        Text(food.name)
-                            .font(.headline)
-                            .foregroundStyle(.primary)
-
-                        Text("\(Int(food.macrosPer100g.calories)) ккал на 100 г")
+                    if validGrams == nil {
+                        Text("Введите корректное количество граммов.")
+                            .font(.caption)
+                            .foregroundStyle(.red)
+                    } else {
+                        Text("Запись будет добавлена с указанной граммовкой.")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
-
-                    Spacer()
-
-                    if isSelected {
-                        Image(systemName: "checkmark.circle.fill")
-                            .font(.title3)
-                            .foregroundStyle(Color.accentColor)
-                    }
                 }
             }
         }
-        .buttonStyle(.plain)
     }
 
-    private var bottomActionBar: some View {
-        VStack(spacing: 0) {
-            Divider()
+    @ViewBuilder
+    private func foodCard(for food: Food) -> some View {
+        let previewMacros = scaledMacros(for: food)
 
-            VStack(spacing: 12) {
-                if let selectedFood {
-                    HStack {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text(selectedFood.name)
-                                .font(.subheadline.weight(.semibold))
-                            Text("\(Int(grams)) г • \(selectedMealType.ruTitle.lowercased())")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                        }
+        AppCard {
+            VStack(alignment: .leading, spacing: 12) {
+                Text(food.name)
+                    .font(.headline)
 
-                        Spacer()
-                    }
+                VStack(spacing: 8) {
+                    InfoValueRow(title: "Калории", value: "\(Int(previewMacros.calories)) ккал")
+                    InfoValueRow(title: "Белки", value: String(format: "%.1f г", previewMacros.protein))
+                    InfoValueRow(title: "Жиры", value: String(format: "%.1f г", previewMacros.fat))
+                    InfoValueRow(title: "Углеводы", value: String(format: "%.1f г", previewMacros.carbs))
                 }
 
                 Button {
-                    saveManualEntry()
+                    guard let grams = validGrams else { return }
+                    vm.addManualFoodEntry(
+                        foodId: food.id,
+                        grams: grams,
+                        mealType: selectedMealType
+                    )
+                    dismiss()
                 } label: {
-                    Text("Добавить в дневник")
+                    Text(buttonTitle(for: food))
                         .font(.headline)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 14)
                         .background(
                             RoundedRectangle(cornerRadius: 16, style: .continuous)
-                                .fill(selectedFood == nil ? Color(.tertiarySystemFill) : Color.accentColor.opacity(0.15))
+                                .fill(validGrams == nil ? Color.gray.opacity(0.18) : Color.accentColor.opacity(0.12))
                         )
                 }
                 .buttonStyle(.plain)
-                .disabled(selectedFood == nil)
+                .disabled(validGrams == nil)
             }
-            .padding(.horizontal, 16)
-            .padding(.top, 12)
-            .padding(.bottom, 12)
-            .background(.ultraThinMaterial)
         }
     }
 
-    private func saveManualEntry() {
-        guard let selectedFoodId else { return }
+    private var emptySearchState: some View {
+        AppCard {
+            VStack(alignment: .leading, spacing: 10) {
+                Text("Ничего не найдено")
+                    .font(.headline)
 
-        vm.addManualFoodToDiary(
-            foodId: selectedFoodId,
-            grams: grams,
-            mealType: selectedMealType
+                Text("Попробуй изменить поисковый запрос или очистить строку поиска.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
+        }
+    }
+
+    private func scaledMacros(for food: Food) -> Macros {
+        let grams = validGrams ?? 100
+        let factor = grams / 100.0
+
+        return Macros(
+            calories: food.macrosPer100g.calories * factor,
+            protein: food.macrosPer100g.protein * factor,
+            fat: food.macrosPer100g.fat * factor,
+            carbs: food.macrosPer100g.carbs * factor
         )
-        dismiss()
+    }
+
+    private func buttonTitle(for food: Food) -> String {
+        guard let grams = validGrams else {
+            return "Введите граммовку"
+        }
+
+        let displayGrams: String
+        if abs(grams.rounded() - grams) < 0.001 {
+            displayGrams = "\(Int(grams.rounded()))"
+        } else {
+            displayGrams = String(format: "%.0f", grams)
+        }
+
+        return "Добавить \(food.name) — \(displayGrams) г"
     }
 }

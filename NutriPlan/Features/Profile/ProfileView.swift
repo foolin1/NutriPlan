@@ -10,21 +10,21 @@ struct ProfileView: View {
     @State private var activityLevel: ActivityLevel = .moderate
     @State private var goalType: GoalType = .maintainWeight
     @State private var nutrientFocus: NutrientFocus = .none
-
     @State private var allergensText: String = ""
     @State private var excludedProductsText: String = ""
     @State private var excludedGroups: Set<String> = []
-
     @State private var showSavedMessage = false
 
     var body: some View {
         NavigationStack {
             Form {
+                accountSection
                 profileSection
                 nutrientFocusSection
                 excludedGroupsSection
                 restrictionsSection
                 previewSection
+                snapshotsSection
                 savedProfileSection
                 actionsSection
                 savedMessageSection
@@ -54,6 +54,29 @@ struct ProfileView: View {
 
     private var hasUnsavedChanges: Bool {
         makeProfileFingerprint(draftProfile) != makeSavedProfileFingerprint()
+    }
+
+    private var accountSection: some View {
+        Section("Аккаунт") {
+            GoalRow(title: "Тип", value: appState.accountTitle)
+            GoalRow(title: "Идентификатор", value: appState.accountShortId)
+            GoalRow(title: "Хранение", value: appState.accountSyncTitle)
+
+            NavigationLink {
+                AccountCenterView()
+            } label: {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Открыть центр аккаунта")
+                    Text("Посмотреть, как в приложении связаны аккаунт, профиль и история.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+
+            Text("Текущий профиль можно менять сколько угодно раз. Это тот же самый пользователь, поэтому история дней и снимки профиля не должны исчезать только из-за изменения веса, цели или ограничений.")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
     }
 
     private var profileSection: some View {
@@ -128,6 +151,23 @@ struct ProfileView: View {
         }
     }
 
+    private var snapshotsSection: some View {
+        Section("История профиля") {
+            NavigationLink {
+                ProfileSnapshotsView()
+            } label: {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Открыть снимки профиля")
+                    Text("Просмотреть, как менялись вес, цель и ограничения пользователя.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+
+            GoalRow(title: "Количество снимков", value: "\(appState.profileSnapshots.count)")
+        }
+    }
+
     @ViewBuilder
     private var savedProfileSection: some View {
         if let currentProfile = appState.userProfile {
@@ -151,13 +191,14 @@ struct ProfileView: View {
             }
             .disabled(!hasUnsavedChanges)
 
-            Button("Сбросить начальную настройку", role: .destructive) {
+            Button("Сбросить текущий профиль", role: .destructive) {
                 appState.resetProfile()
             }
         } footer: {
             VStack(alignment: .leading, spacing: 8) {
                 Text("После сохранения дневная цель пересчитывается автоматически.")
-                Text("Исключённые группы применяются внутри логики генерации плана и механизма замен.")
+                Text("Архив дней, история аккаунта и снимки профиля не должны теряться из-за изменения веса, цели или ограничений.")
+                Text("Сброс профиля очищает только текущую анкету и вернёт приложение к экрану начальной настройки.")
             }
             .font(.caption)
             .foregroundStyle(.secondary)
@@ -168,7 +209,7 @@ struct ProfileView: View {
     private var savedMessageSection: some View {
         if showSavedMessage {
             Section {
-                Text("Профиль сохранён. Цель, ограничения и текущий план были обновлены.")
+                Text("Профиль сохранён.\nОбновились текущие параметры, а аккаунт, история и снимки профиля остались теми же.")
                     .font(.subheadline)
                     .foregroundStyle(.green)
             }
@@ -238,7 +279,9 @@ struct ProfileView: View {
     }
 
     private func groupsSummary(from groups: [String]) -> String {
-        if groups.isEmpty { return "Нет" }
+        if groups.isEmpty {
+            return "Нет"
+        }
 
         return groups
             .sorted()

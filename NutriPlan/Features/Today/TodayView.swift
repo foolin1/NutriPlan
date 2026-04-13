@@ -55,6 +55,7 @@ struct TodayView: View {
 
                             if nutrientFocus == .iron {
                                 Divider()
+
                                 InfoValueRow(
                                     title: "Железо по плану",
                                     value: String(format: "%.2f мг", plannedSummary.nutrients["iron", default: 0])
@@ -86,6 +87,7 @@ struct TodayView: View {
 
                                 if nutrientFocus == .iron {
                                     Divider()
+
                                     InfoValueRow(
                                         title: "Железо по факту",
                                         value: String(format: "%.2f мг", actualSummary.nutrients["iron", default: 0])
@@ -97,7 +99,7 @@ struct TodayView: View {
 
                     SectionTitleView(
                         "Быстрые действия",
-                        subtitle: "Переход к основным сценариям текущего дня."
+                        subtitle: "Переход к основным сценариям текущего дня и просмотру прошлых записей."
                     )
 
                     LazyVGrid(columns: actionColumns, spacing: 12) {
@@ -130,6 +132,28 @@ struct TodayView: View {
                             }
                             .buttonStyle(.plain)
                         }
+
+                        NavigationLink {
+                            PlanHistoryView(vm: vm)
+                        } label: {
+                            QuickActionTile(
+                                systemImage: "clock.arrow.circlepath",
+                                title: "История",
+                                subtitle: "Открой прошлые дни и посмотри, как менялись план и факт."
+                            )
+                        }
+                        .buttonStyle(.plain)
+
+                        NavigationLink {
+                            CloudRestoreView(vm: vm)
+                        } label: {
+                            QuickActionTile(
+                                systemImage: "arrow.triangle.2.circlepath",
+                                title: "Синхронизация",
+                                subtitle: "Обнови данные аккаунта и историю на этом устройстве."
+                            )
+                        }
+                        .buttonStyle(.plain)
                     }
 
                     if let adjustment {
@@ -230,13 +254,12 @@ struct TodayView: View {
                         .font(.subheadline)
 
                     Text(
-                        "Б: \(summary.macros.protein, specifier: "%.1f")  Ж: \(summary.macros.fat, specifier: "%.1f")  У: \(summary.macros.carbs, specifier: "%.1f")"
+                        "Б: \(summary.macros.protein, specifier: "%.1f") Ж: \(summary.macros.fat, specifier: "%.1f") У: \(summary.macros.carbs, specifier: "%.1f")"
                     )
                     .font(.caption)
                     .foregroundStyle(.secondary)
 
-                    if nutrientFocus == .iron,
-                       let iron = summary.nutrients["iron"] {
+                    if nutrientFocus == .iron, let iron = summary.nutrients["iron"] {
                         Text("Железо: \(iron, specifier: "%.2f") мг")
                             .font(.caption2)
                             .foregroundStyle(.secondary)

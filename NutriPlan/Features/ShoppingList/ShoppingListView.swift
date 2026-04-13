@@ -1,10 +1,7 @@
 import SwiftUI
 
 struct ShoppingListView: View {
-    let items: [ShoppingItem]
-
-    @AppStorage("shopping.checkedIds")
-    private var checkedIdsString: String = ""
+    @ObservedObject var vm: PlanViewModel
 
     @State private var searchText: String = ""
     @State private var filter: ShoppingFilter = .all
@@ -69,24 +66,19 @@ struct ShoppingListView: View {
             ToolbarItemGroup(placement: .topBarTrailing) {
                 if !checkedIds.isEmpty {
                     Button("Сбросить купленное") {
-                        clearBought()
+                        vm.clearCheckedShoppingItems()
                     }
                 }
             }
         }
     }
 
-    private var headerCard: some View {
-        AppCard {
-            VStack(alignment: .leading, spacing: 10) {
-                Text("Список покупок")
-                    .font(.title2.weight(.bold))
+    private var items: [ShoppingItem] {
+        vm.shoppingItems
+    }
 
-                Text("Этот список формируется автоматически на основе текущего плана питания. Отмечай купленные продукты, чтобы отслеживать прогресс.")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-            }
-        }
+    private var checkedIds: Set<String> {
+        vm.checkedShoppingItemIds
     }
 
     private var filteredItems: [ShoppingItem] {
@@ -110,20 +102,25 @@ struct ShoppingListView: View {
         return order.filter { groupedItems[$0] != nil }
     }
 
-    private var checkedIds: Set<String> {
-        let parts = checkedIdsString
-            .split(separator: ",")
-            .map(String.init)
-
-        return Set(parts.filter { !$0.isEmpty })
-    }
-
     private var boughtItems: [ShoppingItem] {
         items.filter { checkedIds.contains($0.id) }
     }
 
     private var remainingItems: [ShoppingItem] {
         items.filter { !checkedIds.contains($0.id) }
+    }
+
+    private var headerCard: some View {
+        AppCard {
+            VStack(alignment: .leading, spacing: 10) {
+                Text("Список покупок")
+                    .font(.title2.weight(.bold))
+
+                Text("Этот список формируется автоматически на основе текущего плана питания.\nОтмечай купленные продукты, чтобы отслеживать прогресс.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
+        }
     }
 
     @ViewBuilder
@@ -150,7 +147,7 @@ struct ShoppingListView: View {
                         item: shoppingItem,
                         isChecked: checkedIds.contains(shoppingItem.id)
                     ) {
-                        toggleChecked(shoppingItem.id)
+                        vm.toggleShoppingItemChecked(shoppingItem.id)
                     }
                 }
             }
@@ -163,7 +160,7 @@ struct ShoppingListView: View {
                 Text("Пока нет покупок")
                     .font(.headline)
 
-                Text("Сначала сформируй план питания. Когда в плане появятся блюда, здесь автоматически отобразятся нужные ингредиенты.")
+                Text("Сначала сформируй план питания.\nКогда в плане появятся блюда, здесь автоматически отобразятся нужные ингредиенты.")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
@@ -197,29 +194,11 @@ struct ShoppingListView: View {
     private func matchesSearch(_ item: ShoppingItem) -> Bool {
         let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
 
-        guard !query.isEmpty else { return true }
-
-        return item.name.localizedCaseInsensitiveContains(query)
-    }
-
-    private func toggleChecked(_ id: String) {
-        var updated = checkedIds
-
-        if updated.contains(id) {
-            updated.remove(id)
-        } else {
-            updated.insert(id)
+        guard !query.isEmpty else {
+            return true
         }
 
-        saveCheckedIds(updated)
-    }
-
-    private func saveCheckedIds(_ ids: Set<String>) {
-        checkedIdsString = ids.sorted().joined(separator: ",")
-    }
-
-    private func clearBought() {
-        checkedIdsString = ""
+        return item.name.localizedCaseInsensitiveContains(query)
     }
 
     private func categoryTitle(for key: String) -> String {

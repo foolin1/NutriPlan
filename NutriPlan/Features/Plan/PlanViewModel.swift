@@ -4,16 +4,34 @@ import Combine
 @MainActor
 final class PlanViewModel: ObservableObject {
     @Published var dayPlan: DayPlan = .empty {
-        didSet { persistSession() }
+        didSet {
+            pruneCheckedShoppingItemsIfNeeded()
+            persistSession()
+        }
     }
 
     @Published var diaryDay: DiaryDay = .empty {
-        didSet { persistSession() }
+        didSet {
+            persistSession()
+        }
     }
 
+    @Published private(set) var checkedShoppingItemIds: Set<String> = [] {
+        didSet {
+            persistSession()
+        }
+    }
+
+    @Published private(set) var selectedDayId: String = DayIdentifier.current()
+    @Published private(set) var isCloudRestoreInProgress = false
+    @Published private(set) var lastCloudRestoreAt: Date?
+    @Published var cloudRestoreMessage: String?
+
+    private let accountId: String?
     private let foodRepo: FoodRepository
     private let recipeRepo: RecipeRepository
     private let sessionStore: PlanSessionStore
+    private let remoteDayStore: DayRecordsRemoteStore?
 
     private var excludedAllergens: Set<String> = []
     private var excludedProducts: Set<String> = []
@@ -24,16 +42,22 @@ final class PlanViewModel: ObservableObject {
     private var currentNutrientFocus: NutrientFocus = .none
 
     private var hasConfiguredSession = false
+    private var hasStartedRemoteSync = false
     private var currentInputSignature: PlanInputSignature?
+    private var remoteHistoryRecords: [PlanHistoryRecord] = []
 
     init(
+        accountId: String? = nil,
         foodRepo: FoodRepository = InMemoryFoodRepository(),
         recipeRepo: RecipeRepository = InMemoryRecipeRepository(),
-        sessionStore: PlanSessionStore = UserDefaultsPlanSessionStore()
+        sessionStore: PlanSessionStore = UserDefaultsPlanSessionStore(accountId: "local_guest"),
+        remoteDayStore: DayRecordsRemoteStore? = nil
     ) {
+        self.accountId = accountId
         self.foodRepo = foodRepo
         self.recipeRepo = recipeRepo
         self.sessionStore = sessionStore
+        self.remoteDayStore = remoteDayStore
         self.allRecipes = recipeRepo.getAllRecipes()
     }
 
@@ -41,7 +65,24 @@ final class PlanViewModel: ObservableObject {
         foodRepo.getFoodsById()
     }
 
+    var allFoods: [Food] {
+        foodRepo
+            .getAllFoods()
+            .sorted {
+                $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending
+            }
+    }
+
+    var shoppingItems: [ShoppingItem] {
+        ShoppingListBuilder.build(
+            recipes: dayPlan.meals.map(\.recipe),
+            foodsById: foodsById
+        )
+    }
+
     func configureSession(profile: UserProfile?, goal: NutritionGoal?) {
+        selectedDayId = DayIdentifier.current()
+
         excludedAllergens = Set(profile?.excludedAllergens.map(normalizeText) ?? [])
         excludedProducts = Set(profile?.excludedProducts.map(normalizeText) ?? [])
         excludedGroups = Set(profile?.excludedGroups.map(normalizeText) ?? [])
@@ -52,32 +93,57 @@ final class PlanViewModel: ObservableObject {
 
         if !hasConfiguredSession {
             hasConfiguredSession = true
+            archiveStaleSessionIfNeeded()
 
-            if let persisted = sessionStore.load(),
+            if let persisted = sessionStore.loadCurrentDay(),
+               persisted.dayId == selectedDayId,
                persisted.inputSignature == newSignature {
                 currentInputSignature = persisted.inputSignature
                 dayPlan = persisted.dayPlan
                 diaryDay = persisted.diaryDay
+                checkedShoppingItemIds = Set(persisted.checkedShoppingItemIds)
+                pruneCheckedShoppingItemsIfNeeded()
+                persistSession()
+                startRemoteSyncIfNeeded()
                 return
             }
         }
 
         if currentInputSignature != newSignature {
             currentInputSignature = newSignature
+            checkedShoppingItemIds = []
             rebuildDayPlan(goal: goal)
+            startRemoteSyncIfNeeded()
             return
         }
 
         if dayPlan.meals.isEmpty {
             rebuildDayPlan(goal: goal)
         }
+
+        startRemoteSyncIfNeeded()
+    }
+
+    func reloadCloudState() {
+        performRemoteSync(showLoading: true)
     }
 
     func resetSession() {
         currentInputSignature = nil
+        checkedShoppingItemIds = []
         dayPlan = .empty
         diaryDay = .empty
-        sessionStore.clear()
+        sessionStore.clearCurrentDay()
+
+        if let accountId, let remoteDayStore {
+            Task {
+                do {
+                    try await remoteDayStore.clearCurrentDay(uid: accountId)
+                } catch {
+                    print("Failed to clear remote current day: \(error)")
+                }
+            }
+        }
     }
 
     func rebuildDayPlan(goal: NutritionGoal?) {
@@ -230,10 +296,10 @@ final class PlanViewModel: ObservableObject {
     func displayTitle(for recipe: Recipe) -> String {
         guard recipe.isModified else { return recipe.name }
 
-        let items: [TitleItem] = recipe.ingredients.compactMap { ing in
-            guard let food = foodsById[ing.foodId] else { return nil }
+        let items: [TitleItem] = recipe.ingredients.compactMap { ingredient in
+            guard let food = foodsById[ingredient.foodId] else { return nil }
 
-            let factor = ing.grams / 100.0
+            let factor = ingredient.grams / 100.0
             let calories = food.macrosPer100g.calories * factor
 
             return TitleItem(
@@ -243,25 +309,13 @@ final class PlanViewModel: ObservableObject {
             )
         }
 
-        if let protein = items
-            .filter({ $0.category == .protein })
-            .max(by: { $0.calories < $1.calories }),
-           let carb = items
-            .filter({ $0.category == .carb })
-            .max(by: { $0.calories < $1.calories }) {
-            return "\(protein.name) + \(lowercasedFirstLetter(carb.name))"
+        let generatedTitle = composeModifiedRecipeTitle(from: items)
+
+        if generatedTitle.isEmpty {
+            return recipe.name
         }
 
-        let top = items
-            .sorted { $0.calories > $1.calories }
-            .prefix(2)
-            .map { $0.name }
-
-        if top.count == 2 {
-            return "\(top[0]) + \(lowercasedFirstLetter(top[1]))"
-        }
-
-        return recipe.name
+        return generatedTitle
     }
 
     func substitutionCandidates(for ingredient: RecipeIngredient) -> [SubstitutionCandidate] {
@@ -302,6 +356,39 @@ final class PlanViewModel: ObservableObject {
         dayPlan = DayPlan(meals: updatedMeals)
 
         syncDiaryEntryIfNeeded(for: mealId)
+    }
+
+    func addManualFoodEntry(foodId: String, grams: Double, mealType: MealType) {
+        guard let food = foodsById[foodId] else { return }
+
+        let normalizedGrams = max(1, min(1500, grams))
+        let manualRecipe = Recipe(
+            id: "manual-\(UUID().uuidString)",
+            name: shortenFoodName(food.name),
+            ingredients: [
+                RecipeIngredient(
+                    foodId: foodId,
+                    grams: normalizedGrams
+                )
+            ],
+            cookTimeMinutes: nil,
+            tags: [],
+            isModified: true
+        )
+
+        let title = "\(shortenFoodName(food.name)) — \(gramsText(normalizedGrams))"
+
+        var updatedEntries = diaryDay.entries
+        updatedEntries.append(
+            ConsumedFoodEntry(
+                mealId: nil,
+                mealType: mealType,
+                title: title,
+                recipe: manualRecipe
+            )
+        )
+
+        diaryDay = DiaryDay(entries: sortedDiaryEntries(updatedEntries))
     }
 
     private func syncDiaryEntryIfNeeded(for mealId: UUID) {
@@ -351,14 +438,156 @@ final class PlanViewModel: ObservableObject {
         diaryDay = .empty
     }
 
+    func isShoppingItemChecked(_ id: String) -> Bool {
+        checkedShoppingItemIds.contains(id)
+    }
+
+    func toggleShoppingItemChecked(_ id: String) {
+        if checkedShoppingItemIds.contains(id) {
+            checkedShoppingItemIds.remove(id)
+        } else {
+            checkedShoppingItemIds.insert(id)
+        }
+    }
+
+    func clearCheckedShoppingItems() {
+        checkedShoppingItemIds = []
+    }
+
+    func historyRecords() -> [PlanHistoryRecord] {
+        mergeHistoryRecords(
+            local: sessionStore.loadHistory(),
+            remote: remoteHistoryRecords
+        )
+    }
+
+    private func startRemoteSyncIfNeeded() {
+        guard !hasStartedRemoteSync else { return }
+        hasStartedRemoteSync = true
+        performRemoteSync(showLoading: false)
+    }
+
+    private func performRemoteSync(showLoading: Bool) {
+        guard let accountId, let remoteDayStore else { return }
+
+        if showLoading {
+            cloudRestoreMessage = nil
+            isCloudRestoreInProgress = true
+        }
+
+        Task {
+            do {
+                async let currentTask = remoteDayStore.fetchCurrentDay(uid: accountId)
+                async let historyTask = remoteDayStore.fetchHistory(uid: accountId)
+
+                let (remoteCurrent, remoteHistory) = try await (currentTask, historyTask)
+
+                await MainActor.run {
+                    self.remoteHistoryRecords = remoteHistory.sorted { $0.dayId > $1.dayId }
+                    self.applyRemoteCurrentIfNeeded(remoteCurrent)
+                    self.lastCloudRestoreAt = Date()
+
+                    if showLoading {
+                        self.cloudRestoreMessage = "Текущий день и архив обновлены из облака."
+                        self.isCloudRestoreInProgress = false
+                    }
+                }
+            } catch {
+                await MainActor.run {
+                    if showLoading {
+                        self.cloudRestoreMessage = "Не удалось обновить день и архив из облака: \(error.localizedDescription)"
+                        self.isCloudRestoreInProgress = false
+                    } else {
+                        print("Failed to sync remote day data: \(error)")
+                    }
+                }
+            }
+        }
+    }
+
+    private func applyRemoteCurrentIfNeeded(_ remoteSession: PersistedPlanSession?) {
+        guard let remoteSession else { return }
+        guard remoteSession.dayId == selectedDayId else { return }
+        guard remoteSession.inputSignature == currentInputSignature else { return }
+
+        let localSession = sessionStore.loadCurrentDay()
+        let shouldUseRemote: Bool
+
+        if let localSession {
+            shouldUseRemote = remoteSession.savedAt > localSession.savedAt
+        } else {
+            shouldUseRemote = true
+        }
+
+        guard shouldUseRemote else { return }
+
+        currentInputSignature = remoteSession.inputSignature
+        dayPlan = remoteSession.dayPlan
+        diaryDay = remoteSession.diaryDay
+        checkedShoppingItemIds = Set(remoteSession.checkedShoppingItemIds)
+        pruneCheckedShoppingItemsIfNeeded()
+    }
+
+    private func archiveStaleSessionIfNeeded() {
+        guard let persisted = sessionStore.loadCurrentDay() else { return }
+        guard persisted.dayId != selectedDayId else { return }
+
+        let record = PlanHistoryRecord(from: persisted)
+
+        sessionStore.appendHistoryRecord(from: persisted)
+        sessionStore.clearCurrentDay()
+        upsertRemoteHistoryRecord(record)
+
+        if let accountId, let remoteDayStore {
+            Task {
+                do {
+                    try await remoteDayStore.saveHistoryRecord(record, uid: accountId)
+                    try await remoteDayStore.clearCurrentDay(uid: accountId)
+                } catch {
+                    print("Failed to archive remote current day: \(error)")
+                }
+            }
+        }
+    }
+
     private func persistSession() {
         guard let currentInputSignature else { return }
 
-        sessionStore.save(
+        let session = PersistedPlanSession(
+            dayId: selectedDayId,
+            savedAt: Date(),
             inputSignature: currentInputSignature,
             dayPlan: dayPlan,
-            diaryDay: diaryDay
+            diaryDay: diaryDay,
+            checkedShoppingItemIds: checkedShoppingItemIds.sorted()
         )
+
+        sessionStore.saveCurrentDay(
+            dayId: selectedDayId,
+            inputSignature: currentInputSignature,
+            dayPlan: dayPlan,
+            diaryDay: diaryDay,
+            checkedShoppingItemIds: checkedShoppingItemIds
+        )
+
+        guard let accountId, let remoteDayStore else { return }
+
+        Task {
+            do {
+                try await remoteDayStore.saveCurrentDay(session, uid: accountId)
+            } catch {
+                print("Failed to save remote current day: \(error)")
+            }
+        }
+    }
+
+    private func pruneCheckedShoppingItemsIfNeeded() {
+        let availableIds = Set(shoppingItems.map(\.id))
+        let filtered = checkedShoppingItemIds.intersection(availableIds)
+
+        if filtered != checkedShoppingItemIds {
+            checkedShoppingItemIds = filtered
+        }
     }
 
     private func buildInputSignature(
@@ -418,17 +647,37 @@ final class PlanViewModel: ObservableObject {
         }
     }
 
-    private func dishSuffix(for recipe: Recipe) -> String {
-        if recipe.tags.contains("salad") { return "Салат" }
-        if recipe.tags.contains("plate") { return "Тарелка" }
-        if recipe.tags.contains("bowl") { return "Чаша" }
-        return "Чаша"
+    private func mergeHistoryRecords(
+        local: [PlanHistoryRecord],
+        remote: [PlanHistoryRecord]
+    ) -> [PlanHistoryRecord] {
+        var bestByDayId: [String: PlanHistoryRecord] = [:]
+
+        for record in local + remote {
+            if let existing = bestByDayId[record.dayId] {
+                if record.savedAt > existing.savedAt {
+                    bestByDayId[record.dayId] = record
+                }
+            } else {
+                bestByDayId[record.dayId] = record
+            }
+        }
+
+        return bestByDayId.values.sorted { $0.dayId > $1.dayId }
+    }
+
+    private func upsertRemoteHistoryRecord(_ record: PlanHistoryRecord) {
+        remoteHistoryRecords.removeAll { $0.dayId == record.dayId }
+        remoteHistoryRecords.append(record)
+        remoteHistoryRecords.sort { $0.dayId > $1.dayId }
     }
 
     private enum TitleCategory {
         case protein
         case carb
         case veggie
+        case fruit
+        case dairy
         case other
     }
 
@@ -456,6 +705,17 @@ final class PlanViewModel: ObservableObject {
             return .veggie
         }
 
+        if food.tags.contains("fruit")
+            || food.groups.contains("fruit")
+            || food.groups.contains("berries")
+            || food.groups.contains("citrus") {
+            return .fruit
+        }
+
+        if food.groups.contains("dairy") {
+            return .dairy
+        }
+
         return .other
     }
 
@@ -465,18 +725,96 @@ final class PlanViewModel: ObservableObject {
         let category: TitleCategory
     }
 
+    private func composeModifiedRecipeTitle(from items: [TitleItem]) -> String {
+        guard !items.isEmpty else { return "" }
+
+        var orderedNames: [String] = []
+
+        func appendTopName(for category: TitleCategory) {
+            if let candidate = items
+                .filter({ $0.category == category })
+                .sorted(by: { $0.calories > $1.calories })
+                .first?.name,
+               !orderedNames.contains(candidate) {
+                orderedNames.append(candidate)
+            }
+        }
+
+        appendTopName(for: .protein)
+        appendTopName(for: .carb)
+        appendTopName(for: .veggie)
+        appendTopName(for: .fruit)
+        appendTopName(for: .dairy)
+
+        let fallbackNames = items
+            .sorted { $0.calories > $1.calories }
+            .map(\.name)
+
+        for name in fallbackNames where !orderedNames.contains(name) {
+            orderedNames.append(name)
+        }
+
+        let visibleNames = Array(orderedNames.prefix(3))
+
+        switch visibleNames.count {
+        case 0:
+            return ""
+        case 1:
+            return visibleNames[0]
+        case 2:
+            return "\(visibleNames[0]) + \(visibleNames[1])"
+        default:
+            return "\(visibleNames[0]) + \(visibleNames[1]) + \(visibleNames[2])"
+        }
+    }
+
     private func shortenFoodName(_ name: String) -> String {
-        let result = name.replacingOccurrences(
+        var result = name
+
+        result = result.replacingOccurrences(
             of: #"\s*\([^)]*\)"#,
             with: "",
             options: .regularExpression
         )
 
+        let fragmentsToRemove = [
+            " cooked",
+            " boiled",
+            " raw",
+            " fresh",
+            " steamed",
+            " roasted",
+            "запечённый",
+            "запеченная",
+            "запеченное",
+            "запечённая",
+            "запечённое",
+            "варёный",
+            "вареный",
+            "варёная",
+            "вареная",
+            "отварной",
+            "отварная",
+            "сухой",
+            "сухая"
+        ]
+
+        for fragment in fragmentsToRemove {
+            result = result.replacingOccurrences(
+                of: fragment,
+                with: "",
+                options: .caseInsensitive
+            )
+        }
+
         return result.trimmingCharacters(in: .whitespacesAndNewlines)
     }
-    
-    private func lowercasedFirstLetter(_ value: String) -> String {
-        guard let first = value.first else { return value }
-        return first.lowercased() + value.dropFirst()
+
+    private func gramsText(_ grams: Double) -> String {
+        if abs(grams.rounded() - grams) < 0.001 {
+            return "\(Int(grams.rounded())) г"
+        }
+
+        return String(format: "%.0f г", grams)
     }
 }
