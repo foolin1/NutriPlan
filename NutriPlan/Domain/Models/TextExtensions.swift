@@ -43,8 +43,16 @@ extension MealType {
 extension NutrientFocus {
     var uiTitle: String {
         switch self {
-        case .none: return "Нет"
-        case .iron: return "Железо"
+        case .none:
+            return "Нет"
+        case .iron:
+            return "Железо"
+        case .calcium:
+            return "Кальций"
+        case .magnesium:
+            return "Магний"
+        case .vitaminC:
+            return "Витамин C"
         }
     }
 
@@ -54,6 +62,12 @@ extension NutrientFocus {
             return "Дополнительный акцент на микронутриентах не используется."
         case .iron:
             return "Планировщик будет отдавать приоритет блюдам и продуктам с более высоким содержанием железа."
+        case .calcium:
+            return "Планировщик будет отдавать приоритет блюдам и продуктам с более высоким содержанием кальция."
+        case .magnesium:
+            return "Планировщик будет отдавать приоритет блюдам и продуктам с более высоким содержанием магния."
+        case .vitaminC:
+            return "Планировщик будет отдавать приоритет блюдам и продуктам с более высоким содержанием витамина C."
         }
     }
 }

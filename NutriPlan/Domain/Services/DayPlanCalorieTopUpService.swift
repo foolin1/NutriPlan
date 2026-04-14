@@ -132,7 +132,10 @@ enum DayPlanCalorieTopUpService {
         let protein = summary.macros.protein
         let fat = summary.macros.fat
         let carbs = summary.macros.carbs
-        let iron = summary.nutrients["iron", default: 0]
+        let focusedNutrientAmount = NutrientCatalog.focusedAmount(
+            in: summary.nutrients,
+            for: nutrientFocus
+        )
 
         let calorieScore = 100.0 - min(
             abs(targetSnackCalories - calories) / max(targetSnackCalories, 200.0) * 100.0,
@@ -167,15 +170,30 @@ enum DayPlanCalorieTopUpService {
             overshootPenalty = 0
         }
 
-        let nutrientBonus: Double
-        switch nutrientFocus {
-        case .none:
-            nutrientBonus = 0
-        case .iron:
-            nutrientBonus = min(iron * 2.0, 8.0)
-        }
+        let nutrientBonus = snackNutrientBonus(
+            focus: nutrientFocus,
+            amount: focusedNutrientAmount
+        )
 
         return calorieScore + proteinScore + fatScore + carbsScore + nutrientBonus - overshootPenalty
+    }
+
+    private static func snackNutrientBonus(
+        focus: NutrientFocus,
+        amount: Double
+    ) -> Double {
+        switch focus {
+        case .none:
+            return 0
+        case .iron:
+            return min(amount * 2.0, 8.0)
+        case .calcium:
+            return min(amount * 0.012, 8.0)
+        case .magnesium:
+            return min(amount * 0.02, 8.0)
+        case .vitaminC:
+            return min(amount * 0.05, 8.0)
+        }
     }
 
     private static func summarize(

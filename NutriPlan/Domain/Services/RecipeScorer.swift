@@ -20,7 +20,9 @@ struct RecipeScoreBreakdown: Hashable {
 
     let nutrientBonus: Double
     let tagBonus: Double
+
     let ironAmount: Double
+    let focusedNutrientAmount: Double
 }
 
 enum RecipeScorer {
@@ -40,7 +42,12 @@ enum RecipeScorer {
         let actualProtein = summary.macros.protein
         let actualFat = summary.macros.fat
         let actualCarbs = summary.macros.carbs
+
         let ironAmount = summary.nutrients["iron", default: 0]
+        let focusedNutrientAmount = NutrientCatalog.focusedAmount(
+            in: summary.nutrients,
+            for: nutrientFocus
+        )
 
         let share = mealShare(for: mealType)
 
@@ -85,9 +92,9 @@ enum RecipeScorer {
             fallback: 15
         ) * 15
 
-        let nutrientBonus = micronutrientBonus(
-            nutrientFocus: nutrientFocus,
-            ironAmount: ironAmount
+        let nutrientBonus = NutrientCatalog.recipeBonus(
+            for: nutrientFocus,
+            amount: focusedNutrientAmount
         )
 
         let tagBonus = recipe.tags.contains(mealTag(for: mealType)) ? 8.0 : 0.0
@@ -97,12 +104,12 @@ enum RecipeScorer {
             min(
                 100,
                 100
-                - caloriePenalty
-                - proteinPenalty
-                - fatPenalty
-                - carbsPenalty
-                + nutrientBonus
-                + tagBonus
+                    - caloriePenalty
+                    - proteinPenalty
+                    - fatPenalty
+                    - carbsPenalty
+                    + nutrientBonus
+                    + tagBonus
             )
         )
 
@@ -122,7 +129,8 @@ enum RecipeScorer {
             carbsPenalty: carbsPenalty,
             nutrientBonus: nutrientBonus,
             tagBonus: tagBonus,
-            ironAmount: ironAmount
+            ironAmount: ironAmount,
+            focusedNutrientAmount: focusedNutrientAmount
         )
     }
 
@@ -159,17 +167,5 @@ enum RecipeScorer {
     ) -> Double {
         let denominator = max(target, fallback)
         return abs(actual - target) / denominator
-    }
-
-    private static func micronutrientBonus(
-        nutrientFocus: NutrientFocus,
-        ironAmount: Double
-    ) -> Double {
-        switch nutrientFocus {
-        case .none:
-            return 0
-        case .iron:
-            return min(ironAmount * 4.0, 12.0)
-        }
     }
 }

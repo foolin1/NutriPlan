@@ -100,7 +100,7 @@ final class FirebaseProfileSnapshotsRemoteStore: ProfileSnapshotsRemoteStore {
             "weightKg": profile.weightKg,
             "activityLevel": profile.activityLevel.rawValue,
             "goalType": profile.goalType.rawValue,
-            "nutrientFocus": profile.nutrientFocus.displayName,
+            "nutrientFocus": profile.nutrientFocus.rawValue,
             "excludedAllergens": profile.excludedAllergens,
             "excludedProducts": profile.excludedProducts,
             "excludedGroups": profile.excludedGroups,
@@ -123,8 +123,8 @@ final class FirebaseProfileSnapshotsRemoteStore: ProfileSnapshotsRemoteStore {
             return nil
         }
 
-        let nutrientFocusName = data["nutrientFocus"] as? String ?? NutrientFocus.none.displayName
-        let nutrientFocus = NutrientFocus.allCases.first(where: { $0.displayName == nutrientFocusName }) ?? .none
+        let nutrientFocusStored = data["nutrientFocus"] as? String
+        let nutrientFocus = NutrientFocus.resolve(from: nutrientFocusStored)
 
         let excludedAllergens = data["excludedAllergens"] as? [String] ?? []
         let excludedProducts = data["excludedProducts"] as? [String] ?? []

@@ -84,7 +84,21 @@ struct ProfileSnapshotsView: View {
                     InfoValueRow(title: "Рост", value: snapshot.shortHeightText)
                     InfoValueRow(title: "Возраст", value: "\(snapshot.profile.age)")
                     InfoValueRow(title: "Активность", value: snapshot.shortActivityText)
-                    InfoValueRow(title: "Микронутриентный фокус", value: snapshot.shortNutrientFocusText)
+                    InfoValueRow(title: "Фокус по микронутриентам", value: snapshot.shortNutrientFocusText)
+                }
+
+                if snapshot.profile.nutrientFocus != .none,
+                   let nutrient = NutrientCatalog.nutrient(for: snapshot.profile.nutrientFocus) {
+                    Divider()
+
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("Приоритет в плане")
+                            .font(.subheadline.weight(.semibold))
+
+                        Text("\(nutrient.name). Суточный ориентир: \(amountText(nutrient.targetPerDay ?? 0, unit: nutrient.unit)).")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
                 }
 
                 Divider()
@@ -103,14 +117,8 @@ struct ProfileSnapshotsView: View {
                         .font(.subheadline.weight(.semibold))
 
                     InfoValueRow(title: "Исключённые группы", value: snapshot.excludedGroupsSummary)
-                    InfoValueRow(
-                        title: "Аллергены",
-                        value: listOrDash(snapshot.profile.excludedAllergens)
-                    )
-                    InfoValueRow(
-                        title: "Исключённые продукты",
-                        value: listOrDash(snapshot.profile.excludedProducts)
-                    )
+                    InfoValueRow(title: "Аллергены", value: listOrDash(snapshot.profile.excludedAllergens))
+                    InfoValueRow(title: "Исключённые продукты", value: listOrDash(snapshot.profile.excludedProducts))
                 }
             }
         }
@@ -130,6 +138,10 @@ struct ProfileSnapshotsView: View {
         }
 
         return values.joined(separator: ", ")
+    }
+
+    private func amountText(_ value: Double, unit: String) -> String {
+        String(format: "%.0f %@", value, unit)
     }
 
     private static let dateFormatter: DateFormatter = {

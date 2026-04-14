@@ -24,325 +24,221 @@ struct RecipeDetailView: View {
     private func content(for meal: PlannedMeal) -> some View {
         let recipe = meal.recipe
         let summary = vm.summary(for: recipe)
-        let iron = summary.nutrients["iron"]
         let scoreBreakdown = vm.recipeSelectionBreakdown(
             for: recipe,
             mealType: meal.type
         )
 
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                headerCard(for: meal)
-
-                SectionTitleView(
-                    "Почему выбрано это блюдо",
-                    subtitle: "Краткое объяснение, насколько блюдо подходит под текущую цель."
+        List {
+            Section("Сводка") {
+                Text("Калории: \(Int(summary.macros.calories))")
+                Text(
+                    "Б: \(summary.macros.protein, specifier: "%.1f") Ж: \(summary.macros.fat, specifier: "%.1f") У: \(summary.macros.carbs, specifier: "%.1f")"
                 )
+            }
 
-                AppCard {
-                    VStack(alignment: .leading, spacing: 12) {
-                        HStack {
-                            Text("Оценка выбора")
-                                .font(.headline)
+            Section("Микронутриенты") {
+                ForEach(NutrientCatalog.focusable) { nutrient in
+                    HStack {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(nutrient.name)
 
-                            Spacer()
-
-                            StatPill(text: "\(Int(scoreBreakdown.totalScore.rounded())) / 100")
-                        }
-
-                        Text(selectionSummary(for: scoreBreakdown))
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-
-                        if !selectionHighlights(for: scoreBreakdown).isEmpty {
-                            Divider()
-
-                            VStack(alignment: .leading, spacing: 6) {
-                                ForEach(selectionHighlights(for: scoreBreakdown), id: \.self) { item in
-                                    Text("• \(item)")
-                                        .font(.caption)
-                                        .foregroundStyle(.secondary)
-                                }
+                            if let target = nutrient.targetPerDay {
+                                Text("Ориентир: \(amountText(target, unit: nutrient.unit))")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
                             }
                         }
 
-                        Divider()
+                        Spacer()
 
-                        InfoValueRow(
-                            title: "Целевые калории",
-                            value: "\(Int(scoreBreakdown.mealTargetCalories.rounded())) ккал"
-                        )
-                        InfoValueRow(
-                            title: "Калории блюда",
-                            value: "\(Int(scoreBreakdown.actualCalories.rounded())) ккал"
-                        )
-
-                        InfoValueRow(
-                            title: "Целевые белки",
-                            value: String(format: "%.1f г", scoreBreakdown.mealTargetProtein)
-                        )
-                        InfoValueRow(
-                            title: "Белки блюда",
-                            value: String(format: "%.1f г", scoreBreakdown.actualProtein)
-                        )
-
-                        if scoreBreakdown.ironAmount > 0 {
-                            InfoValueRow(
-                                title: "Железо",
-                                value: String(format: "%.2f мг", scoreBreakdown.ironAmount)
-                            )
-                        }
-                    }
-                }
-
-                SectionTitleView(
-                    "Сводка по рецепту",
-                    subtitle: "Пищевые показатели для текущей версии блюда."
-                )
-
-                AppCard {
-                    RecipeSummaryGrid(
-                        caloriesText: "\(Int(summary.macros.calories)) ккал",
-                        proteinText: String(format: "%.1f г", summary.macros.protein),
-                        fatText: String(format: "%.1f г", summary.macros.fat),
-                        carbsText: String(format: "%.1f г", summary.macros.carbs),
-                        ironText: iron.map { String(format: "%.2f мг", $0) }
-                    )
-                }
-
-                SectionTitleView(
-                    "Действия",
-                    subtitle: "Добавь блюдо в дневник или обнови существующую запись."
-                )
-
-                AppCard {
-                    Button {
-                        vm.addMealToDiary(mealId: mealId)
-                    } label: {
-                        HStack {
-                            Image(systemName: vm.isMealLogged(mealId) ? "arrow.trianglehead.clockwise" : "plus.circle.fill")
-                                .font(.title3)
-
-                            Text(vm.isMealLogged(mealId) ? "Обновить запись в дневнике" : "Добавить в дневник")
-                                .font(.headline)
-
-                            Spacer()
-                        }
-                        .padding(14)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(
-                            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                                .fill(Color.accentColor.opacity(0.12))
-                        )
-                    }
-                    .buttonStyle(.plain)
-
-                    if vm.isMealLogged(mealId) {
-                        Text("Если ты изменил ингредиенты или вес порции, используй это действие, чтобы обновить запись в дневнике.")
-                            .font(.caption)
+                        Text(amountText(summary.nutrients[nutrient.id, default: 0], unit: nutrient.unit))
                             .foregroundStyle(.secondary)
-                    }
-                }
-
-                SectionTitleView(
-                    "Ингредиенты и настройка порции",
-                    subtitle: "Нажми на ингредиент, чтобы заменить его, или измени вес с шагом 25 г."
-                )
-
-                VStack(spacing: 12) {
-                    ForEach(Array(recipe.ingredients.enumerated()), id: \.offset) { index, ingredient in
-                        VStack(spacing: 10) {
-                            RecipeIngredientCard(
-                                title: vm.foodName(for: ingredient.foodId),
-                                gramsText: "\(Int(ingredient.grams)) г",
-                                caloriesText: "\(Int(ingredientMacros(for: ingredient).calories))",
-                                proteinText: String(format: "%.1f", ingredientMacros(for: ingredient).protein),
-                                fatText: String(format: "%.1f", ingredientMacros(for: ingredient).fat),
-                                carbsText: String(format: "%.1f", ingredientMacros(for: ingredient).carbs),
-                                ironText: ingredientIronText(for: ingredient)
-                            ) {
-                                pickedIndex = index
-                            }
-
-                            IngredientPortionControl(
-                                grams: ingredient.grams,
-                                step: portionStep,
-                                canDecrease: ingredient.grams > minIngredientGrams,
-                                canIncrease: ingredient.grams < maxIngredientGrams,
-                                onDecrease: {
-                                    vm.decreaseIngredientPortion(
-                                        mealId: mealId,
-                                        ingredientIndex: index,
-                                        step: portionStep,
-                                        minGrams: minIngredientGrams,
-                                        maxGrams: maxIngredientGrams
-                                    )
-                                },
-                                onIncrease: {
-                                    vm.increaseIngredientPortion(
-                                        mealId: mealId,
-                                        ingredientIndex: index,
-                                        step: portionStep,
-                                        minGrams: minIngredientGrams,
-                                        maxGrams: maxIngredientGrams
-                                    )
-                                }
-                            )
-                        }
                     }
                 }
             }
-            .padding(16)
+
+            Section("Почему блюдо попало в план") {
+                InfoValueRow(title: "Итоговая оценка", value: String(format: "%.1f", scoreBreakdown.totalScore))
+                InfoValueRow(title: "Калории блюда", value: "\(Int(scoreBreakdown.actualCalories)) ккал")
+                InfoValueRow(title: "Белки", value: String(format: "%.1f г", scoreBreakdown.actualProtein))
+                InfoValueRow(title: "Жиры", value: String(format: "%.1f г", scoreBreakdown.actualFat))
+                InfoValueRow(title: "Углеводы", value: String(format: "%.1f г", scoreBreakdown.actualCarbs))
+
+                if let focusedNutrient = vmFocusedNutrient(from: recipe) {
+                    Divider()
+                    InfoValueRow(title: "Фокус", value: focusedNutrient.title)
+                    InfoValueRow(title: "Значение", value: focusedNutrient.amount)
+                }
+            }
+
+            Section("Ингредиенты") {
+                ForEach(Array(recipe.ingredients.enumerated()), id: \.offset) { index, ingredient in
+                    ingredientRow(
+                        mealId: meal.id,
+                        ingredientIndex: index,
+                        ingredient: ingredient
+                    )
+                }
+            }
+
+            Section("Действия") {
+                Button {
+                    vm.addMealToDiary(mealId: mealId)
+                } label: {
+                    Text(vm.isMealLogged(mealId) ? "Обновить запись в дневнике" : "Добавить в дневник")
+                }
+
+                if vm.isMealLogged(mealId) {
+                    Text("Это блюдо уже добавлено в дневник.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
         }
-        .background(Color(.systemGroupedBackground).ignoresSafeArea())
         .navigationTitle(vm.displayTitle(for: recipe))
         .navigationBarTitleDisplayMode(.inline)
-        .sheet(item: $pickedIndex.asIdentifiable) { wrapped in
-            let idx = wrapped.value
-
-            if let currentMeal = vm.meal(with: mealId),
-               currentMeal.recipe.ingredients.indices.contains(idx) {
-                let ingredient = currentMeal.recipe.ingredients[idx]
-                let originalName = vm.foodName(for: ingredient.foodId)
-                let candidates = vm.substitutionCandidates(for: ingredient)
-
-                SubstitutionPickerView(
-                    originalName: originalName,
-                    grams: ingredient.grams,
-                    candidates: candidates
-                ) { chosen in
-                    vm.applySubstitution(
-                        mealId: mealId,
-                        ingredientIndex: idx,
-                        newFoodId: chosen.id
-                    )
-                }
-            } else {
-                Text("Ингредиент не найден")
-                    .padding()
-            }
-        }
-    }
-
-    private var unavailableState: some View {
-        VStack(spacing: 12) {
-            Text("Блюдо не найдено")
-                .font(.headline)
-
-            Text("Это блюдо больше недоступно.")
-                .foregroundStyle(.secondary)
-        }
-        .padding()
     }
 
     @ViewBuilder
-    private func headerCard(for meal: PlannedMeal) -> some View {
-        let recipe = meal.recipe
+    private func ingredientRow(
+        mealId: UUID,
+        ingredientIndex: Int,
+        ingredient: RecipeIngredient
+    ) -> some View {
+        let foodName = vm.foodName(for: ingredient.foodId)
+        let candidates = vm.substitutionCandidates(for: ingredient)
 
-        AppCard {
-            VStack(alignment: .leading, spacing: 12) {
-                HStack {
-                    StatPill(text: meal.type.ruTitle)
-
-                    if recipe.isModified {
-                        StatPill(text: "Изменено")
-                    }
-
-                    if vm.isMealLogged(mealId) {
-                        StatPill(text: "В дневнике")
-                    }
-                }
-
-                Text(vm.displayTitle(for: recipe))
-                    .font(.title2.weight(.bold))
-
-                Text("Блюдо подобрано с учётом цели по питанию, текущих ограничений и типа приёма пищи.")
-                    .font(.subheadline)
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Text(foodName)
+                Spacer()
+                Text("\(Int(ingredient.grams.rounded())) г")
                     .foregroundStyle(.secondary)
+            }
 
-                if let cookTimeMinutes = recipe.cookTimeMinutes {
-                    Divider()
-
-                    InfoValueRow(
-                        title: "Время приготовления",
-                        value: "\(cookTimeMinutes) мин"
+            HStack(spacing: 12) {
+                Button {
+                    adjustIngredientPortion(
+                        mealId: mealId,
+                        ingredientIndex: ingredientIndex,
+                        delta: -portionStep
                     )
+                } label: {
+                    Image(systemName: "minus.circle")
+                }
+                .buttonStyle(.plain)
+
+                Button {
+                    adjustIngredientPortion(
+                        mealId: mealId,
+                        ingredientIndex: ingredientIndex,
+                        delta: portionStep
+                    )
+                } label: {
+                    Image(systemName: "plus.circle")
+                }
+                .buttonStyle(.plain)
+
+                Spacer()
+            }
+            .foregroundStyle(.accentColor)
+
+            if !candidates.isEmpty {
+                Menu("Замена") {
+                    ForEach(candidates, id: \.food.id) { candidate in
+                        Button {
+                            vm.applySubstitution(
+                                mealId: mealId,
+                                ingredientIndex: ingredientIndex,
+                                newFoodId: candidate.food.id
+                            )
+                        } label: {
+                            Text("\(vm.foodName(for: candidate.food.id)) — \(Int(candidate.score.rounded()))")
+                        }
+                    }
                 }
             }
         }
+        .padding(.vertical, 4)
     }
 
-    private func selectionSummary(for breakdown: RecipeScoreBreakdown) -> String {
-        if breakdown.totalScore >= 90 {
-            return "Это блюдо очень хорошо соответствует цели для текущего приёма пищи."
-        } else if breakdown.totalScore >= 75 {
-            return "Это блюдо в целом хорошо подходит, но немного отклоняется от целевых параметров."
-        } else {
-            return "Это блюдо допустимо, но отклоняется от целевых значений заметнее."
-        }
+    private var unavailableState: some View {
+        ContentUnavailableView(
+            "Блюдо недоступно",
+            systemImage: "fork.knife.circle",
+            description: Text("Не удалось найти выбранное блюдо в текущем плане.")
+        )
     }
 
-    private func selectionHighlights(for breakdown: RecipeScoreBreakdown) -> [String] {
-        var result: [String] = []
+    private func adjustIngredientPortion(
+        mealId: UUID,
+        ingredientIndex: Int,
+        delta: Double
+    ) {
+        guard let meal = vm.meal(with: mealId) else { return }
+        guard meal.recipe.ingredients.indices.contains(ingredientIndex) else { return }
 
-        let calorieGap = abs(breakdown.actualCalories - breakdown.mealTargetCalories)
-        let proteinGap = breakdown.mealTargetProtein - breakdown.actualProtein
+        let current = meal.recipe.ingredients[ingredientIndex].grams
+        let newValue = min(max(current + delta, minIngredientGrams), maxIngredientGrams)
 
-        if calorieGap <= 60 {
-            result.append("Калорийность блюда близка к целевому значению.")
-        } else if breakdown.actualCalories < breakdown.mealTargetCalories {
-            result.append("Блюдо немного легче по калорийности, чем целевое значение.")
-        } else {
-            result.append("Блюдо немного калорийнее целевого значения.")
+        guard let sameFoodCandidate = vm.substitutionCandidates(
+            for: meal.recipe.ingredients[ingredientIndex]
+        ).first(where: { $0.food.id == meal.recipe.ingredients[ingredientIndex].foodId }) else {
+            var updatedMeal = meal
+            updatedMeal.recipe.ingredients[ingredientIndex].grams = newValue
+            return
         }
 
-        if proteinGap <= 0 {
-            result.append("Содержание белка соответствует цели или выше неё.")
-        } else if proteinGap <= 5 {
-            result.append("Белка немного меньше целевого значения.")
-        } else {
-            result.append("Белка заметно меньше, чем желательно для этого приёма пищи.")
-        }
+        _ = sameFoodCandidate
 
-        if breakdown.ironAmount >= 2 {
-            result.append("Блюдо даёт полезный вклад в потребление железа.")
-        }
-
-        return result
+        var updatedMeals = vm.dayPlan.meals
+        guard let mealIndex = updatedMeals.firstIndex(where: { $0.id == mealId }) else { return }
+        updatedMeals[mealIndex].recipe.ingredients[ingredientIndex].grams = newValue
+        updatedMeals[mealIndex].recipe.isModified = true
+        vm.dayPlan = DayPlan(meals: updatedMeals)
     }
 
-    private func ingredientMacros(for ingredient: RecipeIngredient) -> Macros {
-        guard let food = vm.foodsById[ingredient.foodId] else {
-            return .zero
-        }
+    private func vmFocusedNutrient(from recipe: Recipe) -> (title: String, amount: String)? {
+        let summary = vm.summary(for: recipe)
+        let focus = vm.recipeSelectionBreakdown(
+            for: recipe,
+            mealType: .snack
+        )
 
-        let factor = ingredient.grams / 100.0
-        return food.macrosPer100g * factor
-    }
+        _ = focus
 
-    private func ingredientIronText(for ingredient: RecipeIngredient) -> String? {
-        guard let food = vm.foodsById[ingredient.foodId] else {
+        guard let currentMeal = vm.meal(with: mealId) else { return nil }
+        let currentBreakdown = vm.recipeSelectionBreakdown(
+            for: recipe,
+            mealType: currentMeal.type
+        )
+
+        let nutrientAmount = currentBreakdown.focusedNutrientAmount
+        guard nutrientAmount > 0 else { return nil }
+
+        guard let appNutrientFocus = currentFocusedNutrientFocus(),
+              let nutrient = NutrientCatalog.nutrient(for: appNutrientFocus) else {
             return nil
         }
 
-        let factor = ingredient.grams / 100.0
-        let iron = food.nutrientsPer100g["iron", default: 0] * factor
-
-        guard iron > 0 else { return nil }
-        return String(format: "%.2f мг", iron)
-    }
-}
-
-private struct IdentifiedInt: Identifiable {
-    let id = UUID()
-    let value: Int
-}
-
-private extension Binding where Value == Int? {
-    var asIdentifiable: Binding<IdentifiedInt?> {
-        Binding<IdentifiedInt?>(
-            get: { wrappedValue.map { IdentifiedInt(value: $0) } },
-            set: { wrappedValue = $0?.value }
+        return (
+            title: nutrient.name,
+            amount: amountText(nutrientAmount, unit: nutrient.unit)
         )
+    }
+
+    private func currentFocusedNutrientFocus() -> NutrientFocus? {
+        for focus in NutrientFocus.allCases where focus != .none {
+            if let nutrient = NutrientCatalog.nutrient(for: focus),
+               vm.daySummary().nutrients.keys.contains(nutrient.id) {
+                return focus
+            }
+        }
+        return nil
+    }
+
+    private func amountText(_ value: Double, unit: String) -> String {
+        String(format: "%.1f %@", value, unit)
     }
 }

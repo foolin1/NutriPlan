@@ -141,13 +141,23 @@ enum DayPlanPortionOptimizer {
         let fatPenalty = fatGap * 12.0
         let carbsPenalty = carbsGap * 8.0
 
-        let ironBonus: Double
+        let focusedNutrientAmount = NutrientCatalog.focusedAmount(
+            in: summary.nutrients,
+            for: nutrientFocus
+        )
+
+        let nutrientBonus: Double
         switch nutrientFocus {
         case .none:
-            ironBonus = 0
+            nutrientBonus = 0
         case .iron:
-            let iron = summary.nutrients["iron", default: 0]
-            ironBonus = min(iron * 1.5, 12.0)
+            nutrientBonus = min(focusedNutrientAmount * 1.5, 12.0)
+        case .calcium:
+            nutrientBonus = min(focusedNutrientAmount * 0.012, 12.0)
+        case .magnesium:
+            nutrientBonus = min(focusedNutrientAmount * 0.02, 12.0)
+        case .vitaminC:
+            nutrientBonus = min(focusedNutrientAmount * 0.05, 12.0)
         }
 
         return 10_000.0
@@ -155,7 +165,7 @@ enum DayPlanPortionOptimizer {
             - proteinPenalty
             - fatPenalty
             - carbsPenalty
-            + ironBonus
+            + nutrientBonus
     }
 
     private static func summarize(

@@ -23,6 +23,7 @@ struct DayPlanScoreBreakdown: Hashable {
     let nutrientBonus: Double
 
     let ironAmount: Double
+    let focusedNutrientAmount: Double
     let mealCount: Int
 }
 
@@ -33,13 +34,8 @@ enum DayPlanOptimizer {
         foodsById: [String: Food],
         nutrientFocus: NutrientFocus
     ) -> DayPlan {
-        let orderedMealTypes = MealType.allCases.filter {
-            !(candidatePools[$0] ?? []).isEmpty
-        }
-
-        guard !orderedMealTypes.isEmpty else {
-            return .empty
-        }
+        let orderedMealTypes = MealType.allCases.filter { !(candidatePools[$0] ?? []).isEmpty }
+        guard !orderedMealTypes.isEmpty else { return .empty }
 
         var bestMeals: [PlannedMeal] = []
         var bestScore = -Double.infinity
@@ -61,7 +57,6 @@ enum DayPlanOptimizer {
                     bestScore = breakdown.totalScore
                     bestMeals = selectedMeals
                 }
-
                 return
             }
 
@@ -85,7 +80,6 @@ enum DayPlanOptimizer {
                 )
             }
 
-            // Если для данного mealType остались только дубликаты, не валим построение всего дня
             if !addedAtLeastOne {
                 search(
                     index: index + 1,
@@ -101,10 +95,7 @@ enum DayPlanOptimizer {
             selectedMeals: []
         )
 
-        let sortedMeals = bestMeals.sorted {
-            mealOrder($0.type) < mealOrder($1.type)
-        }
-
+        let sortedMeals = bestMeals.sorted { mealOrder($0.type) < mealOrder($1.type) }
         return DayPlan(meals: sortedMeals)
     }
 
@@ -114,7 +105,10 @@ enum DayPlanOptimizer {
         foodsById: [String: Food],
         nutrientFocus: NutrientFocus
     ) -> DayPlanScoreBreakdown {
-        let totalSummary = summarize(meals: meals, foodsById: foodsById)
+        let totalSummary = summarize(
+            meals: meals,
+            foodsById: foodsById
+        )
 
         let targetCalories = goal.map { Double($0.targetCalories) } ?? totalSummary.macros.calories
         let targetProtein = goal.map { Double($0.proteinGrams) } ?? totalSummary.macros.protein
@@ -125,7 +119,12 @@ enum DayPlanOptimizer {
         let actualProtein = totalSummary.macros.protein
         let actualFat = totalSummary.macros.fat
         let actualCarbs = totalSummary.macros.carbs
+
         let ironAmount = totalSummary.nutrients["iron", default: 0]
+        let focusedNutrientAmount = NutrientCatalog.focusedAmount(
+            in: totalSummary.nutrients,
+            for: nutrientFocus
+        )
 
         let caloriePenalty = relativePenalty(
             actual: actualCalories,
@@ -168,30 +167,24 @@ enum DayPlanOptimizer {
             averageMealScore = scores.reduce(0, +) / Double(scores.count)
         }
 
-        // Небольшой бонус за то, что внутри дня сами блюда тоже локально хорошие
         let mealQualityBonus = min(averageMealScore * 0.12, 12.0)
-
-        // Бонус за покрытие дня: если есть все 4 приема пищи, бонус максимален
         let coverageBonus = min(Double(meals.count) * 2.0, 8.0)
 
-        let nutrientBonus: Double
-        switch nutrientFocus {
-        case .none:
-            nutrientBonus = 0
-        case .iron:
-            nutrientBonus = min(ironAmount * 2.0, 10.0)
-        }
+        let nutrientBonus = NutrientCatalog.dayPlanBonus(
+            for: nutrientFocus,
+            amount: focusedNutrientAmount
+        )
 
         let totalScore = min(
             max(
                 100
-                - caloriePenalty
-                - proteinPenalty
-                - fatPenalty
-                - carbsPenalty
-                + mealQualityBonus
-                + coverageBonus
-                + nutrientBonus,
+                    - caloriePenalty
+                    - proteinPenalty
+                    - fatPenalty
+                    - carbsPenalty
+                    + mealQualityBonus
+                    + coverageBonus
+                    + nutrientBonus,
                 0
             ),
             100
@@ -215,6 +208,7 @@ enum DayPlanOptimizer {
             coverageBonus: coverageBonus,
             nutrientBonus: nutrientBonus,
             ironAmount: ironAmount,
+            focusedNutrientAmount: focusedNutrientAmount,
             mealCount: meals.count
         )
     }

@@ -124,6 +124,16 @@ struct ProfileView: View {
             Text(nutrientFocus.descriptionText)
                 .font(.caption)
                 .foregroundStyle(.secondary)
+
+            VStack(alignment: .leading, spacing: 10) {
+                Text("Поддерживаемые показатели")
+                    .font(.subheadline.weight(.semibold))
+
+                ForEach(NutrientCatalog.focusable) { nutrient in
+                    micronutrientSupportRow(nutrient)
+                }
+            }
+            .padding(.vertical, 4)
         }
     }
 
@@ -148,6 +158,7 @@ struct ProfileView: View {
             GoalRow(title: "Белки", value: "\(previewGoal.proteinGrams) г")
             GoalRow(title: "Жиры", value: "\(previewGoal.fatGrams) г")
             GoalRow(title: "Углеводы", value: "\(previewGoal.carbsGrams) г")
+            GoalRow(title: "Фокус", value: nutrientFocus.displayName)
         }
     }
 
@@ -158,7 +169,7 @@ struct ProfileView: View {
             } label: {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Открыть снимки профиля")
-                    Text("Просмотреть, как менялись вес, цель и ограничения пользователя.")
+                    Text("Просмотреть, как менялись вес, цель, ограничения и выбранный микронутриентный фокус.")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -198,7 +209,7 @@ struct ProfileView: View {
             VStack(alignment: .leading, spacing: 8) {
                 Text("После сохранения дневная цель пересчитывается автоматически.")
                 Text("Архив дней, история аккаунта и снимки профиля не должны теряться из-за изменения веса, цели или ограничений.")
-                Text("Сброс профиля очищает только текущую анкету и вернёт приложение к экрану начальной настройки.")
+                Text("Фокус по микронутриентам влияет на приоритет блюд при формировании плана.")
             }
             .font(.caption)
             .foregroundStyle(.secondary)
@@ -209,9 +220,35 @@ struct ProfileView: View {
     private var savedMessageSection: some View {
         if showSavedMessage {
             Section {
-                Text("Профиль сохранён.\nОбновились текущие параметры, а аккаунт, история и снимки профиля остались теми же.")
+                Text("Профиль сохранён.\nОбновились текущие параметры, фокус по микронутриентам и расчётные рекомендации.")
                     .font(.subheadline)
                     .foregroundStyle(.green)
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func micronutrientSupportRow(_ nutrient: Nutrient) -> some View {
+        let isSelected = nutrientFocus.nutrientId == nutrient.id
+
+        HStack(alignment: .top) {
+            VStack(alignment: .leading, spacing: 4) {
+                Text(nutrient.name)
+                    .font(.subheadline)
+
+                if let target = nutrient.targetPerDay {
+                    Text("Ориентир: \(formatAmount(target, unit: nutrient.unit)) в сутки")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+
+            Spacer()
+
+            if isSelected {
+                Text("Выбран")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.accentColor)
             }
         }
     }
@@ -317,11 +354,19 @@ struct ProfileView: View {
             String(Int(profile.weightKg.rounded())),
             profile.activityLevel.rawValue,
             profile.goalType.rawValue,
-            profile.nutrientFocus.displayName,
+            profile.nutrientFocus.rawValue,
             allergens,
             excludedProducts,
             excludedGroups
         ].joined(separator: "#")
+    }
+
+    private func formatAmount(_ value: Double, unit: String) -> String {
+        if unit == "мг" {
+            return String(format: "%.0f %@", value, unit)
+        }
+
+        return String(format: "%.1f %@", value, unit)
     }
 }
 

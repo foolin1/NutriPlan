@@ -43,8 +43,8 @@ struct TodayView: View {
 
                                 Spacer()
 
-                                if nutrientFocus == .iron {
-                                    StatPill(text: "Фокус: железо")
+                                if nutrientFocus != .none {
+                                    StatPill(text: "Фокус: \(nutrientFocus.displayName)")
                                 }
                             }
 
@@ -52,15 +52,6 @@ struct TodayView: View {
                             InfoValueRow(title: "Белки", value: String(format: "%.1f г", plannedSummary.macros.protein))
                             InfoValueRow(title: "Жиры", value: String(format: "%.1f г", plannedSummary.macros.fat))
                             InfoValueRow(title: "Углеводы", value: String(format: "%.1f г", plannedSummary.macros.carbs))
-
-                            if nutrientFocus == .iron {
-                                Divider()
-
-                                InfoValueRow(
-                                    title: "Железо по плану",
-                                    value: String(format: "%.2f мг", plannedSummary.nutrients["iron", default: 0])
-                                )
-                            }
                         }
 
                         AppCard {
@@ -84,15 +75,22 @@ struct TodayView: View {
                                 InfoValueRow(title: "Белки", value: String(format: "%.1f г", actualSummary.macros.protein))
                                 InfoValueRow(title: "Жиры", value: String(format: "%.1f г", actualSummary.macros.fat))
                                 InfoValueRow(title: "Углеводы", value: String(format: "%.1f г", actualSummary.macros.carbs))
+                            }
+                        }
 
-                                if nutrientFocus == .iron {
-                                    Divider()
+                        SectionTitleView(
+                            "Микронутриенты",
+                            subtitle: "Здесь видно, сколько ключевых витаминов и минералов запланировано и сколько набрано фактически."
+                        )
 
-                                    InfoValueRow(
-                                        title: "Железо по факту",
-                                        value: String(format: "%.2f мг", actualSummary.nutrients["iron", default: 0])
-                                    )
-                                }
+                        VStack(spacing: 12) {
+                            ForEach(NutrientCatalog.focusable) { nutrient in
+                                micronutrientCard(
+                                    nutrient: nutrient,
+                                    planned: plannedSummary.nutrients[nutrient.id, default: 0],
+                                    actual: actualSummary.nutrients[nutrient.id, default: 0],
+                                    isFocused: nutrientFocus.nutrientId == nutrient.id
+                                )
                             }
                         }
                     }
@@ -236,8 +234,44 @@ struct TodayView: View {
     }
 
     @ViewBuilder
+    private func micronutrientCard(
+        nutrient: Nutrient,
+        planned: Double,
+        actual: Double,
+        isFocused: Bool
+    ) -> some View {
+        AppCard {
+            VStack(alignment: .leading, spacing: 10) {
+                HStack {
+                    Text(nutrient.name)
+                        .font(.headline)
+
+                    Spacer()
+
+                    if isFocused {
+                        StatPill(text: "Выбранный фокус")
+                    }
+                }
+
+                InfoValueRow(title: "По плану", value: amountText(planned, nutrient: nutrient))
+                InfoValueRow(title: "По факту", value: amountText(actual, nutrient: nutrient))
+
+                if let target = nutrient.targetPerDay {
+                    Divider()
+                    InfoValueRow(title: "Ориентир", value: amountText(target, nutrient: nutrient))
+                    InfoValueRow(title: "Выполнение", value: progressText(actual: actual, target: target))
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
     private func mealCard(for meal: PlannedMeal, nutrientFocus: NutrientFocus) -> some View {
         let summary = vm.summary(for: meal.recipe)
+        let focusedAmount = NutrientCatalog.focusedAmount(
+            in: summary.nutrients,
+            for: nutrientFocus
+        )
 
         AppCard {
             HStack(alignment: .top) {
@@ -259,8 +293,9 @@ struct TodayView: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
 
-                    if nutrientFocus == .iron, let iron = summary.nutrients["iron"] {
-                        Text("Железо: \(iron, specifier: "%.2f") мг")
+                    if nutrientFocus != .none,
+                       let nutrient = NutrientCatalog.nutrient(for: nutrientFocus) {
+                        Text("\(nutrient.name): \(amountText(focusedAmount, nutrient: nutrient))")
                             .font(.caption2)
                             .foregroundStyle(.secondary)
                     }
@@ -279,5 +314,19 @@ struct TodayView: View {
                 }
             }
         }
+    }
+
+    private func amountText(_ value: Double, nutrient: Nutrient) -> String {
+        if nutrient.unit == "мг" {
+            return String(format: "%.1f %@", value, nutrient.unit)
+        }
+
+        return String(format: "%.1f %@", value, nutrient.unit)
+    }
+
+    private func progressText(actual: Double, target: Double) -> String {
+        guard target > 0 else { return "—" }
+        let progress = min(max(actual / target, 0), 9.99) * 100
+        return String(format: "%.0f %%", progress)
     }
 }
