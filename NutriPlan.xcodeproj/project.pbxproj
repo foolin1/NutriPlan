@@ -86,7 +86,6 @@
 		8B0B9EBC2F8D2ACE00B41AE7 /* AccountCenterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9EBB2F8D2ACE00B41AE7 /* AccountCenterView.swift */; };
 		8B0B9EBE2F8D2DA600B41AE7 /* AppleSignInAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9EBD2F8D2DA600B41AE7 /* AppleSignInAuthService.swift */; };
 		8B0B9EC02F8D2DC200B41AE7 /* SignInWithAppleActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9EBF2F8D2DC200B41AE7 /* SignInWithAppleActionButton.swift */; };
-		8B0B9EC22F8D3E1E00B41AE7 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8B0B9EC12F8D3E1E00B41AE7 /* GoogleService-Info.plist */; };
 		8B0B9EC52F8D3F6100B41AE7 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 8B0B9EC42F8D3F6100B41AE7 /* FirebaseAuth */; };
 		8B0B9EC72F8D3F6100B41AE7 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 8B0B9EC62F8D3F6100B41AE7 /* FirebaseFirestore */; };
 		8B0B9ECA2F8D48F400B41AE7 /* FirebaseEmailAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9EC92F8D48F400B41AE7 /* FirebaseEmailAuthService.swift */; };
@@ -99,6 +98,11 @@
 		8B0B9ED92F8D60F000B41AE7 /* CloudArchitectureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9ED82F8D60F000B41AE7 /* CloudArchitectureView.swift */; };
 		8B0B9EDC2F8D69B400B41AE7 /* CloudRestoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9EDB2F8D69B400B41AE7 /* CloudRestoreView.swift */; };
 		8B0B9EDE2F8D737500B41AE7 /* CloudListenerToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9EDD2F8D737500B41AE7 /* CloudListenerToken.swift */; };
+		8B88C31B2F8FB1EC00AC5444 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8B88C31A2F8FB1EC00AC5444 /* GoogleService-Info.plist */; };
+		8B88C31D2F8FDF1200AC5444 /* ShoppingGroupingMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B88C31C2F8FDF1200AC5444 /* ShoppingGroupingMode.swift */; };
+		8B88C31F2F8FEA9600AC5444 /* ExcludedGroupsPickerView 2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B88C31E2F8FEA9600AC5444 /* ExcludedGroupsPickerView 2.swift */; };
+		8B88C3212F8FEAB000AC5444 /* RestrictionsEditorView 2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B88C3202F8FEAB000AC5444 /* RestrictionsEditorView 2.swift */; };
+		8B88C3232F900E9700AC5444 /* StartupIntroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B88C3222F900E9700AC5444 /* StartupIntroView.swift */; };
 		8B94CA432F54778A000CB887 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B94CA402F54778A000CB887 /* ContentView.swift */; };
 		8B94CA442F54778A000CB887 /* NutriPlanApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B94CA412F54778A000CB887 /* NutriPlanApp.swift */; };
 		8B94CA452F54778A000CB887 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B94CA3F2F54778A000CB887 /* Assets.xcassets */; };
@@ -211,7 +215,6 @@
 		8B0B9EBB2F8D2ACE00B41AE7 /* AccountCenterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountCenterView.swift; sourceTree = "<group>"; };
 		8B0B9EBD2F8D2DA600B41AE7 /* AppleSignInAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleSignInAuthService.swift; sourceTree = "<group>"; };
 		8B0B9EBF2F8D2DC200B41AE7 /* SignInWithAppleActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithAppleActionButton.swift; sourceTree = "<group>"; };
-		8B0B9EC12F8D3E1E00B41AE7 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		8B0B9EC92F8D48F400B41AE7 /* FirebaseEmailAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseEmailAuthService.swift; sourceTree = "<group>"; };
 		8B0B9ECB2F8D494300B41AE7 /* AuthGateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthGateView.swift; sourceTree = "<group>"; };
 		8B0B9ECE2F8D508D00B41AE7 /* FirebaseUserProfileRemoteStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseUserProfileRemoteStore.swift; sourceTree = "<group>"; };
@@ -223,6 +226,11 @@
 		8B0B9EDB2F8D69B400B41AE7 /* CloudRestoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudRestoreView.swift; sourceTree = "<group>"; };
 		8B0B9EDD2F8D737500B41AE7 /* CloudListenerToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudListenerToken.swift; sourceTree = "<group>"; };
 		8B7D9B702F545AD3006A4CFD /* NutriPlan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NutriPlan.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8B88C31A2F8FB1EC00AC5444 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		8B88C31C2F8FDF1200AC5444 /* ShoppingGroupingMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingGroupingMode.swift; sourceTree = "<group>"; };
+		8B88C31E2F8FEA9600AC5444 /* ExcludedGroupsPickerView 2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExcludedGroupsPickerView 2.swift"; sourceTree = "<group>"; };
+		8B88C3202F8FEAB000AC5444 /* RestrictionsEditorView 2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RestrictionsEditorView 2.swift"; sourceTree = "<group>"; };
+		8B88C3222F900E9700AC5444 /* StartupIntroView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartupIntroView.swift; sourceTree = "<group>"; };
 		8B94CA3F2F54778A000CB887 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8B94CA402F54778A000CB887 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		8B94CA412F54778A000CB887 /* NutriPlanApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutriPlanApp.swift; sourceTree = "<group>"; };
@@ -284,6 +292,8 @@
 		8B0B9E202F82AD0200B41AE7 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
+				8B88C3202F8FEAB000AC5444 /* RestrictionsEditorView 2.swift */,
+				8B88C31E2F8FEA9600AC5444 /* ExcludedGroupsPickerView 2.swift */,
 				8B0B9E212F82AD4400B41AE7 /* ProfileView.swift */,
 				8B0B9ED02F8D540500B41AE7 /* ProfileSnapshot.swift */,
 				8B0B9ED42F8D54A100B41AE7 /* ProfileSnapshotsView.swift */,
@@ -473,7 +483,6 @@
 		8B7D9B672F545AD3006A4CFD = {
 			isa = PBXGroup;
 			children = (
-				8B0B9EC12F8D3E1E00B41AE7 /* GoogleService-Info.plist */,
 				8B94CA422F54778A000CB887 /* NutriPlan */,
 				8B0B9E862F8AE6F900B41AE7 /* NutriPlanTests */,
 				8B7D9B712F545AD3006A4CFD /* Products */,
@@ -492,6 +501,7 @@
 		8B94CA332F54778A000CB887 /* App */ = {
 			isa = PBXGroup;
 			children = (
+				8B88C3222F900E9700AC5444 /* StartupIntroView.swift */,
 				8B94CA412F54778A000CB887 /* NutriPlanApp.swift */,
 				8B0B9DF42F65C03D00B41AE7 /* AppState.swift */,
 				8B0B9DF62F65C09700B41AE7 /* RootView.swift */,
@@ -570,6 +580,7 @@
 		8B94CA3B2F54778A000CB887 /* ShoppingList */ = {
 			isa = PBXGroup;
 			children = (
+				8B88C31C2F8FDF1200AC5444 /* ShoppingGroupingMode.swift */,
 				8B94CA622F548778000CB887 /* ShoppingListView.swift */,
 				8B0B9E322F82C3F300B41AE7 /* ShoppingFilter.swift */,
 				8B0B9E342F82C41600B41AE7 /* ShoppingProgressCard.swift */,
@@ -619,6 +630,7 @@
 		8B94CA422F54778A000CB887 /* NutriPlan */ = {
 			isa = PBXGroup;
 			children = (
+				8B88C31A2F8FB1EC00AC5444 /* GoogleService-Info.plist */,
 				8B94CA332F54778A000CB887 /* App */,
 				8B94CA342F54778A000CB887 /* Core */,
 				8B94CA352F54778A000CB887 /* Data */,
@@ -792,7 +804,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8B0B9E5A2F8954C100B41AE7 /* foods.json in Resources */,
-				8B0B9EC22F8D3E1E00B41AE7 /* GoogleService-Info.plist in Resources */,
+				8B88C31B2F8FB1EC00AC5444 /* GoogleService-Info.plist in Resources */,
 				8B0B9E5B2F8954C100B41AE7 /* recipes.json in Resources */,
 				8B94CA452F54778A000CB887 /* Assets.xcassets in Resources */,
 			);
@@ -835,6 +847,8 @@
 				8B0B9E672F8ACDE200B41AE7 /* DayPlanPortionOptimizer.swift in Sources */,
 				8B0B9E3C2F82C90F00B41AE7 /* RecipeIngredientCard.swift in Sources */,
 				8B0B9E282F82B06000B41AE7 /* InfoValueRow.swift in Sources */,
+				8B88C31D2F8FDF1200AC5444 /* ShoppingGroupingMode.swift in Sources */,
+				8B88C31F2F8FEA9600AC5444 /* ExcludedGroupsPickerView 2.swift in Sources */,
 				8B94CA6C2F5495EB000CB887 /* RecipeDetailView.swift in Sources */,
 				8B94CA4B2F547C8B000CB887 /* Macros.swift in Sources */,
 				8B0B9E032F65CAD900B41AE7 /* MealPlanBuilder.swift in Sources */,
@@ -842,6 +856,7 @@
 				8B0B9E4C2F82F0F300B41AE7 /* RecipeScorer.swift in Sources */,
 				8B0B9DF32F65BE4200B41AE7 /* GoalCalculator.swift in Sources */,
 				8B0B9E5F2F8960C400B41AE7 /* TextExtensions.swift in Sources */,
+				8B88C3212F8FEAB000AC5444 /* RestrictionsEditorView 2.swift in Sources */,
 				8B0B9E4E2F82FE9C00B41AE7 /* DayPlanOptimizer.swift in Sources */,
 				8B0B9E612F896FD400B41AE7 /* DisplayTextExtensions.swift in Sources */,
 				8B94CA5F2F548720000CB887 /* ShoppingItem.swift in Sources */,
@@ -874,6 +889,7 @@
 				8B0B9E372F82C49700B41AE7 /* ShoppingItemRow.swift in Sources */,
 				8B0B9E482F82E7C800B41AE7 /* PlanViewModel+IngredientPortion.swift in Sources */,
 				8B94CA6A2F5495B1000CB887 /* SubstitutionPickerView.swift in Sources */,
+				8B88C3232F900E9700AC5444 /* StartupIntroView.swift in Sources */,
 				8B0B9ECF2F8D508D00B41AE7 /* FirebaseUserProfileRemoteStore.swift in Sources */,
 				8B0B9E4A2F82E85C00B41AE7 /* IngredientPortionControl.swift in Sources */,
 				8B94CA592F547E11000CB887 /* InMemoryFoodRepository.swift in Sources */,

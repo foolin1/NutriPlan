@@ -12,14 +12,14 @@ struct ProgressStrip: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .leading) {
-                RoundedRectangle(cornerRadius: 8, style: .continuous)
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
                     .fill(Color(.tertiarySystemFill))
 
-                RoundedRectangle(cornerRadius: 8, style: .continuous)
-                    .fill(Color.accentColor.opacity(0.85))
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                    .fill(Color.accentColor.opacity(0.9))
                     .frame(width: geometry.size.width * normalized)
             }
         }
-        .frame(height: 10)
+        .frame(height: 12)
     }
 }

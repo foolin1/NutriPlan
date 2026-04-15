@@ -18,14 +18,11 @@ struct ProfileView: View {
     var body: some View {
         NavigationStack {
             Form {
-                accountSection
-                profileSection
+                overviewSection
+                mainProfileSection
                 nutrientFocusSection
-                excludedGroupsSection
-                restrictionsSection
-                previewSection
-                snapshotsSection
-                savedProfileSection
+                preferencesSection
+                accountAndHistorySection
                 actionsSection
                 savedMessageSection
             }
@@ -56,31 +53,44 @@ struct ProfileView: View {
         makeProfileFingerprint(draftProfile) != makeSavedProfileFingerprint()
     }
 
-    private var accountSection: some View {
-        Section("Аккаунт") {
-            GoalRow(title: "Тип", value: appState.accountTitle)
-            GoalRow(title: "Идентификатор", value: appState.accountShortId)
-            GoalRow(title: "Хранение", value: appState.accountSyncTitle)
+    private var overviewSection: some View {
+        Section {
+            VStack(alignment: .leading, spacing: 14) {
+                Text("Кратко")
+                    .font(.headline)
 
-            NavigationLink {
-                AccountCenterView()
-            } label: {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Открыть центр аккаунта")
-                    Text("Посмотреть, как в приложении связаны аккаунт, профиль и история.")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                HStack(spacing: 12) {
+                    summaryTile(title: "Цель", value: goalType.ruTitle)
+                    summaryTile(title: "Калории", value: "\(previewGoal.targetCalories)")
+                }
+
+                HStack(spacing: 12) {
+                    summaryTile(title: "Фокус", value: nutrientFocus.shortTitle)
+                    summaryTile(title: "Ограничения", value: "\(restrictionsCount)")
+                }
+
+                if !excludedGroups.isEmpty || restrictionsCount > 0 {
+                    VStack(alignment: .leading, spacing: 6) {
+                        if !excludedGroups.isEmpty {
+                            Text("Исключённые группы: \(groupsSummary(from: excludedGroups.sorted()))")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+
+                        if restrictionsCount > 0 {
+                            Text(restrictionsSummaryDescription)
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
                 }
             }
-
-            Text("Текущий профиль можно менять сколько угодно раз. Это тот же самый пользователь, поэтому история дней и снимки профиля не должны исчезать только из-за изменения веса, цели или ограничений.")
-                .font(.caption)
-                .foregroundStyle(.secondary)
+            .padding(.vertical, 4)
         }
     }
 
-    private var profileSection: some View {
-        Section("Профиль") {
+    private var mainProfileSection: some View {
+        Section("Основные параметры") {
             Picker("Пол", selection: $sex) {
                 ForEach(BiologicalSex.allCases) { value in
                     Text(value.ruTitle).tag(value)
@@ -110,6 +120,19 @@ struct ProfileView: View {
                     Text(value.ruTitle).tag(value)
                 }
             }
+
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Дневная цель рассчитывается автоматически на основе текущих параметров профиля.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+
+                HStack(spacing: 16) {
+                    compactMetric(title: "Белки", value: "\(previewGoal.proteinGrams) г")
+                    compactMetric(title: "Жиры", value: "\(previewGoal.fatGrams) г")
+                    compactMetric(title: "Углеводы", value: "\(previewGoal.carbsGrams) г")
+                }
+            }
+            .padding(.top, 4)
         }
     }
 
@@ -126,9 +149,6 @@ struct ProfileView: View {
                 .foregroundStyle(.secondary)
 
             VStack(alignment: .leading, spacing: 10) {
-                Text("Поддерживаемые показатели")
-                    .font(.subheadline.weight(.semibold))
-
                 ForEach(NutrientCatalog.focusable) { nutrient in
                     micronutrientSupportRow(nutrient)
                 }
@@ -137,59 +157,75 @@ struct ProfileView: View {
         }
     }
 
-    private var excludedGroupsSection: some View {
-        Section("Исключаемые группы продуктов") {
-            ForEach(FoodGroupCatalog.all) { option in
-                groupToggle(for: option)
+    private var preferencesSection: some View {
+        Section("Пищевые предпочтения") {
+            NavigationLink {
+                ExcludedGroupsPickerView(selection: $excludedGroups)
+            } label: {
+                VStack(alignment: .leading, spacing: 6) {
+                    HStack {
+                        Text("Исключаемые группы")
+                        Spacer()
+                        Text(excludedGroupsSummaryShort)
+                            .foregroundStyle(.secondary)
+                    }
+
+                    Text(excludedGroupsSummaryDescription)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .lineLimit(2)
+                }
+            }
+
+            NavigationLink {
+                RestrictionsEditorView(
+                    allergensText: $allergensText,
+                    excludedProductsText: $excludedProductsText
+                )
+            } label: {
+                VStack(alignment: .leading, spacing: 6) {
+                    HStack {
+                        Text("Ограничения")
+                        Spacer()
+                        Text(restrictionsSummaryShort)
+                            .foregroundStyle(.secondary)
+                    }
+
+                    Text(restrictionsSummaryDescriptionShort)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .lineLimit(2)
+                }
             }
         }
     }
 
-    private var restrictionsSection: some View {
-        Section("Ограничения") {
-            TextField("Аллергены (через запятую)", text: $allergensText)
-            TextField("Исключаемые продукты (через запятую)", text: $excludedProductsText)
-        }
-    }
+    private var accountAndHistorySection: some View {
+        Section("Аккаунт и данные") {
+            GoalRow(title: "Тип аккаунта", value: appState.accountTitle)
+            GoalRow(title: "Хранение", value: appState.accountSyncTitle)
+            GoalRow(title: "Снимков профиля", value: "\(appState.profileSnapshots.count)")
 
-    private var previewSection: some View {
-        Section("Предпросмотр цели") {
-            GoalRow(title: "Калории", value: "\(previewGoal.targetCalories) ккал")
-            GoalRow(title: "Белки", value: "\(previewGoal.proteinGrams) г")
-            GoalRow(title: "Жиры", value: "\(previewGoal.fatGrams) г")
-            GoalRow(title: "Углеводы", value: "\(previewGoal.carbsGrams) г")
-            GoalRow(title: "Фокус", value: nutrientFocus.displayName)
-        }
-    }
-
-    private var snapshotsSection: some View {
-        Section("История профиля") {
             NavigationLink {
-                ProfileSnapshotsView()
+                AccountCenterView()
             } label: {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Открыть снимки профиля")
-                    Text("Просмотреть, как менялись вес, цель, ограничения и выбранный микронутриентный фокус.")
+                    Text("Управление аккаунтом")
+                    Text("Вход, синхронизация и восстановление данных.")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
             }
 
-            GoalRow(title: "Количество снимков", value: "\(appState.profileSnapshots.count)")
-        }
-    }
-
-    @ViewBuilder
-    private var savedProfileSection: some View {
-        if let currentProfile = appState.userProfile {
-            Section("Сохранённый профиль") {
-                GoalRow(title: "Текущая цель", value: currentProfile.goalType.ruTitle)
-                GoalRow(title: "Текущая активность", value: currentProfile.activityLevel.ruTitle)
-                GoalRow(title: "Фокус по микронутриентам", value: currentProfile.nutrientFocus.displayName)
-                GoalRow(
-                    title: "Исключённые группы",
-                    value: groupsSummary(from: currentProfile.excludedGroups)
-                )
+            NavigationLink {
+                ProfileSnapshotsView()
+            } label: {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("История профиля")
+                    Text("Посмотреть, как менялись вес, цель и ограничения.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
             }
         }
     }
@@ -206,13 +242,9 @@ struct ProfileView: View {
                 appState.resetProfile()
             }
         } footer: {
-            VStack(alignment: .leading, spacing: 8) {
-                Text("После сохранения дневная цель пересчитывается автоматически.")
-                Text("Архив дней, история аккаунта и снимки профиля не должны теряться из-за изменения веса, цели или ограничений.")
-                Text("Фокус по микронутриентам влияет на приоритет блюд при формировании плана.")
-            }
-            .font(.caption)
-            .foregroundStyle(.secondary)
+            Text("После сохранения профиль, рекомендации и дневная цель обновятся автоматически.")
+                .font(.caption)
+                .foregroundStyle(.secondary)
         }
     }
 
@@ -220,7 +252,7 @@ struct ProfileView: View {
     private var savedMessageSection: some View {
         if showSavedMessage {
             Section {
-                Text("Профиль сохранён.\nОбновились текущие параметры, фокус по микронутриентам и расчётные рекомендации.")
+                Text("Профиль сохранён. Обновлены параметры пользователя и расчётные рекомендации.")
                     .font(.subheadline)
                     .foregroundStyle(.green)
             }
@@ -248,34 +280,100 @@ struct ProfileView: View {
             if isSelected {
                 Text("Выбран")
                     .font(.caption.weight(.semibold))
-                    .foregroundStyle(.accentColor)
+                    .foregroundStyle(Color.accentColor)
             }
         }
     }
 
     @ViewBuilder
-    private func groupToggle(for option: FoodGroupOption) -> some View {
-        Toggle(isOn: bindingForGroup(option.id)) {
-            VStack(alignment: .leading, spacing: 4) {
-                Text(option.title)
-                Text(option.subtitle)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
+    private func summaryTile(title: String, value: String) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(title)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+
+            Text(value)
+                .font(.headline)
+                .lineLimit(1)
+                .minimumScaleFactor(0.85)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(12)
+        .background(
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .fill(Color(.tertiarySystemFill))
+        )
+    }
+
+    @ViewBuilder
+    private func compactMetric(title: String, value: String) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(title)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+
+            Text(value)
+                .font(.subheadline.weight(.semibold))
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private var excludedGroupsSummaryShort: String {
+        excludedGroups.isEmpty ? "Нет" : "\(excludedGroups.count)"
+    }
+
+    private var excludedGroupsSummaryDescription: String {
+        if excludedGroups.isEmpty {
+            return "Сейчас группы продуктов не исключены."
+        }
+
+        return groupsSummary(from: excludedGroups.sorted())
+    }
+
+    private var restrictionsCount: Int {
+        parseList(from: allergensText).count + parseList(from: excludedProductsText).count
+    }
+
+    private var restrictionsSummaryShort: String {
+        restrictionsCount == 0 ? "Нет" : "\(restrictionsCount)"
+    }
+
+    private var restrictionsSummaryDescriptionShort: String {
+        if restrictionsCount == 0 {
+            return "Аллергены и отдельные продукты пока не указаны."
+        }
+
+        let allergens = parseList(from: allergensText)
+        let products = parseList(from: excludedProductsText)
+
+        if !allergens.isEmpty && !products.isEmpty {
+            return "Есть аллергены и исключённые продукты."
+        } else if !allergens.isEmpty {
+            return "Указаны аллергены."
+        } else {
+            return "Указаны исключённые продукты."
         }
     }
 
-    private func bindingForGroup(_ id: String) -> Binding<Bool> {
-        Binding(
-            get: { excludedGroups.contains(id) },
-            set: { isOn in
-                if isOn {
-                    excludedGroups.insert(id)
-                } else {
-                    excludedGroups.remove(id)
-                }
-            }
-        )
+    private var restrictionsSummaryDescription: String {
+        let allergens = parseList(from: allergensText)
+        let products = parseList(from: excludedProductsText)
+
+        if allergens.isEmpty && products.isEmpty {
+            return "Аллергены и отдельные продукты пока не указаны."
+        }
+
+        var parts: [String] = []
+
+        if !allergens.isEmpty {
+            parts.append("Аллергены: \(allergens.joined(separator: ", "))")
+        }
+
+        if !products.isEmpty {
+            parts.append("Исключённые продукты: \(products.joined(separator: ", "))")
+        }
+
+        return parts.joined(separator: " • ")
     }
 
     private func loadProfile() {

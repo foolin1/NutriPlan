@@ -12,13 +12,13 @@ struct ShoppingProgressCard: View {
 
     var body: some View {
         AppCard {
-            VStack(alignment: .leading, spacing: 14) {
-                HStack(alignment: .center) {
-                    VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: 16) {
+                HStack(alignment: .center, spacing: 16) {
+                    VStack(alignment: .leading, spacing: 6) {
                         Text("Прогресс покупок")
                             .font(.headline)
 
-                        Text("Отмечай, что уже куплено, и отслеживай, что ещё осталось.")
+                        Text(progressDescription)
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                     }
@@ -40,7 +40,7 @@ struct ShoppingProgressCard: View {
                         Text("\(Int(progress * 100))%")
                             .font(.caption.weight(.semibold))
                     }
-                    .frame(width: 54, height: 54)
+                    .frame(width: 58, height: 58)
                 }
 
                 HStack(spacing: 12) {
@@ -52,6 +52,18 @@ struct ShoppingProgressCard: View {
         }
     }
 
+    private var progressDescription: String {
+        if totalCount == 0 {
+            return "Список появится после формирования плана."
+        }
+
+        if remainingCount == 0 {
+            return "Все продукты из списка уже отмечены как купленные."
+        }
+
+        return "Отмечай купленные позиции и контролируй, что ещё осталось взять."
+    }
+
     @ViewBuilder
     private func summaryTile(title: String, value: String) -> some View {
         VStack(alignment: .leading, spacing: 4) {
@@ -61,6 +73,8 @@ struct ShoppingProgressCard: View {
 
             Text(value)
                 .font(.headline)
+                .lineLimit(1)
+                .minimumScaleFactor(0.8)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(12)

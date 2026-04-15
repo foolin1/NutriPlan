@@ -5,13 +5,13 @@ struct StatPill: View {
 
     var body: some View {
         Text(text)
-            .font(.caption.weight(.medium))
-            .foregroundStyle(.secondary)
+            .font(.caption.weight(.semibold))
+            .foregroundStyle(Color.accentColor)
             .padding(.horizontal, 10)
             .padding(.vertical, 6)
             .background(
                 Capsule()
-                    .fill(Color(.tertiarySystemFill))
+                    .fill(Color.accentColor.opacity(0.12))
             )
     }
 }

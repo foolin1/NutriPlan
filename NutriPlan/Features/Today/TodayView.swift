@@ -21,192 +21,63 @@ struct TodayView: View {
                     headerSection
 
                     if let goal = appState.nutritionGoal {
-                        SectionTitleView(
-                            "Сводка дня",
-                            subtitle: "Текущая цель, план питания и фактические показатели за сегодняшний день."
+                        summarySection(
+                            goal: goal,
+                            plannedSummary: plannedSummary,
+                            actualSummary: actualSummary,
+                            nutrientFocus: nutrientFocus
                         )
 
-                        AppCard {
-                            Text("Дневная цель")
-                                .font(.headline)
-
-                            InfoValueRow(title: "Калории", value: "\(goal.targetCalories) ккал")
-                            InfoValueRow(title: "Белки", value: "\(goal.proteinGrams) г")
-                            InfoValueRow(title: "Жиры", value: "\(goal.fatGrams) г")
-                            InfoValueRow(title: "Углеводы", value: "\(goal.carbsGrams) г")
-                        }
-
-                        AppCard {
-                            HStack {
-                                Text("План на день")
-                                    .font(.headline)
-
-                                Spacer()
-
-                                if nutrientFocus != .none {
-                                    StatPill(text: "Фокус: \(nutrientFocus.displayName)")
-                                }
-                            }
-
-                            InfoValueRow(title: "Калории", value: "\(Int(plannedSummary.macros.calories)) ккал")
-                            InfoValueRow(title: "Белки", value: String(format: "%.1f г", plannedSummary.macros.protein))
-                            InfoValueRow(title: "Жиры", value: String(format: "%.1f г", plannedSummary.macros.fat))
-                            InfoValueRow(title: "Углеводы", value: String(format: "%.1f г", plannedSummary.macros.carbs))
-                        }
-
-                        AppCard {
-                            HStack {
-                                Text("Факт за день")
-                                    .font(.headline)
-
-                                Spacer()
-
-                                if vm.diaryDay.entries.isEmpty {
-                                    StatPill(text: "Дневник пуст")
-                                }
-                            }
-
-                            if vm.diaryDay.entries.isEmpty {
-                                Text("Можно переносить блюда из плана или добавлять продукты вручную, если фактическое питание отличалось от плана.")
-                                    .font(.subheadline)
-                                    .foregroundStyle(.secondary)
-                            } else {
-                                InfoValueRow(title: "Калории", value: "\(Int(actualSummary.macros.calories)) ккал")
-                                InfoValueRow(title: "Белки", value: String(format: "%.1f г", actualSummary.macros.protein))
-                                InfoValueRow(title: "Жиры", value: String(format: "%.1f г", actualSummary.macros.fat))
-                                InfoValueRow(title: "Углеводы", value: String(format: "%.1f г", actualSummary.macros.carbs))
-                            }
-                        }
-
-                        SectionTitleView(
-                            "Микронутриенты",
-                            subtitle: "Здесь видно, сколько ключевых витаминов и минералов запланировано и сколько набрано фактически."
+                        micronutrientsSection(
+                            plannedSummary: plannedSummary,
+                            actualSummary: actualSummary,
+                            nutrientFocus: nutrientFocus
                         )
-
-                        VStack(spacing: 12) {
-                            ForEach(NutrientCatalog.focusable) { nutrient in
-                                micronutrientCard(
-                                    nutrient: nutrient,
-                                    planned: plannedSummary.nutrients[nutrient.id, default: 0],
-                                    actual: actualSummary.nutrients[nutrient.id, default: 0],
-                                    isFocused: nutrientFocus.nutrientId == nutrient.id
-                                )
-                            }
-                        }
                     }
 
-                    SectionTitleView(
-                        "Быстрые действия",
-                        subtitle: "Переход к основным сценариям текущего дня и просмотру прошлых записей."
-                    )
-
-                    LazyVGrid(columns: actionColumns, spacing: 12) {
-                        NavigationLink {
-                            DiaryView(vm: vm)
-                        } label: {
-                            QuickActionTile(
-                                systemImage: "book.pages",
-                                title: "Дневник",
-                                subtitle: "Посмотри записи за день и при необходимости добавь продукты вручную."
-                            )
-                        }
-                        .buttonStyle(.plain)
-
-                        if vm.diaryDay.entries.isEmpty {
-                            QuickActionTile(
-                                systemImage: "chart.bar.xaxis",
-                                title: "План vs факт",
-                                subtitle: "Сравнение станет доступно, когда в дневнике появятся записи."
-                            )
-                        } else {
-                            NavigationLink {
-                                PlanComparisonView(vm: vm)
-                            } label: {
-                                QuickActionTile(
-                                    systemImage: "chart.bar.xaxis",
-                                    title: "План vs факт",
-                                    subtitle: "Сравни цель, план и фактическое питание."
-                                )
-                            }
-                            .buttonStyle(.plain)
-                        }
-
-                        NavigationLink {
-                            PlanHistoryView(vm: vm)
-                        } label: {
-                            QuickActionTile(
-                                systemImage: "clock.arrow.circlepath",
-                                title: "История",
-                                subtitle: "Открой прошлые дни и посмотри, как менялись план и факт."
-                            )
-                        }
-                        .buttonStyle(.plain)
-
-                        NavigationLink {
-                            CloudRestoreView(vm: vm)
-                        } label: {
-                            QuickActionTile(
-                                systemImage: "arrow.triangle.2.circlepath",
-                                title: "Синхронизация",
-                                subtitle: "Обнови данные аккаунта и историю на этом устройстве."
-                            )
-                        }
-                        .buttonStyle(.plain)
-                    }
+                    actionsSection
 
                     if let adjustment {
                         SectionTitleView(
                             "Рекомендация на завтра",
-                            subtitle: "Приложение корректирует цель следующего дня по итогам сегодняшнего питания."
+                            subtitle: "Корректировка следующего дня."
                         )
 
                         AppCard {
-                            Text(adjustment.statusTitle)
-                                .font(.headline)
+                            VStack(alignment: .leading, spacing: 12) {
+                                Text(adjustment.statusTitle)
+                                    .font(.headline)
 
-                            Text(adjustment.summary)
-                                .font(.subheadline)
-                                .foregroundStyle(.secondary)
+                                Text(adjustment.summary)
+                                    .font(.subheadline)
+                                    .foregroundStyle(.secondary)
 
-                            Divider()
-
-                            InfoValueRow(title: "Калории", value: "\(adjustment.nextDayGoal.targetCalories) ккал")
-                            InfoValueRow(title: "Белки", value: "\(adjustment.nextDayGoal.proteinGrams) г")
-                            InfoValueRow(title: "Жиры", value: "\(adjustment.nextDayGoal.fatGrams) г")
-                            InfoValueRow(title: "Углеводы", value: "\(adjustment.nextDayGoal.carbsGrams) г")
-
-                            if !adjustment.hints.isEmpty {
                                 Divider()
 
-                                VStack(alignment: .leading, spacing: 6) {
-                                    Text("Подсказки")
-                                        .font(.subheadline.weight(.semibold))
+                                InfoValueRow(title: "Калории", value: "\(adjustment.nextDayGoal.targetCalories) ккал")
+                                InfoValueRow(title: "Белки", value: "\(adjustment.nextDayGoal.proteinGrams) г")
+                                InfoValueRow(title: "Жиры", value: "\(adjustment.nextDayGoal.fatGrams) г")
+                                InfoValueRow(title: "Углеводы", value: "\(adjustment.nextDayGoal.carbsGrams) г")
 
-                                    ForEach(adjustment.hints, id: \.self) { hint in
-                                        Text("• \(hint)")
-                                            .font(.caption)
-                                            .foregroundStyle(.secondary)
+                                if !adjustment.hints.isEmpty {
+                                    Divider()
+
+                                    VStack(alignment: .leading, spacing: 6) {
+                                        Text("Подсказки")
+                                            .font(.subheadline.weight(.semibold))
+
+                                        ForEach(adjustment.hints, id: \.self) { hint in
+                                            Text("• \(hint)")
+                                                .font(.caption)
+                                                .foregroundStyle(.secondary)
+                                        }
                                     }
                                 }
                             }
                         }
                     }
 
-                    SectionTitleView(
-                        "Блюда на сегодня",
-                        subtitle: "Список блюд, подобранных системой на текущий день."
-                    )
-
-                    VStack(spacing: 12) {
-                        ForEach(vm.dayPlan.meals) { meal in
-                            NavigationLink {
-                                RecipeDetailView(mealId: meal.id, vm: vm)
-                            } label: {
-                                mealCard(for: meal, nutrientFocus: nutrientFocus)
-                            }
-                            .buttonStyle(.plain)
-                        }
-                    }
+                    mealsSection(nutrientFocus: nutrientFocus)
                 }
                 .padding(16)
             }
@@ -217,18 +88,188 @@ struct TodayView: View {
     }
 
     private var headerSection: some View {
+        EmptyView()
+    }
+
+    @ViewBuilder
+    private func summarySection(
+        goal: NutritionGoal,
+        plannedSummary: NutritionSummary,
+        actualSummary: NutritionSummary,
+        nutrientFocus: NutrientFocus
+    ) -> some View {
+        SectionTitleView(
+            "Сводка дня",
+            subtitle: "Ключевые показатели плана и факта."
+        )
+
         AppCard {
-            VStack(alignment: .leading, spacing: 10) {
-                Text("NutriPlan")
-                    .font(.headline)
-                    .foregroundStyle(.secondary)
+            VStack(alignment: .leading, spacing: 14) {
+                HStack {
+                    Text("Цель")
+                        .font(.headline)
 
-                Text("Главный экран питания на сегодня")
-                    .font(.title2.weight(.bold))
+                    Spacer()
 
-                Text("Следи за текущим днём, сравнивай план и факт и получай рекомендации на следующий день без перехода между множеством экранов.")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    Text("\(goal.targetCalories) ккал")
+                        .foregroundStyle(.secondary)
+                }
+
+                HStack(spacing: 12) {
+                    summaryTile(title: "Белки", value: "\(goal.proteinGrams) г")
+                    summaryTile(title: "Жиры", value: "\(goal.fatGrams) г")
+                    summaryTile(title: "Углеводы", value: "\(goal.carbsGrams) г")
+                }
+            }
+        }
+
+        AppCard {
+            VStack(alignment: .leading, spacing: 14) {
+                HStack {
+                    Text("План и факт")
+                        .font(.headline)
+
+                    Spacer()
+
+                    if nutrientFocus != .none {
+                        StatPill(text: nutrientFocus.displayName)
+                    }
+                }
+
+                InfoValueRow(title: "План по калориям", value: "\(Int(plannedSummary.macros.calories.rounded())) ккал")
+                InfoValueRow(title: "Факт по калориям", value: "\(Int(actualSummary.macros.calories.rounded())) ккал")
+
+                Divider()
+
+                HStack(spacing: 12) {
+                    macroMiniCard(
+                        title: "Белки",
+                        planned: plannedSummary.macros.protein,
+                        actual: actualSummary.macros.protein
+                    )
+
+                    macroMiniCard(
+                        title: "Жиры",
+                        planned: plannedSummary.macros.fat,
+                        actual: actualSummary.macros.fat
+                    )
+
+                    macroMiniCard(
+                        title: "Углеводы",
+                        planned: plannedSummary.macros.carbs,
+                        actual: actualSummary.macros.carbs
+                    )
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func micronutrientsSection(
+        plannedSummary: NutritionSummary,
+        actualSummary: NutritionSummary,
+        nutrientFocus: NutrientFocus
+    ) -> some View {
+        SectionTitleView(
+            "Микронутриенты",
+            subtitle: "План, факт и текущий акцент."
+        )
+
+        VStack(spacing: 12) {
+            ForEach(NutrientCatalog.focusable) { nutrient in
+                micronutrientCard(
+                    nutrient: nutrient,
+                    planned: plannedSummary.nutrients[nutrient.id, default: 0],
+                    actual: actualSummary.nutrients[nutrient.id, default: 0],
+                    isFocused: nutrientFocus.nutrientId == nutrient.id
+                )
+            }
+        }
+    }
+
+    private var actionsSection: some View {
+        Group {
+            SectionTitleView(
+                "Быстрые действия",
+                subtitle: "Основные сценарии текущего дня."
+            )
+
+            LazyVGrid(columns: actionColumns, spacing: 12) {
+                NavigationLink {
+                    DiaryView(vm: vm)
+                } label: {
+                    QuickActionTile(
+                        systemImage: "book.pages",
+                        title: "Дневник",
+                        subtitle: "Записи за день"
+                    )
+                }
+                .buttonStyle(.plain)
+
+                NavigationLink {
+                    PlanComparisonView(vm: vm)
+                } label: {
+                    QuickActionTile(
+                        systemImage: "chart.bar.xaxis",
+                        title: "План и факт",
+                        subtitle: "Сравнение за день"
+                    )
+                }
+                .buttonStyle(.plain)
+
+                NavigationLink {
+                    PlanHistoryView(vm: vm)
+                } label: {
+                    QuickActionTile(
+                        systemImage: "clock.arrow.circlepath",
+                        title: "История",
+                        subtitle: "Прошлые дни"
+                    )
+                }
+                .buttonStyle(.plain)
+
+                NavigationLink {
+                    CloudRestoreView(vm: vm)
+                } label: {
+                    QuickActionTile(
+                        systemImage: "arrow.triangle.2.circlepath",
+                        title: "Синхронизация",
+                        subtitle: "Обновить данные"
+                    )
+                }
+                .buttonStyle(.plain)
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func mealsSection(nutrientFocus: NutrientFocus) -> some View {
+        SectionTitleView(
+            "Блюда на сегодня",
+            subtitle: "Текущий набор блюд."
+        )
+
+        if vm.dayPlan.meals.isEmpty {
+            AppCard {
+                VStack(alignment: .leading, spacing: 10) {
+                    Text("План пока не сформирован")
+                        .font(.headline)
+
+                    Text("Перейди в раздел плана и собери рацион на день.")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+            }
+        } else {
+            VStack(spacing: 12) {
+                ForEach(vm.dayPlan.meals) { meal in
+                    NavigationLink {
+                        RecipeDetailView(mealId: meal.id, vm: vm)
+                    } label: {
+                        mealCard(for: meal, nutrientFocus: nutrientFocus)
+                    }
+                    .buttonStyle(.plain)
+                }
             }
         }
     }
@@ -249,24 +290,27 @@ struct TodayView: View {
                     Spacer()
 
                     if isFocused {
-                        StatPill(text: "Выбранный фокус")
+                        StatPill(text: "Фокус")
                     }
                 }
 
-                InfoValueRow(title: "По плану", value: amountText(planned, nutrient: nutrient))
-                InfoValueRow(title: "По факту", value: amountText(actual, nutrient: nutrient))
+                InfoValueRow(title: "План", value: amountText(planned, nutrient: nutrient))
+                InfoValueRow(title: "Факт", value: amountText(actual, nutrient: nutrient))
 
                 if let target = nutrient.targetPerDay {
                     Divider()
                     InfoValueRow(title: "Ориентир", value: amountText(target, nutrient: nutrient))
-                    InfoValueRow(title: "Выполнение", value: progressText(actual: actual, target: target))
+                    InfoValueRow(title: "Покрытие", value: progressText(actual: actual, target: target))
                 }
             }
         }
     }
 
     @ViewBuilder
-    private func mealCard(for meal: PlannedMeal, nutrientFocus: NutrientFocus) -> some View {
+    private func mealCard(
+        for meal: PlannedMeal,
+        nutrientFocus: NutrientFocus
+    ) -> some View {
         let summary = vm.summary(for: meal.recipe)
         let focusedAmount = NutrientCatalog.focusedAmount(
             in: summary.nutrients,
@@ -284,7 +328,7 @@ struct TodayView: View {
                         .font(.headline)
                         .multilineTextAlignment(.leading)
 
-                    Text("Калории: \(Int(summary.macros.calories))")
+                    Text("Калории: \(Int(summary.macros.calories.rounded()))")
                         .font(.subheadline)
 
                     Text(
@@ -294,7 +338,8 @@ struct TodayView: View {
                     .foregroundStyle(.secondary)
 
                     if nutrientFocus != .none,
-                       let nutrient = NutrientCatalog.nutrient(for: nutrientFocus) {
+                       let nutrient = NutrientCatalog.nutrient(for: nutrientFocus),
+                       focusedAmount > 0 {
                         Text("\(nutrient.name): \(amountText(focusedAmount, nutrient: nutrient))")
                             .font(.caption2)
                             .foregroundStyle(.secondary)
@@ -316,12 +361,53 @@ struct TodayView: View {
         }
     }
 
-    private func amountText(_ value: Double, nutrient: Nutrient) -> String {
-        if nutrient.unit == "мг" {
-            return String(format: "%.1f %@", value, nutrient.unit)
-        }
+    @ViewBuilder
+    private func summaryTile(title: String, value: String) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(title)
+                .font(.caption)
+                .foregroundStyle(.secondary)
 
-        return String(format: "%.1f %@", value, nutrient.unit)
+            Text(value)
+                .font(.headline)
+                .lineLimit(1)
+                .minimumScaleFactor(0.85)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(12)
+        .background(
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .fill(Color(.tertiarySystemFill))
+        )
+    }
+
+    @ViewBuilder
+    private func macroMiniCard(
+        title: String,
+        planned: Double,
+        actual: Double
+    ) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text(title)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+
+            Text("План: \(planned, specifier: "%.1f")")
+                .font(.caption)
+
+            Text("Факт: \(actual, specifier: "%.1f")")
+                .font(.caption.weight(.semibold))
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(10)
+        .background(
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                .fill(Color(.tertiarySystemFill))
+        )
+    }
+
+    private func amountText(_ value: Double, nutrient: Nutrient) -> String {
+        String(format: "%.1f %@", value, nutrient.unit)
     }
 
     private func progressText(actual: Double, target: Double) -> String {

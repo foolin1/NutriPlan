@@ -3,10 +3,13 @@ import SwiftUI
 struct RootView: View {
     @EnvironmentObject private var appState: AppState
 
+    @State private var hasFinishedIntro = false
+    @State private var didStartIntro = false
+
     var body: some View {
         Group {
-            if !appState.isLoaded {
-                launchStateView
+            if shouldShowStartup {
+                StartupIntroView()
             } else if appState.account == nil {
                 AuthGateView()
             } else if appState.hasProfile, let accountId = appState.account?.id {
@@ -17,33 +20,24 @@ struct RootView: View {
         }
         .onAppear {
             appState.bootstrapIfNeeded()
+            startIntroIfNeeded()
         }
     }
 
-    private var launchStateView: some View {
-        NavigationStack {
-            VStack(spacing: 16) {
-                Spacer()
+    private var shouldShowStartup: Bool {
+        !appState.isLoaded || !hasFinishedIntro
+    }
 
-                Image(systemName: "fork.knife.circle.fill")
-                    .font(.system(size: 64))
-                    .foregroundColor(.accentColor)
+    private func startIntroIfNeeded() {
+        guard !didStartIntro else { return }
+        didStartIntro = true
 
-                Text("NutriPlan")
-                    .font(.largeTitle.weight(.bold))
+        Task {
+            try? await Task.sleep(nanoseconds: 1_200_000_000)
 
-                Text("Подготавливаем данные приложения")
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-
-                ProgressView()
-                    .padding(.top, 4)
-
-                Spacer()
+            await MainActor.run {
+                hasFinishedIntro = true
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .padding(24)
-            .background(Color(.systemGroupedBackground).ignoresSafeArea())
         }
     }
 }

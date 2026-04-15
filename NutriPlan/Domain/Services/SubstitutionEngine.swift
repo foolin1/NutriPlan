@@ -1,12 +1,10 @@
 import Foundation
 
 struct SubstitutionCandidate: Identifiable, Hashable {
-    let id: String                 // foodId кандидата
+    let id: String
     let name: String
-    let score: Double              // итоговая оценка 0...100, больше = лучше
-    let deltaMacros: Macros        // candidate - original для того же веса
-
-    // Для объяснимости в UI и дипломе
+    let score: Double
+    let deltaMacros: Macros
     let weightedPenalty: Double
     let tagBonus: Double
     let ironDelta: Double?
@@ -22,7 +20,7 @@ enum SubstitutionEngine {
         excludedProducts: Set<String> = [],
         excludedGroups: Set<String> = [],
         requiredTags: Set<String> = []
-    ) -> [SubstitutionCandidate]{
+    ) -> [SubstitutionCandidate] {
         guard let original = foodsById[originalFoodId] else {
             return []
         }
@@ -30,7 +28,8 @@ enum SubstitutionEngine {
         let factor = grams / 100.0
         let originalMacros = original.macrosPer100g * factor
         let originalIron = original.nutrientsPer100g["iron", default: 0] * factor
-        let originalCategory = categoryKey(for: original)
+        let originalCategory = culinaryCategory(for: original)
+        let allowedCategories = compatibleCategories(for: originalCategory)
 
         let normalizedExcludedProducts = Set(
             excludedProducts.map(normalizeText)
@@ -42,8 +41,8 @@ enum SubstitutionEngine {
             guard requiredTags.isSubset(of: food.tags) else { return false }
             guard excludedGroups.isDisjoint(with: food.groups) else { return false }
 
-            let candidateCategory = categoryKey(for: food)
-            guard candidateCategory == originalCategory else { return false }
+            let candidateCategory = culinaryCategory(for: food)
+            guard allowedCategories.contains(candidateCategory) else { return false }
 
             let normalizedName = normalizeText(food.name)
             let normalizedId = normalizeText(food.id)
@@ -60,6 +59,7 @@ enum SubstitutionEngine {
         let scored: [SubstitutionCandidate] = candidates.map { candidate in
             let candidateMacros = candidate.macrosPer100g * factor
             let candidateIron = candidate.nutrientsPer100g["iron", default: 0] * factor
+            let candidateCategory = culinaryCategory(for: candidate)
 
             let delta = Macros(
                 calories: candidateMacros.calories - originalMacros.calories,
@@ -71,6 +71,11 @@ enum SubstitutionEngine {
             let weightedPenalty = computeWeightedPenalty(
                 original: originalMacros,
                 candidate: candidateMacros
+            )
+
+            let categoryBonus = computeCategoryBonus(
+                originalCategory: originalCategory,
+                candidateCategory: candidateCategory
             )
 
             let tagBonus = computeTagBonus(
@@ -85,6 +90,7 @@ enum SubstitutionEngine {
 
             let score = computeScore(
                 weightedPenalty: weightedPenalty,
+                categoryBonus: categoryBonus,
                 tagBonus: tagBonus,
                 ironDelta: ironDelta
             )
@@ -95,7 +101,7 @@ enum SubstitutionEngine {
                 score: score,
                 deltaMacros: delta,
                 weightedPenalty: weightedPenalty,
-                tagBonus: tagBonus,
+                tagBonus: categoryBonus + tagBonus,
                 ironDelta: ironDelta
             )
         }
@@ -106,26 +112,130 @@ enum SubstitutionEngine {
                     return $0.score > $1.score
                 }
 
+                let leftMacroGap = macroGapMagnitude($0.deltaMacros)
+                let rightMacroGap = macroGapMagnitude($1.deltaMacros)
+
+                if abs(leftMacroGap - rightMacroGap) > 0.0001 {
+                    return leftMacroGap < rightMacroGap
+                }
+
                 return abs($0.deltaMacros.calories) < abs($1.deltaMacros.calories)
             }
-            .prefix(5)
+            .prefix(8)
             .map { $0 }
     }
 
-    private static func categoryKey(for food: Food) -> String {
-        if food.tags.contains("meat") {
+    private static func culinaryCategory(for food: Food) -> String {
+        if food.groups.contains("seafood") || food.tags.contains("seafood") {
+            return "fish"
+        }
+
+        if food.groups.contains("poultry")
+            || food.groups.contains("red_meat")
+            || food.tags.contains("meat") {
             return "meat"
         }
 
-        if food.tags.contains("grain") || food.tags.contains("legume") {
-            return "grain"
+        if food.groups.contains("eggs") || food.tags.contains("egg") {
+            return "eggs"
         }
 
-        if food.tags.contains("vegetable") {
+        if food.groups.contains("grain")
+            || food.groups.contains("legumes")
+            || food.tags.contains("grain")
+            || food.tags.contains("legume") {
+            return "garnish"
+        }
+
+        if food.groups.contains("vegetable") || food.tags.contains("vegetable") {
             return "vegetable"
         }
 
+        if food.groups.contains("berries") {
+            return "berries"
+        }
+
+        if food.groups.contains("fruit")
+            || food.groups.contains("citrus")
+            || food.tags.contains("fruit") {
+            return "fruit"
+        }
+
+        if food.groups.contains("dairy") || food.tags.contains("dairy") {
+            return "dairy"
+        }
+
+        if food.groups.contains("nuts")
+            || food.groups.contains("seeds")
+            || food.tags.contains("nut")
+            || food.tags.contains("seed") {
+            return "nuts"
+        }
+
+        if food.groups.contains("protein_alt") {
+            return "protein_alt"
+        }
+
         return "other"
+    }
+
+    private static func compatibleCategories(for originalCategory: String) -> Set<String> {
+        switch originalCategory {
+        case "meat":
+            return ["meat", "fish"]
+
+        case "fish":
+            return ["fish", "meat"]
+
+        case "eggs":
+            return ["eggs"]
+
+        case "garnish":
+            return ["garnish"]
+
+        case "vegetable":
+            return ["vegetable"]
+
+        case "fruit":
+            return ["fruit", "berries"]
+
+        case "berries":
+            return ["berries", "fruit"]
+
+        case "dairy":
+            return ["dairy"]
+
+        case "nuts":
+            return ["nuts"]
+
+        case "protein_alt":
+            return ["protein_alt"]
+
+        default:
+            return [originalCategory]
+        }
+    }
+
+    private static func computeCategoryBonus(
+        originalCategory: String,
+        candidateCategory: String
+    ) -> Double {
+        if originalCategory == candidateCategory {
+            return 18.0
+        }
+
+        let proteinFamily: Set<String> = ["meat", "fish"]
+        let fruitFamily: Set<String> = ["fruit", "berries"]
+
+        if proteinFamily.contains(originalCategory) && proteinFamily.contains(candidateCategory) {
+            return 6.0
+        }
+
+        if fruitFamily.contains(originalCategory) && fruitFamily.contains(candidateCategory) {
+            return 5.0
+        }
+
+        return 0.0
     }
 
     private static func computeWeightedPenalty(
@@ -137,32 +247,26 @@ enum SubstitutionEngine {
             candidate: candidate.calories,
             fallback: 50
         )
-
         let proteinRelative = relativeDelta(
             original: original.protein,
             candidate: candidate.protein,
             fallback: 5
         )
-
         let fatRelative = relativeDelta(
             original: original.fat,
             candidate: candidate.fat,
             fallback: 3
         )
-
         let carbsRelative = relativeDelta(
             original: original.carbs,
             candidate: candidate.carbs,
             fallback: 5
         )
 
-        let weightedPenalty =
-            caloriesRelative * 40
+        return caloriesRelative * 40
             + proteinRelative * 30
             + fatRelative * 15
             + carbsRelative * 15
-
-        return weightedPenalty
     }
 
     private static func relativeDelta(
@@ -180,9 +284,17 @@ enum SubstitutionEngine {
     ) -> Double {
         let genericTags: Set<String> = [
             "meat",
+            "seafood",
+            "egg",
+            "dairy",
             "grain",
             "legume",
-            "vegetable"
+            "vegetable",
+            "fruit",
+            "nut",
+            "seed",
+            "vegan",
+            "high_protein"
         ]
 
         let originalSpecific = originalTags.subtracting(genericTags)
@@ -205,16 +317,24 @@ enum SubstitutionEngine {
 
     private static func computeScore(
         weightedPenalty: Double,
+        categoryBonus: Double,
         tagBonus: Double,
         ironDelta: Double?
     ) -> Double {
-        var score = 100.0 - weightedPenalty + tagBonus
+        var score = 100.0 - weightedPenalty + categoryBonus + tagBonus
 
         if let ironDelta {
-            score += max(min(ironDelta * 3.0, 6.0), -6.0)
+            score += max(min(ironDelta * 2.5, 5.0), -5.0)
         }
 
         return min(max(score, 0), 100)
+    }
+
+    private static func macroGapMagnitude(_ delta: Macros) -> Double {
+        abs(delta.calories) * 0.35
+            + abs(delta.protein) * 0.30
+            + abs(delta.fat) * 0.20
+            + abs(delta.carbs) * 0.15
     }
 
     private static func normalizeText(_ value: String) -> String {

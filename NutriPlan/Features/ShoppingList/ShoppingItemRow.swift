@@ -3,30 +3,43 @@ import SwiftUI
 struct ShoppingItemRow: View {
     let item: ShoppingItem
     let isChecked: Bool
+    let categoryTitle: String
     let onToggle: () -> Void
 
     var body: some View {
         Button(action: onToggle) {
-            HStack(spacing: 12) {
+            HStack(alignment: .top, spacing: 12) {
                 Image(systemName: isChecked ? "checkmark.circle.fill" : "circle")
                     .imageScale(.large)
                     .foregroundStyle(isChecked ? Color.accentColor : Color.secondary)
+                    .padding(.top, 2)
 
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(item.name)
-                        .font(.subheadline.weight(.medium))
-                        .foregroundStyle(.primary)
-                        .strikethrough(isChecked, color: .secondary)
+                VStack(alignment: .leading, spacing: 6) {
+                    HStack(alignment: .top) {
+                        Text(item.name)
+                            .font(.subheadline.weight(.medium))
+                            .foregroundStyle(.primary)
+                            .strikethrough(isChecked, color: .secondary)
 
-                    Text(formattedWeight(item.grams))
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
+                        Spacer(minLength: 8)
 
-                Spacer()
+                        Text(formattedWeight(item.grams))
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(.secondary)
+                    }
 
-                if isChecked {
-                    StatPill(text: "Куплено")
+                    HStack(spacing: 8) {
+                        Text(categoryTitle)
+                            .font(.caption.weight(.medium))
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 5)
+                            .background(Color(.tertiarySystemFill))
+                            .clipShape(Capsule())
+
+                        if isChecked {
+                            StatPill(text: "Куплено")
+                        }
+                    }
                 }
             }
             .padding(14)
@@ -46,8 +59,7 @@ struct ShoppingItemRow: View {
     }
 
     private func formattedWeight(_ grams: Double) -> String {
-        let measurement: Measurement<UnitMass> =
-            grams >= 1000
+        let measurement: Measurement<UnitMass> = grams >= 1000
             ? Measurement(value: grams / 1000.0, unit: .kilograms)
             : Measurement(value: grams, unit: .grams)
 
