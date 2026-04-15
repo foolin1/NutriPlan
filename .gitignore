@@ -21,3 +21,7 @@ Packages/
 # Optional local environment files
 .env
 .env.local
+
+# Firebase
+GoogleService-Info.plist
+**/GoogleService-Info.plist
