@@ -90,30 +90,6 @@ NutriPlanStableTests — новый стабильный набор тестов
 экран онбординга;
 экран аккаунта;
 экран синхронизации.
-Структура проекта
-NutriPlan/
-├── App
-├── Assets.xcassets
-├── Data
-├── Domain
-├── Features
-└── Resources/Data
-    ├── foods.json
-    └── recipes.json
-
-NutriPlanStableTests/
-├── Core
-├── Planning
-└── Shopping
-
-NutriPlanTests/
-├── Core
-├── Diary
-├── Planning
-├── Shopping
-└── Support
-
-Структура выше соответствует текущему дереву репозитория.
 
 Технологии
 Swift
