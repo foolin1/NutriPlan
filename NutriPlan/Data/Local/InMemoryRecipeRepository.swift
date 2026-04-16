@@ -4,11 +4,15 @@ final class InMemoryRecipeRepository: RecipeRepository {
     private let recipes: [Recipe]
 
     init(bundle: Bundle = .main) {
-        if let loaded: [Recipe] = BundleJSONLoader.loadArray(Recipe.self, named: "recipes", bundle: bundle),
-           !loaded.isEmpty {
+        if let loaded: [Recipe] = BundleJSONLoader.loadArray(
+            Recipe.self,
+            named: "recipes",
+            bundle: bundle
+        ), !loaded.isEmpty {
             self.recipes = loaded
         } else {
             self.recipes = Self.fallbackRecipes
+            print("recipes.json не найден или пуст. Используются резервные рецепты.")
         }
     }
 
@@ -19,7 +23,7 @@ final class InMemoryRecipeRepository: RecipeRepository {
     private static let fallbackRecipes: [Recipe] = [
         Recipe(
             id: "oatmeal_bowl",
-            name: "Oatmeal Bowl",
+            name: "Овсянка с йогуртом и бананом",
             ingredients: [
                 RecipeIngredient(foodId: "oats", grams: 60),
                 RecipeIngredient(foodId: "greek_yogurt", grams: 150),
@@ -31,7 +35,7 @@ final class InMemoryRecipeRepository: RecipeRepository {
         ),
         Recipe(
             id: "chicken_rice_bowl",
-            name: "Chicken + Rice Bowl",
+            name: "Курица с рисом",
             ingredients: [
                 RecipeIngredient(foodId: "chicken_breast", grams: 180),
                 RecipeIngredient(foodId: "rice", grams: 200)

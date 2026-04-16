@@ -61,24 +61,6 @@
 		8B0B9E652F8AC29F00B41AE7 /* ManualDiaryEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9E642F8AC29F00B41AE7 /* ManualDiaryEntryView.swift */; };
 		8B0B9E672F8ACDE200B41AE7 /* DayPlanPortionOptimizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9E662F8ACDE200B41AE7 /* DayPlanPortionOptimizer.swift */; };
 		8B0B9E692F8AD33500B41AE7 /* DayPlanCalorieTopUpService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9E682F8AD33500B41AE7 /* DayPlanCalorieTopUpService.swift */; };
-		8B0B9E8E2F8AE7A700B41AE7 /* TestDataFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9E8D2F8AE7A700B41AE7 /* TestDataFactory.swift */; };
-		8B0B9E902F8AE7BF00B41AE7 /* GoalCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9E8F2F8AE7BF00B41AE7 /* GoalCalculatorTests.swift */; };
-		8B0B9E922F8AE7DA00B41AE7 /* MealPlanBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9E912F8AE7DA00B41AE7 /* MealPlanBuilderTests.swift */; };
-		8B0B9E942F8AE7F200B41AE7 /* SubstitutionEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9E932F8AE7F200B41AE7 /* SubstitutionEngineTests.swift */; };
-		8B0B9E962F8AE80400B41AE7 /* DayPlanTopUpTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9E952F8AE80400B41AE7 /* DayPlanTopUpTests.swift */; };
-		8B0B9E982F8AE81700B41AE7 /* ManualDiaryEntryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9E972F8AE81700B41AE7 /* ManualDiaryEntryTests.swift */; };
-		8B0B9E9A2F8AE8C400B41AE7 /* ShoppingListBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9E992F8AE8C400B41AE7 /* ShoppingListBuilderTests.swift */; };
-		8B0B9E9C2F8AF24700B41AE7 /* RepositoryTestDoubles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9E9B2F8AF24700B41AE7 /* RepositoryTestDoubles.swift */; };
-		8B0B9E9E2F8AF28C00B41AE7 /* DayPlanPortionOptimizerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9E9D2F8AF28C00B41AE7 /* DayPlanPortionOptimizerTests.swift */; };
-		8B0B9EA02F8AF2B800B41AE7 /* DayPlanCalorieTopUpServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9E9F2F8AF2B800B41AE7 /* DayPlanCalorieTopUpServiceTests.swift */; };
-		8B0B9EA22F8AF2E800B41AE7 /* PlanViewModelShuffleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9EA12F8AF2E800B41AE7 /* PlanViewModelShuffleTests.swift */; };
-		8B0B9EA42F8AF31700B41AE7 /* PlanAdjusterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9EA32F8AF31700B41AE7 /* PlanAdjusterTests.swift */; };
-		8B0B9EA62F8AF83200B41AE7 /* MealPlanRestrictionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9EA52F8AF83200B41AE7 /* MealPlanRestrictionsTests.swift */; };
-		8B0B9EA82F8AF89A00B41AE7 /* PlanComparisonServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9EA72F8AF89A00B41AE7 /* PlanComparisonServiceTests.swift */; };
-		8B0B9EAA2F8AF8D400B41AE7 /* ManualDiaryOrderingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9EA92F8AF8D400B41AE7 /* ManualDiaryOrderingTests.swift */; };
-		8B0B9EAC2F8AFA4F00B41AE7 /* PlanViewModelSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9EAB2F8AFA4F00B41AE7 /* PlanViewModelSessionTests.swift */; };
-		8B0B9EAE2F8AFAB500B41AE7 /* DiarySyncTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9EAD2F8AFAB500B41AE7 /* DiarySyncTests.swift */; };
-		8B0B9EB02F8AFAF400B41AE7 /* DisplayTitleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9EAF2F8AFAF400B41AE7 /* DisplayTitleTests.swift */; };
 		8B0B9EB22F8D0AD700B41AE7 /* UserProfileStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9EB12F8D0AD700B41AE7 /* UserProfileStore.swift */; };
 		8B0B9EB52F8D1D4200B41AE7 /* PlanHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9EB42F8D1D4200B41AE7 /* PlanHistoryView.swift */; };
 		8B0B9EB72F8D1D5F00B41AE7 /* PlanHistoryDayDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9EB62F8D1D5F00B41AE7 /* PlanHistoryDayDetailView.swift */; };
@@ -98,6 +80,15 @@
 		8B0B9ED92F8D60F000B41AE7 /* CloudArchitectureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9ED82F8D60F000B41AE7 /* CloudArchitectureView.swift */; };
 		8B0B9EDC2F8D69B400B41AE7 /* CloudRestoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9EDB2F8D69B400B41AE7 /* CloudRestoreView.swift */; };
 		8B0B9EDE2F8D737500B41AE7 /* CloudListenerToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0B9EDD2F8D737500B41AE7 /* CloudListenerToken.swift */; };
+		8B32E5872F90FDDF004FCB60 /* ShoppingListBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B32E5862F90FAC7004FCB60 /* ShoppingListBuilderTests.swift */; };
+		8B32E5882F90FDED004FCB60 /* GoalCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B32E5852F90FAB5004FCB60 /* GoalCalculatorTests.swift */; };
+		8B32E58B2F910188004FCB60 /* SubstitutionEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B32E58A2F910188004FCB60 /* SubstitutionEngineTests.swift */; };
+		8B32E58D2F9101AD004FCB60 /* NutrientCatalogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B32E58C2F9101AD004FCB60 /* NutrientCatalogTests.swift */; };
+		8B32E58F2F91073E004FCB60 /* PlanComparisonServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B32E58E2F91073E004FCB60 /* PlanComparisonServiceTests.swift */; };
+		8B32E5912F91076C004FCB60 /* PlanAdjusterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B32E5902F91076C004FCB60 /* PlanAdjusterTests.swift */; };
+		8B32E5932F9109D7004FCB60 /* NutritionCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B32E5922F9109D7004FCB60 /* NutritionCalculatorTests.swift */; };
+		8B32E5952F9109F1004FCB60 /* DayPlanCalorieTopUpServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B32E5942F9109F1004FCB60 /* DayPlanCalorieTopUpServiceTests.swift */; };
+		8B32E5972F910C7F004FCB60 /* DayPlanPortionOptimizerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B32E5962F910C7F004FCB60 /* DayPlanPortionOptimizerTests.swift */; };
 		8B88C31B2F8FB1EC00AC5444 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8B88C31A2F8FB1EC00AC5444 /* GoogleService-Info.plist */; };
 		8B88C31D2F8FDF1200AC5444 /* ShoppingGroupingMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B88C31C2F8FDF1200AC5444 /* ShoppingGroupingMode.swift */; };
 		8B88C31F2F8FEA9600AC5444 /* ExcludedGroupsPickerView 2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B88C31E2F8FEA9600AC5444 /* ExcludedGroupsPickerView 2.swift */; };
@@ -126,6 +117,13 @@
 
 /* Begin PBXContainerItemProxy section */
 		8B0B9E802F8AE6C800B41AE7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8B7D9B682F545AD3006A4CFD /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8B7D9B6F2F545AD3006A4CFD;
+			remoteInfo = NutriPlan;
+		};
+		8B32E57D2F90F8F6004FCB60 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 8B7D9B682F545AD3006A4CFD /* Project object */;
 			proxyType = 1;
@@ -225,6 +223,16 @@
 		8B0B9ED82F8D60F000B41AE7 /* CloudArchitectureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudArchitectureView.swift; sourceTree = "<group>"; };
 		8B0B9EDB2F8D69B400B41AE7 /* CloudRestoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudRestoreView.swift; sourceTree = "<group>"; };
 		8B0B9EDD2F8D737500B41AE7 /* CloudListenerToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudListenerToken.swift; sourceTree = "<group>"; };
+		8B32E5792F90F8F6004FCB60 /* NutriPlanStableTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NutriPlanStableTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		8B32E5852F90FAB5004FCB60 /* GoalCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalCalculatorTests.swift; sourceTree = "<group>"; };
+		8B32E5862F90FAC7004FCB60 /* ShoppingListBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingListBuilderTests.swift; sourceTree = "<group>"; };
+		8B32E58A2F910188004FCB60 /* SubstitutionEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubstitutionEngineTests.swift; sourceTree = "<group>"; };
+		8B32E58C2F9101AD004FCB60 /* NutrientCatalogTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutrientCatalogTests.swift; sourceTree = "<group>"; };
+		8B32E58E2F91073E004FCB60 /* PlanComparisonServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanComparisonServiceTests.swift; sourceTree = "<group>"; };
+		8B32E5902F91076C004FCB60 /* PlanAdjusterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanAdjusterTests.swift; sourceTree = "<group>"; };
+		8B32E5922F9109D7004FCB60 /* NutritionCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutritionCalculatorTests.swift; sourceTree = "<group>"; };
+		8B32E5942F9109F1004FCB60 /* DayPlanCalorieTopUpServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayPlanCalorieTopUpServiceTests.swift; sourceTree = "<group>"; };
+		8B32E5962F910C7F004FCB60 /* DayPlanPortionOptimizerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayPlanPortionOptimizerTests.swift; sourceTree = "<group>"; };
 		8B7D9B702F545AD3006A4CFD /* NutriPlan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NutriPlan.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B88C31A2F8FB1EC00AC5444 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		8B88C31C2F8FDF1200AC5444 /* ShoppingGroupingMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShoppingGroupingMode.swift; sourceTree = "<group>"; };
@@ -254,6 +262,13 @@
 
 /* Begin PBXFrameworksBuildPhase section */
 		8B0B9E792F8AE6C800B41AE7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8B32E5762F90F8F6004FCB60 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -480,11 +495,52 @@
 			path = Cloud;
 			sourceTree = "<group>";
 		};
+		8B32E5822F90FA5F004FCB60 /* NutriPlanStableTests */ = {
+			isa = PBXGroup;
+			children = (
+				8B32E5892F910167004FCB60 /* Planning */,
+				8B32E5842F90FA73004FCB60 /* Shopping */,
+				8B32E5832F90FA67004FCB60 /* Core */,
+			);
+			path = NutriPlanStableTests;
+			sourceTree = "<group>";
+		};
+		8B32E5832F90FA67004FCB60 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				8B32E5852F90FAB5004FCB60 /* GoalCalculatorTests.swift */,
+				8B32E58C2F9101AD004FCB60 /* NutrientCatalogTests.swift */,
+				8B32E5922F9109D7004FCB60 /* NutritionCalculatorTests.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		8B32E5842F90FA73004FCB60 /* Shopping */ = {
+			isa = PBXGroup;
+			children = (
+				8B32E5862F90FAC7004FCB60 /* ShoppingListBuilderTests.swift */,
+			);
+			path = Shopping;
+			sourceTree = "<group>";
+		};
+		8B32E5892F910167004FCB60 /* Planning */ = {
+			isa = PBXGroup;
+			children = (
+				8B32E58A2F910188004FCB60 /* SubstitutionEngineTests.swift */,
+				8B32E58E2F91073E004FCB60 /* PlanComparisonServiceTests.swift */,
+				8B32E5902F91076C004FCB60 /* PlanAdjusterTests.swift */,
+				8B32E5942F9109F1004FCB60 /* DayPlanCalorieTopUpServiceTests.swift */,
+				8B32E5962F910C7F004FCB60 /* DayPlanPortionOptimizerTests.swift */,
+			);
+			path = Planning;
+			sourceTree = "<group>";
+		};
 		8B7D9B672F545AD3006A4CFD = {
 			isa = PBXGroup;
 			children = (
 				8B94CA422F54778A000CB887 /* NutriPlan */,
 				8B0B9E862F8AE6F900B41AE7 /* NutriPlanTests */,
+				8B32E5822F90FA5F004FCB60 /* NutriPlanStableTests */,
 				8B7D9B712F545AD3006A4CFD /* Products */,
 			);
 			sourceTree = "<group>";
@@ -494,6 +550,7 @@
 			children = (
 				8B7D9B702F545AD3006A4CFD /* NutriPlan.app */,
 				8B0B9E7C2F8AE6C800B41AE7 /* NutriPlanTests.xctest */,
+				8B32E5792F90F8F6004FCB60 /* NutriPlanStableTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -728,6 +785,26 @@
 			productReference = 8B0B9E7C2F8AE6C800B41AE7 /* NutriPlanTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		8B32E5782F90F8F6004FCB60 /* NutriPlanStableTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8B32E5812F90F8F6004FCB60 /* Build configuration list for PBXNativeTarget "NutriPlanStableTests" */;
+			buildPhases = (
+				8B32E5752F90F8F6004FCB60 /* Sources */,
+				8B32E5762F90F8F6004FCB60 /* Frameworks */,
+				8B32E5772F90F8F6004FCB60 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8B32E57E2F90F8F6004FCB60 /* PBXTargetDependency */,
+			);
+			name = NutriPlanStableTests;
+			packageProductDependencies = (
+			);
+			productName = NutriPlanStableTests;
+			productReference = 8B32E5792F90F8F6004FCB60 /* NutriPlanStableTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		8B7D9B6F2F545AD3006A4CFD /* NutriPlan */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8B7D9B7B2F545AD3006A4CFD /* Build configuration list for PBXNativeTarget "NutriPlan" */;
@@ -756,11 +833,15 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 2630;
-				LastUpgradeCheck = 2630;
+				LastSwiftUpdateCheck = 2640;
+				LastUpgradeCheck = 2640;
 				TargetAttributes = {
 					8B0B9E7B2F8AE6C800B41AE7 = {
 						CreatedOnToolsVersion = 26.3;
+						TestTargetID = 8B7D9B6F2F545AD3006A4CFD;
+					};
+					8B32E5782F90F8F6004FCB60 = {
+						CreatedOnToolsVersion = 26.4;
 						TestTargetID = 8B7D9B6F2F545AD3006A4CFD;
 					};
 					8B7D9B6F2F545AD3006A4CFD = {
@@ -787,12 +868,20 @@
 			targets = (
 				8B7D9B6F2F545AD3006A4CFD /* NutriPlan */,
 				8B0B9E7B2F8AE6C800B41AE7 /* NutriPlanTests */,
+				8B32E5782F90F8F6004FCB60 /* NutriPlanStableTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		8B0B9E7A2F8AE6C800B41AE7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8B32E5772F90F8F6004FCB60 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -817,24 +906,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8B0B9EA02F8AF2B800B41AE7 /* DayPlanCalorieTopUpServiceTests.swift in Sources */,
-				8B0B9EA22F8AF2E800B41AE7 /* PlanViewModelShuffleTests.swift in Sources */,
-				8B0B9E962F8AE80400B41AE7 /* DayPlanTopUpTests.swift in Sources */,
-				8B0B9E902F8AE7BF00B41AE7 /* GoalCalculatorTests.swift in Sources */,
-				8B0B9E922F8AE7DA00B41AE7 /* MealPlanBuilderTests.swift in Sources */,
-				8B0B9E8E2F8AE7A700B41AE7 /* TestDataFactory.swift in Sources */,
-				8B0B9E9C2F8AF24700B41AE7 /* RepositoryTestDoubles.swift in Sources */,
-				8B0B9E942F8AE7F200B41AE7 /* SubstitutionEngineTests.swift in Sources */,
-				8B0B9EAC2F8AFA4F00B41AE7 /* PlanViewModelSessionTests.swift in Sources */,
-				8B0B9E982F8AE81700B41AE7 /* ManualDiaryEntryTests.swift in Sources */,
-				8B0B9EAA2F8AF8D400B41AE7 /* ManualDiaryOrderingTests.swift in Sources */,
-				8B0B9E9A2F8AE8C400B41AE7 /* ShoppingListBuilderTests.swift in Sources */,
-				8B0B9EA82F8AF89A00B41AE7 /* PlanComparisonServiceTests.swift in Sources */,
-				8B0B9EB02F8AFAF400B41AE7 /* DisplayTitleTests.swift in Sources */,
-				8B0B9EA42F8AF31700B41AE7 /* PlanAdjusterTests.swift in Sources */,
-				8B0B9EAE2F8AFAB500B41AE7 /* DiarySyncTests.swift in Sources */,
-				8B0B9EA62F8AF83200B41AE7 /* MealPlanRestrictionsTests.swift in Sources */,
-				8B0B9E9E2F8AF28C00B41AE7 /* DayPlanPortionOptimizerTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8B32E5752F90F8F6004FCB60 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8B32E58D2F9101AD004FCB60 /* NutrientCatalogTests.swift in Sources */,
+				8B32E5932F9109D7004FCB60 /* NutritionCalculatorTests.swift in Sources */,
+				8B32E5882F90FDED004FCB60 /* GoalCalculatorTests.swift in Sources */,
+				8B32E58F2F91073E004FCB60 /* PlanComparisonServiceTests.swift in Sources */,
+				8B32E5952F9109F1004FCB60 /* DayPlanCalorieTopUpServiceTests.swift in Sources */,
+				8B32E58B2F910188004FCB60 /* SubstitutionEngineTests.swift in Sources */,
+				8B32E5912F91076C004FCB60 /* PlanAdjusterTests.swift in Sources */,
+				8B32E5872F90FDDF004FCB60 /* ShoppingListBuilderTests.swift in Sources */,
+				8B32E5972F910C7F004FCB60 /* DayPlanPortionOptimizerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -944,6 +1031,11 @@
 			target = 8B7D9B6F2F545AD3006A4CFD /* NutriPlan */;
 			targetProxy = 8B0B9E802F8AE6C800B41AE7 /* PBXContainerItemProxy */;
 		};
+		8B32E57E2F90F8F6004FCB60 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8B7D9B6F2F545AD3006A4CFD /* NutriPlan */;
+			targetProxy = 8B32E57D2F90F8F6004FCB60 /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
@@ -953,7 +1045,6 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 3Z4TN3B83Y;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.NutriPlanTests;
@@ -974,10 +1065,51 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 3Z4TN3B83Y;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.NutriPlanTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NutriPlan.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/NutriPlan";
+			};
+			name = Release;
+		};
+		8B32E57F2F90F8F6004FCB60 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.NutriPlanStableTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NutriPlan.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/NutriPlan";
+			};
+			name = Debug;
+		};
+		8B32E5802F90F8F6004FCB60 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.NutriPlanStableTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -1024,6 +1156,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 3Z4TN3B83Y;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -1047,6 +1180,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -1087,6 +1221,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 3Z4TN3B83Y;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -1103,6 +1238,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1116,7 +1252,6 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 3Z4TN3B83Y;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -1149,7 +1284,6 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 3Z4TN3B83Y;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -1182,6 +1316,15 @@
 			buildConfigurations = (
 				8B0B9E832F8AE6C800B41AE7 /* Debug */,
 				8B0B9E842F8AE6C800B41AE7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8B32E5812F90F8F6004FCB60 /* Build configuration list for PBXNativeTarget "NutriPlanStableTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8B32E57F2F90F8F6004FCB60 /* Debug */,
+				8B32E5802F90F8F6004FCB60 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

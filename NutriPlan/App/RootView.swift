@@ -34,7 +34,6 @@ struct RootView: View {
 
         Task {
             try? await Task.sleep(nanoseconds: 1_200_000_000)
-
             await MainActor.run {
                 hasFinishedIntro = true
             }

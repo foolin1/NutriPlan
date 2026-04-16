@@ -2,7 +2,6 @@ import SwiftUI
 
 struct ShoppingListView: View {
     @ObservedObject var vm: PlanViewModel
-
     @State private var searchText: String = ""
     @State private var filter: ShoppingFilter = .all
     @State private var groupingMode: ShoppingGroupingMode = .category
@@ -50,7 +49,7 @@ struct ShoppingListView: View {
         .background(Color(.systemGroupedBackground).ignoresSafeArea())
         .navigationTitle("Покупки")
         .navigationBarTitleDisplayMode(.large)
-        .searchable(text: $searchText, prompt: "Поиск продуктов")
+        .searchable(text: $searchText, prompt: "Поиск по списку")
         .toolbar {
             ToolbarItemGroup(placement: .topBarTrailing) {
                 if !remainingItems.isEmpty {
@@ -115,7 +114,6 @@ struct ShoppingListView: View {
                 "category.nuts",
                 "category.other"
             ]
-
         case .status:
             preferredOrder = [
                 "section.remaining",
@@ -154,7 +152,7 @@ struct ShoppingListView: View {
                 Text("Список покупок")
                     .font(.title2.weight(.bold))
 
-                Text("Этот список формируется автоматически на основе текущего плана питания. Отмечай купленные продукты, чтобы понимать, что уже готово, а что ещё нужно взять.")
+                Text("Этот список формируется автоматически на основе текущего плана питания. Отмечай купленные продукты, чтобы быстрее понимать, что уже готово, а что ещё осталось взять.")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
@@ -203,7 +201,7 @@ struct ShoppingListView: View {
                     } label: {
                         quickActionLabel(
                             title: "Отметить всё",
-                            subtitle: "Закрыть оставшиеся покупки"
+                            subtitle: "Закрыть все оставшиеся покупки"
                         )
                     }
                     .buttonStyle(.plain)
@@ -214,7 +212,7 @@ struct ShoppingListView: View {
                     } label: {
                         quickActionLabel(
                             title: "Сбросить",
-                            subtitle: "Вернуть все отметки"
+                            subtitle: "Убрать все отметки о покупке"
                         )
                     }
                     .buttonStyle(.plain)
@@ -278,7 +276,7 @@ struct ShoppingListView: View {
     private var emptyPlanState: some View {
         AppCard {
             VStack(alignment: .leading, spacing: 10) {
-                Text("Пока нет покупок")
+                Text("Покупок пока нет")
                     .font(.headline)
 
                 Text("Сначала сформируй план питания. Когда в плане появятся блюда, здесь автоматически отобразятся нужные ингредиенты.")
@@ -294,7 +292,7 @@ struct ShoppingListView: View {
                 Text("Ничего не найдено")
                     .font(.headline)
 
-                Text("Попробуй другой поисковый запрос, переключи фильтр или вернись ко всем позициям списка.")
+                Text("Попробуй изменить поисковый запрос, переключить фильтр или вернуться ко всем позициям списка.")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
@@ -304,7 +302,7 @@ struct ShoppingListView: View {
     private var listSubtitle: String {
         switch groupingMode {
         case .category:
-            return "Позиции сгруппированы по категориям продуктов, чтобы список было удобно использовать в магазине."
+            return "Позиции сгруппированы по категориям продуктов, чтобы списком было удобнее пользоваться в магазине."
         case .status:
             return "Позиции сгруппированы по статусу, чтобы быстрее увидеть, что ещё осталось купить."
         }
@@ -403,7 +401,8 @@ struct ShoppingListView: View {
     }
 
     private func formattedWeight(_ grams: Double) -> String {
-        let measurement: Measurement<UnitMass> = grams >= 1000
+        let measurement: Measurement<UnitMass> =
+            grams >= 1000
             ? Measurement(value: grams / 1000.0, unit: .kilograms)
             : Measurement(value: grams, unit: .grams)
 

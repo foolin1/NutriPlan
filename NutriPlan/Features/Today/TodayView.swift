@@ -40,7 +40,7 @@ struct TodayView: View {
                     if let adjustment {
                         SectionTitleView(
                             "Рекомендация на завтра",
-                            subtitle: "Корректировка следующего дня."
+                            subtitle: "Следующая цель с учётом сегодняшнего питания."
                         )
 
                         AppCard {
@@ -88,7 +88,16 @@ struct TodayView: View {
     }
 
     private var headerSection: some View {
-        EmptyView()
+        AppCard {
+            VStack(alignment: .leading, spacing: 10) {
+                Text("Питание на сегодня")
+                    .font(.title2.weight(.bold))
+
+                Text("Здесь можно быстро посмотреть цель дня, сравнить план и факт, открыть дневник и при необходимости обновить данные аккаунта.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
+        }
     }
 
     @ViewBuilder
@@ -100,13 +109,13 @@ struct TodayView: View {
     ) -> some View {
         SectionTitleView(
             "Сводка дня",
-            subtitle: "Ключевые показатели плана и факта."
+            subtitle: "Цель, запланированный рацион и фактическое питание за текущий день."
         )
 
         AppCard {
             VStack(alignment: .leading, spacing: 14) {
                 HStack {
-                    Text("Цель")
+                    Text("Дневная цель")
                         .font(.headline)
 
                     Spacer()
@@ -172,7 +181,7 @@ struct TodayView: View {
     ) -> some View {
         SectionTitleView(
             "Микронутриенты",
-            subtitle: "План, факт и текущий акцент."
+            subtitle: "План, факт и текущий приоритет по витаминам и минералам."
         )
 
         VStack(spacing: 12) {
@@ -191,7 +200,7 @@ struct TodayView: View {
         Group {
             SectionTitleView(
                 "Быстрые действия",
-                subtitle: "Основные сценарии текущего дня."
+                subtitle: "Переход к основным сценариям текущего дня."
             )
 
             LazyVGrid(columns: actionColumns, spacing: 12) {
@@ -201,7 +210,7 @@ struct TodayView: View {
                     QuickActionTile(
                         systemImage: "book.pages",
                         title: "Дневник",
-                        subtitle: "Записи за день"
+                        subtitle: "Записи за текущий день"
                     )
                 }
                 .buttonStyle(.plain)
@@ -212,7 +221,7 @@ struct TodayView: View {
                     QuickActionTile(
                         systemImage: "chart.bar.xaxis",
                         title: "План и факт",
-                        subtitle: "Сравнение за день"
+                        subtitle: "Сравнение за сегодня"
                     )
                 }
                 .buttonStyle(.plain)
@@ -223,7 +232,7 @@ struct TodayView: View {
                     QuickActionTile(
                         systemImage: "clock.arrow.circlepath",
                         title: "История",
-                        subtitle: "Прошлые дни"
+                        subtitle: "Прошлые дни и записи"
                     )
                 }
                 .buttonStyle(.plain)
@@ -234,7 +243,7 @@ struct TodayView: View {
                     QuickActionTile(
                         systemImage: "arrow.triangle.2.circlepath",
                         title: "Синхронизация",
-                        subtitle: "Обновить данные"
+                        subtitle: "Обновить сохранённые данные"
                     )
                 }
                 .buttonStyle(.plain)
@@ -246,7 +255,7 @@ struct TodayView: View {
     private func mealsSection(nutrientFocus: NutrientFocus) -> some View {
         SectionTitleView(
             "Блюда на сегодня",
-            subtitle: "Текущий набор блюд."
+            subtitle: "Текущий набор блюд, подобранных на день."
         )
 
         if vm.dayPlan.meals.isEmpty {
@@ -299,6 +308,7 @@ struct TodayView: View {
 
                 if let target = nutrient.targetPerDay {
                     Divider()
+
                     InfoValueRow(title: "Ориентир", value: amountText(target, nutrient: nutrient))
                     InfoValueRow(title: "Покрытие", value: progressText(actual: actual, target: target))
                 }

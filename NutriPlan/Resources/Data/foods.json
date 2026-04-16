@@ -1,78 +1,1490 @@
 [
-  { "id": "chicken_breast", "name": "Куриная грудка", "macrosPer100g": { "calories": 165, "protein": 31.0, "fat": 3.6, "carbs": 0.0 }, "nutrientsPer100g": { "iron": 1.0 }, "tags": ["meat"], "groups": ["poultry"], "allergens": [] },
-  { "id": "turkey_breast", "name": "Грудка индейки", "macrosPer100g": { "calories": 135, "protein": 29.0, "fat": 1.6, "carbs": 0.0 }, "nutrientsPer100g": { "iron": 1.2 }, "tags": ["meat"], "groups": ["poultry"], "allergens": [] },
-  { "id": "lean_beef", "name": "Говядина постная", "macrosPer100g": { "calories": 187, "protein": 26.0, "fat": 9.0, "carbs": 0.0 }, "nutrientsPer100g": { "iron": 2.6 }, "tags": ["meat"], "groups": ["red_meat"], "allergens": [] },
-  { "id": "veal", "name": "Телятина", "macrosPer100g": { "calories": 172, "protein": 24.0, "fat": 8.0, "carbs": 0.0 }, "nutrientsPer100g": { "iron": 1.1 }, "tags": ["meat"], "groups": ["red_meat"], "allergens": [] },
-
-  { "id": "salmon", "name": "Лосось", "macrosPer100g": { "calories": 208, "protein": 20.0, "fat": 13.0, "carbs": 0.0 }, "nutrientsPer100g": { "iron": 0.5 }, "tags": ["seafood"], "groups": ["seafood"], "allergens": ["fish"] },
-  { "id": "tuna", "name": "Тунец", "macrosPer100g": { "calories": 132, "protein": 29.0, "fat": 1.0, "carbs": 0.0 }, "nutrientsPer100g": { "iron": 1.3 }, "tags": ["seafood"], "groups": ["seafood"], "allergens": ["fish"] },
-  { "id": "cod", "name": "Треска", "macrosPer100g": { "calories": 82, "protein": 18.0, "fat": 0.7, "carbs": 0.0 }, "nutrientsPer100g": { "iron": 0.4 }, "tags": ["seafood"], "groups": ["seafood"], "allergens": ["fish"] },
-  { "id": "shrimp", "name": "Креветки", "macrosPer100g": { "calories": 99, "protein": 24.0, "fat": 0.3, "carbs": 0.2 }, "nutrientsPer100g": { "iron": 0.5 }, "tags": ["seafood"], "groups": ["seafood"], "allergens": ["shellfish"] },
-
-  { "id": "eggs", "name": "Яйца", "macrosPer100g": { "calories": 155, "protein": 13.0, "fat": 11.0, "carbs": 1.1 }, "nutrientsPer100g": { "iron": 1.8 }, "tags": ["egg"], "groups": ["eggs"], "allergens": ["eggs"] },
-  { "id": "egg_whites", "name": "Яичные белки", "macrosPer100g": { "calories": 52, "protein": 10.9, "fat": 0.2, "carbs": 0.7 }, "nutrientsPer100g": { "iron": 0.1 }, "tags": ["egg"], "groups": ["eggs"], "allergens": ["eggs"] },
-
-  { "id": "tofu", "name": "Тофу", "macrosPer100g": { "calories": 76, "protein": 8.0, "fat": 4.8, "carbs": 1.9 }, "nutrientsPer100g": { "iron": 1.6 }, "tags": ["legume", "vegan"], "groups": ["legumes"], "allergens": ["soy"] },
-  { "id": "tempeh", "name": "Темпе", "macrosPer100g": { "calories": 192, "protein": 20.0, "fat": 11.0, "carbs": 8.0 }, "nutrientsPer100g": { "iron": 2.7 }, "tags": ["legume", "vegan"], "groups": ["legumes"], "allergens": ["soy"] },
-  { "id": "seitan", "name": "Сейтан", "macrosPer100g": { "calories": 143, "protein": 25.0, "fat": 2.0, "carbs": 5.0 }, "nutrientsPer100g": { "iron": 1.2 }, "tags": ["vegan"], "groups": ["protein_alt"], "allergens": ["gluten"] },
-
-  { "id": "greek_yogurt", "name": "Греческий йогурт", "macrosPer100g": { "calories": 73, "protein": 10.0, "fat": 2.0, "carbs": 3.9 }, "nutrientsPer100g": { "iron": 0.1, "calcium": 110.0 }, "tags": ["dairy"], "groups": ["dairy"], "allergens": ["lactose"] },
-  { "id": "cottage_cheese", "name": "Творог", "macrosPer100g": { "calories": 98, "protein": 11.0, "fat": 4.3, "carbs": 3.4 }, "nutrientsPer100g": { "iron": 0.2, "calcium": 83.0 }, "tags": ["dairy"], "groups": ["dairy"], "allergens": ["lactose"] },
-  { "id": "milk", "name": "Молоко", "macrosPer100g": { "calories": 60, "protein": 3.2, "fat": 3.3, "carbs": 4.8 }, "nutrientsPer100g": { "calcium": 120.0 }, "tags": ["dairy"], "groups": ["dairy"], "allergens": ["lactose"] },
-  { "id": "kefir", "name": "Кефир", "macrosPer100g": { "calories": 52, "protein": 3.4, "fat": 2.0, "carbs": 4.7 }, "nutrientsPer100g": { "calcium": 120.0 }, "tags": ["dairy"], "groups": ["dairy"], "allergens": ["lactose"] },
-  { "id": "hard_cheese", "name": "Твёрдый сыр", "macrosPer100g": { "calories": 350, "protein": 25.0, "fat": 27.0, "carbs": 1.5 }, "nutrientsPer100g": { "calcium": 700.0 }, "tags": ["dairy"], "groups": ["dairy"], "allergens": ["lactose"] },
-
-  { "id": "oats", "name": "Овсяные хлопья", "macrosPer100g": { "calories": 389, "protein": 16.9, "fat": 6.9, "carbs": 66.3 }, "nutrientsPer100g": { "iron": 4.7, "magnesium": 177.0 }, "tags": ["grain", "vegan"], "groups": ["grain"], "allergens": ["gluten"] },
-  { "id": "rice", "name": "Рис (варёный)", "macrosPer100g": { "calories": 130, "protein": 2.7, "fat": 0.3, "carbs": 28.0 }, "nutrientsPer100g": { "iron": 0.2 }, "tags": ["grain", "vegan"], "groups": ["grain"], "allergens": [] },
-  { "id": "brown_rice", "name": "Бурый рис (варёный)", "macrosPer100g": { "calories": 123, "protein": 2.6, "fat": 1.0, "carbs": 25.6 }, "nutrientsPer100g": { "iron": 0.4 }, "tags": ["grain", "vegan"], "groups": ["grain"], "allergens": [] },
-  { "id": "quinoa", "name": "Киноа (варёная)", "macrosPer100g": { "calories": 120, "protein": 4.4, "fat": 1.9, "carbs": 21.3 }, "nutrientsPer100g": { "iron": 1.5, "magnesium": 64.0 }, "tags": ["grain", "vegan"], "groups": ["grain"], "allergens": [] },
-  { "id": "buckwheat", "name": "Гречка (варёная)", "macrosPer100g": { "calories": 110, "protein": 3.6, "fat": 1.3, "carbs": 21.0 }, "nutrientsPer100g": { "iron": 0.8 }, "tags": ["grain", "vegan"], "groups": ["grain"], "allergens": [] },
-  { "id": "wholegrain_pasta", "name": "Цельнозерновая паста (варёная)", "macrosPer100g": { "calories": 124, "protein": 5.0, "fat": 0.9, "carbs": 25.0 }, "nutrientsPer100g": { "iron": 1.1 }, "tags": ["grain"], "groups": ["grain"], "allergens": ["gluten"] },
-  { "id": "couscous", "name": "Кускус (варёный)", "macrosPer100g": { "calories": 112, "protein": 3.8, "fat": 0.2, "carbs": 23.2 }, "nutrientsPer100g": { "iron": 0.4 }, "tags": ["grain"], "groups": ["grain"], "allergens": ["gluten"] },
-  { "id": "bulgur", "name": "Булгур (варёный)", "macrosPer100g": { "calories": 83, "protein": 3.1, "fat": 0.2, "carbs": 18.6 }, "nutrientsPer100g": { "iron": 0.9 }, "tags": ["grain"], "groups": ["grain"], "allergens": ["gluten"] },
-  { "id": "potato", "name": "Картофель", "macrosPer100g": { "calories": 77, "protein": 2.0, "fat": 0.1, "carbs": 17.0 }, "nutrientsPer100g": { "vitamin_c": 19.7, "potassium": 425.0 }, "tags": ["grain", "vegan"], "groups": ["grain"], "allergens": [] },
-  { "id": "sweet_potato", "name": "Батат", "macrosPer100g": { "calories": 86, "protein": 1.6, "fat": 0.1, "carbs": 20.1 }, "nutrientsPer100g": { "vitamin_c": 2.4 }, "tags": ["grain", "vegan"], "groups": ["grain"], "allergens": [] },
-
-  { "id": "lentils", "name": "Чечевица (варёная)", "macrosPer100g": { "calories": 116, "protein": 9.0, "fat": 0.4, "carbs": 20.1 }, "nutrientsPer100g": { "iron": 3.3 }, "tags": ["legume", "vegan"], "groups": ["legumes"], "allergens": [] },
-  { "id": "chickpeas", "name": "Нут (варёный)", "macrosPer100g": { "calories": 164, "protein": 8.9, "fat": 2.6, "carbs": 27.4 }, "nutrientsPer100g": { "iron": 2.9 }, "tags": ["legume", "vegan"], "groups": ["legumes"], "allergens": [] },
-  { "id": "black_beans", "name": "Чёрная фасоль (варёная)", "macrosPer100g": { "calories": 132, "protein": 8.9, "fat": 0.5, "carbs": 23.7 }, "nutrientsPer100g": { "iron": 2.1 }, "tags": ["legume", "vegan"], "groups": ["legumes"], "allergens": [] },
-  { "id": "kidney_beans", "name": "Красная фасоль (варёная)", "macrosPer100g": { "calories": 127, "protein": 8.7, "fat": 0.5, "carbs": 22.8 }, "nutrientsPer100g": { "iron": 2.9 }, "tags": ["legume", "vegan"], "groups": ["legumes"], "allergens": [] },
-  { "id": "green_peas", "name": "Зелёный горошек", "macrosPer100g": { "calories": 81, "protein": 5.4, "fat": 0.4, "carbs": 14.5 }, "nutrientsPer100g": { "iron": 1.5, "vitamin_c": 40.0 }, "tags": ["legume", "vegan"], "groups": ["legumes"], "allergens": [] },
-
-  { "id": "banana", "name": "Банан", "macrosPer100g": { "calories": 89, "protein": 1.1, "fat": 0.3, "carbs": 22.8 }, "nutrientsPer100g": { "vitamin_c": 8.7, "potassium": 358.0 }, "tags": ["fruit", "vegan"], "groups": ["fruit"], "allergens": [] },
-  { "id": "apple", "name": "Яблоко", "macrosPer100g": { "calories": 52, "protein": 0.3, "fat": 0.2, "carbs": 14.0 }, "nutrientsPer100g": { "iron": 0.1, "vitamin_c": 4.6 }, "tags": ["fruit", "vegan"], "groups": ["fruit"], "allergens": [] },
-  { "id": "pear", "name": "Груша", "macrosPer100g": { "calories": 57, "protein": 0.4, "fat": 0.1, "carbs": 15.2 }, "nutrientsPer100g": { "vitamin_c": 4.3 }, "tags": ["fruit", "vegan"], "groups": ["fruit"], "allergens": [] },
-  { "id": "orange", "name": "Апельсин", "macrosPer100g": { "calories": 47, "protein": 0.9, "fat": 0.1, "carbs": 11.8 }, "nutrientsPer100g": { "vitamin_c": 53.2 }, "tags": ["fruit", "vegan", "citrus"], "groups": ["fruit", "citrus"], "allergens": [] },
-  { "id": "lemon", "name": "Лимон", "macrosPer100g": { "calories": 29, "protein": 1.1, "fat": 0.3, "carbs": 9.3 }, "nutrientsPer100g": { "vitamin_c": 53.0 }, "tags": ["fruit", "vegan", "citrus"], "groups": ["fruit", "citrus"], "allergens": [] },
-  { "id": "grapefruit", "name": "Грейпфрут", "macrosPer100g": { "calories": 42, "protein": 0.8, "fat": 0.1, "carbs": 10.7 }, "nutrientsPer100g": { "vitamin_c": 31.2 }, "tags": ["fruit", "vegan", "citrus"], "groups": ["fruit", "citrus"], "allergens": [] },
-  { "id": "kiwi", "name": "Киви", "macrosPer100g": { "calories": 61, "protein": 1.1, "fat": 0.5, "carbs": 14.7 }, "nutrientsPer100g": { "vitamin_c": 92.7 }, "tags": ["fruit", "vegan"], "groups": ["fruit"], "allergens": [] },
-  { "id": "blueberries", "name": "Черника", "macrosPer100g": { "calories": 57, "protein": 0.7, "fat": 0.3, "carbs": 14.5 }, "nutrientsPer100g": { "vitamin_c": 9.7 }, "tags": ["fruit", "vegan"], "groups": ["fruit", "berries"], "allergens": [] },
-  { "id": "strawberries", "name": "Клубника", "macrosPer100g": { "calories": 32, "protein": 0.7, "fat": 0.3, "carbs": 7.7 }, "nutrientsPer100g": { "vitamin_c": 58.8 }, "tags": ["fruit", "vegan"], "groups": ["fruit", "berries"], "allergens": [] },
-  { "id": "raspberries", "name": "Малина", "macrosPer100g": { "calories": 52, "protein": 1.2, "fat": 0.7, "carbs": 11.9 }, "nutrientsPer100g": { "vitamin_c": 26.2 }, "tags": ["fruit", "vegan"], "groups": ["fruit", "berries"], "allergens": [] },
-  { "id": "blackcurrant", "name": "Чёрная смородина", "macrosPer100g": { "calories": 63, "protein": 1.4, "fat": 0.4, "carbs": 15.4 }, "nutrientsPer100g": { "vitamin_c": 181.0 }, "tags": ["fruit", "vegan"], "groups": ["fruit", "berries"], "allergens": [] },
-  { "id": "avocado", "name": "Авокадо", "macrosPer100g": { "calories": 160, "protein": 2.0, "fat": 14.7, "carbs": 8.5 }, "nutrientsPer100g": { "vitamin_c": 10.0 }, "tags": ["fruit", "vegan"], "groups": ["fruit"], "allergens": [] },
-
-  { "id": "spinach", "name": "Шпинат", "macrosPer100g": { "calories": 23, "protein": 2.9, "fat": 0.4, "carbs": 3.6 }, "nutrientsPer100g": { "iron": 2.7, "vitamin_c": 28.0 }, "tags": ["vegetable", "vegan"], "groups": ["vegetable"], "allergens": [] },
-  { "id": "broccoli", "name": "Брокколи", "macrosPer100g": { "calories": 34, "protein": 2.8, "fat": 0.4, "carbs": 6.6 }, "nutrientsPer100g": { "iron": 0.7, "vitamin_c": 89.0 }, "tags": ["vegetable", "vegan"], "groups": ["vegetable"], "allergens": [] },
-  { "id": "tomato", "name": "Томат", "macrosPer100g": { "calories": 18, "protein": 0.9, "fat": 0.2, "carbs": 3.9 }, "nutrientsPer100g": { "vitamin_c": 13.7 }, "tags": ["vegetable", "vegan"], "groups": ["vegetable"], "allergens": [] },
-  { "id": "cucumber", "name": "Огурец", "macrosPer100g": { "calories": 15, "protein": 0.7, "fat": 0.1, "carbs": 3.6 }, "nutrientsPer100g": { "vitamin_c": 2.8 }, "tags": ["vegetable", "vegan"], "groups": ["vegetable"], "allergens": [] },
-  { "id": "bell_pepper", "name": "Болгарский перец", "macrosPer100g": { "calories": 31, "protein": 1.0, "fat": 0.3, "carbs": 6.0 }, "nutrientsPer100g": { "vitamin_c": 127.7 }, "tags": ["vegetable", "vegan"], "groups": ["vegetable"], "allergens": [] },
-  { "id": "zucchini", "name": "Кабачок", "macrosPer100g": { "calories": 17, "protein": 1.2, "fat": 0.3, "carbs": 3.1 }, "nutrientsPer100g": { "vitamin_c": 17.9 }, "tags": ["vegetable", "vegan"], "groups": ["vegetable"], "allergens": [] },
-  { "id": "carrot", "name": "Морковь", "macrosPer100g": { "calories": 41, "protein": 0.9, "fat": 0.2, "carbs": 9.6 }, "nutrientsPer100g": { "vitamin_c": 5.9 }, "tags": ["vegetable", "vegan"], "groups": ["vegetable"], "allergens": [] },
-  { "id": "beetroot", "name": "Свёкла", "macrosPer100g": { "calories": 43, "protein": 1.6, "fat": 0.2, "carbs": 10.0 }, "nutrientsPer100g": { "iron": 0.8, "vitamin_c": 4.9 }, "tags": ["vegetable", "vegan"], "groups": ["vegetable"], "allergens": [] },
-  { "id": "cauliflower", "name": "Цветная капуста", "macrosPer100g": { "calories": 25, "protein": 1.9, "fat": 0.3, "carbs": 5.0 }, "nutrientsPer100g": { "vitamin_c": 48.2 }, "tags": ["vegetable", "vegan"], "groups": ["vegetable"], "allergens": [] },
-  { "id": "mushrooms", "name": "Шампиньоны", "macrosPer100g": { "calories": 22, "protein": 3.1, "fat": 0.3, "carbs": 3.3 }, "nutrientsPer100g": { "iron": 0.5 }, "tags": ["vegetable", "vegan"], "groups": ["vegetable"], "allergens": [] },
-  { "id": "onion", "name": "Лук", "macrosPer100g": { "calories": 40, "protein": 1.1, "fat": 0.1, "carbs": 9.3 }, "nutrientsPer100g": { "vitamin_c": 7.4 }, "tags": ["vegetable", "vegan"], "groups": ["vegetable"], "allergens": [] },
-
-  { "id": "pumpkin_seeds", "name": "Тыквенные семечки", "macrosPer100g": { "calories": 559, "protein": 30.2, "fat": 49.0, "carbs": 10.7 }, "nutrientsPer100g": { "iron": 8.8, "magnesium": 592.0 }, "tags": ["seed", "vegan"], "groups": ["seeds"], "allergens": [] },
-  { "id": "chia_seeds", "name": "Семена чиа", "macrosPer100g": { "calories": 486, "protein": 16.5, "fat": 30.7, "carbs": 42.1 }, "nutrientsPer100g": { "calcium": 631.0, "iron": 7.7 }, "tags": ["seed", "vegan"], "groups": ["seeds"], "allergens": [] },
-  { "id": "flax_seeds", "name": "Семена льна", "macrosPer100g": { "calories": 534, "protein": 18.3, "fat": 42.2, "carbs": 28.9 }, "nutrientsPer100g": { "iron": 5.7 }, "tags": ["seed", "vegan"], "groups": ["seeds"], "allergens": [] },
-
-  { "id": "almonds", "name": "Миндаль", "macrosPer100g": { "calories": 579, "protein": 21.2, "fat": 49.9, "carbs": 21.6 }, "nutrientsPer100g": { "iron": 3.7, "calcium": 269.0 }, "tags": ["nut", "vegan"], "groups": ["nuts"], "allergens": ["nuts"] },
-  { "id": "walnuts", "name": "Грецкий орех", "macrosPer100g": { "calories": 654, "protein": 15.2, "fat": 65.2, "carbs": 13.7 }, "nutrientsPer100g": { "iron": 2.9 }, "tags": ["nut", "vegan"], "groups": ["nuts"], "allergens": ["nuts"] },
-  { "id": "cashews", "name": "Кешью", "macrosPer100g": { "calories": 553, "protein": 18.2, "fat": 43.8, "carbs": 30.2 }, "nutrientsPer100g": { "iron": 6.7 }, "tags": ["nut", "vegan"], "groups": ["nuts"], "allergens": ["nuts"] },
-  { "id": "peanut_butter", "name": "Арахисовая паста", "macrosPer100g": { "calories": 588, "protein": 25.0, "fat": 50.0, "carbs": 20.0 }, "nutrientsPer100g": { "iron": 1.9 }, "tags": ["nut", "vegan"], "groups": ["nuts"], "allergens": ["nuts"] },
-
-  { "id": "olive_oil", "name": "Оливковое масло", "macrosPer100g": { "calories": 884, "protein": 0.0, "fat": 100.0, "carbs": 0.0 }, "nutrientsPer100g": {}, "tags": ["fat", "vegan"], "groups": ["oil"], "allergens": [] },
-  { "id": "butter", "name": "Сливочное масло", "macrosPer100g": { "calories": 717, "protein": 0.9, "fat": 81.1, "carbs": 0.1 }, "nutrientsPer100g": { "vitamin_a": 684.0 }, "tags": ["fat"], "groups": ["dairy"], "allergens": ["lactose"] }
+  {
+    "id": "chicken_breast",
+    "name": "Куриная грудка",
+    "macrosPer100g": {
+      "calories": 165,
+      "protein": 31.0,
+      "fat": 3.6,
+      "carbs": 0.0
+    },
+    "nutrientsPer100g": {
+      "iron": 1.0
+    },
+    "tags": [
+      "meat",
+      "high_protein"
+    ],
+    "groups": [
+      "poultry"
+    ],
+    "allergens": []
+  },
+  {
+    "id": "turkey_breast",
+    "name": "Грудка индейки",
+    "macrosPer100g": {
+      "calories": 135,
+      "protein": 29.0,
+      "fat": 1.6,
+      "carbs": 0.0
+    },
+    "nutrientsPer100g": {
+      "iron": 1.2
+    },
+    "tags": [
+      "meat",
+      "high_protein"
+    ],
+    "groups": [
+      "poultry"
+    ],
+    "allergens": []
+  },
+  {
+    "id": "lean_beef",
+    "name": "Говядина постная",
+    "macrosPer100g": {
+      "calories": 187,
+      "protein": 26.0,
+      "fat": 9.0,
+      "carbs": 0.0
+    },
+    "nutrientsPer100g": {
+      "iron": 2.6
+    },
+    "tags": [
+      "meat"
+    ],
+    "groups": [
+      "red_meat"
+    ],
+    "allergens": []
+  },
+  {
+    "id": "veal",
+    "name": "Телятина",
+    "macrosPer100g": {
+      "calories": 172,
+      "protein": 24.0,
+      "fat": 8.0,
+      "carbs": 0.0
+    },
+    "nutrientsPer100g": {
+      "iron": 1.1
+    },
+    "tags": [
+      "meat"
+    ],
+    "groups": [
+      "red_meat"
+    ],
+    "allergens": []
+  },
+  {
+    "id": "salmon",
+    "name": "Лосось",
+    "macrosPer100g": {
+      "calories": 208,
+      "protein": 20.0,
+      "fat": 13.0,
+      "carbs": 0.0
+    },
+    "nutrientsPer100g": {
+      "iron": 0.5
+    },
+    "tags": [
+      "seafood"
+    ],
+    "groups": [
+      "seafood"
+    ],
+    "allergens": [
+      "fish"
+    ]
+  },
+  {
+    "id": "tuna",
+    "name": "Тунец",
+    "macrosPer100g": {
+      "calories": 132,
+      "protein": 29.0,
+      "fat": 1.0,
+      "carbs": 0.0
+    },
+    "nutrientsPer100g": {
+      "iron": 1.3
+    },
+    "tags": [
+      "seafood",
+      "high_protein"
+    ],
+    "groups": [
+      "seafood"
+    ],
+    "allergens": [
+      "fish"
+    ]
+  },
+  {
+    "id": "cod",
+    "name": "Треска",
+    "macrosPer100g": {
+      "calories": 82,
+      "protein": 18.0,
+      "fat": 0.7,
+      "carbs": 0.0
+    },
+    "nutrientsPer100g": {
+      "iron": 0.4
+    },
+    "tags": [
+      "seafood"
+    ],
+    "groups": [
+      "seafood"
+    ],
+    "allergens": [
+      "fish"
+    ]
+  },
+  {
+    "id": "shrimp",
+    "name": "Креветки",
+    "macrosPer100g": {
+      "calories": 99,
+      "protein": 24.0,
+      "fat": 0.3,
+      "carbs": 0.2
+    },
+    "nutrientsPer100g": {
+      "iron": 0.5
+    },
+    "tags": [
+      "seafood"
+    ],
+    "groups": [
+      "seafood"
+    ],
+    "allergens": [
+      "shellfish"
+    ]
+  },
+  {
+    "id": "eggs",
+    "name": "Яйца",
+    "macrosPer100g": {
+      "calories": 155,
+      "protein": 13.0,
+      "fat": 11.0,
+      "carbs": 1.1
+    },
+    "nutrientsPer100g": {
+      "iron": 1.8
+    },
+    "tags": [
+      "egg"
+    ],
+    "groups": [
+      "eggs"
+    ],
+    "allergens": [
+      "eggs"
+    ]
+  },
+  {
+    "id": "egg_whites",
+    "name": "Яичные белки",
+    "macrosPer100g": {
+      "calories": 52,
+      "protein": 10.9,
+      "fat": 0.2,
+      "carbs": 0.7
+    },
+    "nutrientsPer100g": {
+      "iron": 0.1
+    },
+    "tags": [
+      "egg",
+      "high_protein"
+    ],
+    "groups": [
+      "eggs"
+    ],
+    "allergens": [
+      "eggs"
+    ]
+  },
+  {
+    "id": "quail_eggs",
+    "name": "Перепелиные яйца",
+    "macrosPer100g": {
+      "calories": 158,
+      "protein": 13.0,
+      "fat": 11.0,
+      "carbs": 0.4
+    },
+    "nutrientsPer100g": {
+      "iron": 3.5
+    },
+    "tags": [
+      "egg",
+      "high_protein"
+    ],
+    "groups": [
+      "eggs"
+    ],
+    "allergens": [
+      "eggs"
+    ]
+  },
+  {
+    "id": "tofu",
+    "name": "Тофу",
+    "macrosPer100g": {
+      "calories": 76,
+      "protein": 8.0,
+      "fat": 4.8,
+      "carbs": 1.9
+    },
+    "nutrientsPer100g": {
+      "iron": 1.6
+    },
+    "tags": [
+      "vegan",
+      "high_protein"
+    ],
+    "groups": [
+      "protein_alt"
+    ],
+    "allergens": [
+      "soy"
+    ]
+  },
+  {
+    "id": "tempeh",
+    "name": "Темпе",
+    "macrosPer100g": {
+      "calories": 192,
+      "protein": 20.0,
+      "fat": 11.0,
+      "carbs": 8.0
+    },
+    "nutrientsPer100g": {
+      "iron": 2.7
+    },
+    "tags": [
+      "vegan",
+      "high_protein"
+    ],
+    "groups": [
+      "protein_alt"
+    ],
+    "allergens": [
+      "soy"
+    ]
+  },
+  {
+    "id": "seitan",
+    "name": "Сейтан",
+    "macrosPer100g": {
+      "calories": 143,
+      "protein": 25.0,
+      "fat": 2.0,
+      "carbs": 5.0
+    },
+    "nutrientsPer100g": {
+      "iron": 1.2
+    },
+    "tags": [
+      "vegan",
+      "high_protein"
+    ],
+    "groups": [
+      "protein_alt"
+    ],
+    "allergens": [
+      "gluten"
+    ]
+  },
+  {
+    "id": "greek_yogurt",
+    "name": "Греческий йогурт",
+    "macrosPer100g": {
+      "calories": 73,
+      "protein": 10.0,
+      "fat": 2.0,
+      "carbs": 3.9
+    },
+    "nutrientsPer100g": {
+      "iron": 0.1,
+      "calcium": 110.0
+    },
+    "tags": [
+      "dairy",
+      "high_protein"
+    ],
+    "groups": [
+      "dairy"
+    ],
+    "allergens": [
+      "lactose"
+    ]
+  },
+  {
+    "id": "cottage_cheese",
+    "name": "Творог",
+    "macrosPer100g": {
+      "calories": 98,
+      "protein": 11.0,
+      "fat": 4.3,
+      "carbs": 3.4
+    },
+    "nutrientsPer100g": {
+      "iron": 0.2,
+      "calcium": 83.0
+    },
+    "tags": [
+      "dairy",
+      "high_protein"
+    ],
+    "groups": [
+      "dairy"
+    ],
+    "allergens": [
+      "lactose"
+    ]
+  },
+  {
+    "id": "milk",
+    "name": "Молоко",
+    "macrosPer100g": {
+      "calories": 60,
+      "protein": 3.2,
+      "fat": 3.3,
+      "carbs": 4.8
+    },
+    "nutrientsPer100g": {
+      "calcium": 120.0
+    },
+    "tags": [
+      "dairy"
+    ],
+    "groups": [
+      "dairy"
+    ],
+    "allergens": [
+      "lactose"
+    ]
+  },
+  {
+    "id": "kefir",
+    "name": "Кефир",
+    "macrosPer100g": {
+      "calories": 52,
+      "protein": 3.4,
+      "fat": 2.0,
+      "carbs": 4.7
+    },
+    "nutrientsPer100g": {
+      "calcium": 120.0
+    },
+    "tags": [
+      "dairy"
+    ],
+    "groups": [
+      "dairy"
+    ],
+    "allergens": [
+      "lactose"
+    ]
+  },
+  {
+    "id": "hard_cheese",
+    "name": "Твёрдый сыр",
+    "macrosPer100g": {
+      "calories": 350,
+      "protein": 25.0,
+      "fat": 27.0,
+      "carbs": 1.5
+    },
+    "nutrientsPer100g": {
+      "calcium": 700.0
+    },
+    "tags": [
+      "dairy"
+    ],
+    "groups": [
+      "dairy"
+    ],
+    "allergens": [
+      "lactose"
+    ]
+  },
+  {
+    "id": "oats",
+    "name": "Овсяные хлопья",
+    "macrosPer100g": {
+      "calories": 389,
+      "protein": 16.9,
+      "fat": 6.9,
+      "carbs": 66.3
+    },
+    "nutrientsPer100g": {
+      "iron": 4.7,
+      "magnesium": 177.0
+    },
+    "tags": [
+      "grain",
+      "vegan"
+    ],
+    "groups": [
+      "grain"
+    ],
+    "allergens": [
+      "gluten"
+    ]
+  },
+  {
+    "id": "rice",
+    "name": "Рис (варёный)",
+    "macrosPer100g": {
+      "calories": 130,
+      "protein": 2.7,
+      "fat": 0.3,
+      "carbs": 28.0
+    },
+    "nutrientsPer100g": {
+      "iron": 0.2
+    },
+    "tags": [
+      "grain",
+      "vegan"
+    ],
+    "groups": [
+      "grain"
+    ],
+    "allergens": []
+  },
+  {
+    "id": "brown_rice",
+    "name": "Бурый рис (варёный)",
+    "macrosPer100g": {
+      "calories": 123,
+      "protein": 2.6,
+      "fat": 1.0,
+      "carbs": 25.6
+    },
+    "nutrientsPer100g": {
+      "iron": 0.4
+    },
+    "tags": [
+      "grain",
+      "vegan"
+    ],
+    "groups": [
+      "grain"
+    ],
+    "allergens": []
+  },
+  {
+    "id": "quinoa",
+    "name": "Киноа (варёная)",
+    "macrosPer100g": {
+      "calories": 120,
+      "protein": 4.4,
+      "fat": 1.9,
+      "carbs": 21.3
+    },
+    "nutrientsPer100g": {
+      "iron": 1.5,
+      "magnesium": 64.0
+    },
+    "tags": [
+      "grain",
+      "vegan"
+    ],
+    "groups": [
+      "grain"
+    ],
+    "allergens": []
+  },
+  {
+    "id": "buckwheat",
+    "name": "Гречка (варёная)",
+    "macrosPer100g": {
+      "calories": 110,
+      "protein": 3.6,
+      "fat": 1.3,
+      "carbs": 21.0
+    },
+    "nutrientsPer100g": {
+      "iron": 0.8
+    },
+    "tags": [
+      "grain",
+      "vegan"
+    ],
+    "groups": [
+      "grain"
+    ],
+    "allergens": []
+  },
+  {
+    "id": "wholegrain_pasta",
+    "name": "Цельнозерновая паста (варёная)",
+    "macrosPer100g": {
+      "calories": 124,
+      "protein": 5.0,
+      "fat": 0.9,
+      "carbs": 25.0
+    },
+    "nutrientsPer100g": {
+      "iron": 1.1
+    },
+    "tags": [
+      "grain"
+    ],
+    "groups": [
+      "grain"
+    ],
+    "allergens": [
+      "gluten"
+    ]
+  },
+  {
+    "id": "couscous",
+    "name": "Кускус (варёный)",
+    "macrosPer100g": {
+      "calories": 112,
+      "protein": 3.8,
+      "fat": 0.2,
+      "carbs": 23.2
+    },
+    "nutrientsPer100g": {
+      "iron": 0.4
+    },
+    "tags": [
+      "grain"
+    ],
+    "groups": [
+      "grain"
+    ],
+    "allergens": [
+      "gluten"
+    ]
+  },
+  {
+    "id": "bulgur",
+    "name": "Булгур (варёный)",
+    "macrosPer100g": {
+      "calories": 83,
+      "protein": 3.1,
+      "fat": 0.2,
+      "carbs": 18.6
+    },
+    "nutrientsPer100g": {
+      "iron": 0.9
+    },
+    "tags": [
+      "grain"
+    ],
+    "groups": [
+      "grain"
+    ],
+    "allergens": [
+      "gluten"
+    ]
+  },
+  {
+    "id": "potato",
+    "name": "Картофель",
+    "macrosPer100g": {
+      "calories": 77,
+      "protein": 2.0,
+      "fat": 0.1,
+      "carbs": 17.0
+    },
+    "nutrientsPer100g": {
+      "vitamin_c": 19.7,
+      "potassium": 425.0
+    },
+    "tags": [
+      "grain",
+      "vegan"
+    ],
+    "groups": [
+      "grain"
+    ],
+    "allergens": []
+  },
+  {
+    "id": "sweet_potato",
+    "name": "Батат",
+    "macrosPer100g": {
+      "calories": 86,
+      "protein": 1.6,
+      "fat": 0.1,
+      "carbs": 20.1
+    },
+    "nutrientsPer100g": {
+      "vitamin_c": 2.4
+    },
+    "tags": [
+      "grain",
+      "vegan"
+    ],
+    "groups": [
+      "grain"
+    ],
+    "allergens": []
+  },
+  {
+    "id": "lentils",
+    "name": "Чечевица (варёная)",
+    "macrosPer100g": {
+      "calories": 116,
+      "protein": 9.0,
+      "fat": 0.4,
+      "carbs": 20.1
+    },
+    "nutrientsPer100g": {
+      "iron": 3.3
+    },
+    "tags": [
+      "legume",
+      "vegan"
+    ],
+    "groups": [
+      "legumes"
+    ],
+    "allergens": []
+  },
+  {
+    "id": "chickpeas",
+    "name": "Нут (варёный)",
+    "macrosPer100g": {
+      "calories": 164,
+      "protein": 8.9,
+      "fat": 2.6,
+      "carbs": 27.4
+    },
+    "nutrientsPer100g": {
+      "iron": 2.9
+    },
+    "tags": [
+      "legume",
+      "vegan"
+    ],
+    "groups": [
+      "legumes"
+    ],
+    "allergens": []
+  },
+  {
+    "id": "black_beans",
+    "name": "Чёрная фасоль (варёная)",
+    "macrosPer100g": {
+      "calories": 132,
+      "protein": 8.9,
+      "fat": 0.5,
+      "carbs": 23.7
+    },
+    "nutrientsPer100g": {
+      "iron": 2.1
+    },
+    "tags": [
+      "legume",
+      "vegan"
+    ],
+    "groups": [
+      "legumes"
+    ],
+    "allergens": []
+  },
+  {
+    "id": "kidney_beans",
+    "name": "Красная фасоль (варёная)",
+    "macrosPer100g": {
+      "calories": 127,
+      "protein": 8.7,
+      "fat": 0.5,
+      "carbs": 22.8
+    },
+    "nutrientsPer100g": {
+      "iron": 2.9
+    },
+    "tags": [
+      "legume",
+      "vegan"
+    ],
+    "groups": [
+      "legumes"
+    ],
+    "allergens": []
+  },
+  {
+    "id": "green_peas",
+    "name": "Зелёный горошек",
+    "macrosPer100g": {
+      "calories": 81,
+      "protein": 5.4,
+      "fat": 0.4,
+      "carbs": 14.5
+    },
+    "nutrientsPer100g": {
+      "iron": 1.5,
+      "vitamin_c": 40.0
+    },
+    "tags": [
+      "legume",
+      "vegan"
+    ],
+    "groups": [
+      "legumes"
+    ],
+    "allergens": []
+  },
+  {
+    "id": "banana",
+    "name": "Банан",
+    "macrosPer100g": {
+      "calories": 89,
+      "protein": 1.1,
+      "fat": 0.3,
+      "carbs": 22.8
+    },
+    "nutrientsPer100g": {
+      "vitamin_c": 8.7,
+      "potassium": 358.0
+    },
+    "tags": [
+      "fruit",
+      "vegan"
+    ],
+    "groups": [
+      "fruit"
+    ],
+    "allergens": []
+  },
+  {
+    "id": "apple",
+    "name": "Яблоко",
+    "macrosPer100g": {
+      "calories": 52,
+      "protein": 0.3,
+      "fat": 0.2,
+      "carbs": 14.0
+    },
+    "nutrientsPer100g": {
+      "iron": 0.1,
+      "vitamin_c": 4.6
+    },
+    "tags": [
+      "fruit",
+      "vegan"
+    ],
+    "groups": [
+      "fruit"
+    ],
+    "allergens": []
+  },
+  {
+    "id": "pear",
+    "name": "Груша",
+    "macrosPer100g": {
+      "calories": 57,
+      "protein": 0.4,
+      "fat": 0.1,
+      "carbs": 15.2
+    },
+    "nutrientsPer100g": {
+      "vitamin_c": 4.3
+    },
+    "tags": [
+      "fruit",
+      "vegan"
+    ],
+    "groups": [
+      "fruit"
+    ],
+    "allergens": []
+  },
+  {
+    "id": "orange",
+    "name": "Апельсин",
+    "macrosPer100g": {
+      "calories": 47,
+      "protein": 0.9,
+      "fat": 0.1,
+      "carbs": 11.8
+    },
+    "nutrientsPer100g": {
+      "vitamin_c": 53.2
+    },
+    "tags": [
+      "fruit",
+      "vegan",
+      "citrus"
+    ],
+    "groups": [
+      "fruit",
+      "citrus"
+    ],
+    "allergens": []
+  },
+  {
+    "id": "lemon",
+    "name": "Лимон",
+    "macrosPer100g": {
+      "calories": 29,
+      "protein": 1.1,
+      "fat": 0.3,
+      "carbs": 9.3
+    },
+    "nutrientsPer100g": {
+      "vitamin_c": 53.0
+    },
+    "tags": [
+      "fruit",
+      "vegan",
+      "citrus"
+    ],
+    "groups": [
+      "fruit",
+      "citrus"
+    ],
+    "allergens": []
+  },
+  {
+    "id": "grapefruit",
+    "name": "Грейпфрут",
+    "macrosPer100g": {
+      "calories": 42,
+      "protein": 0.8,
+      "fat": 0.1,
+      "carbs": 10.7
+    },
+    "nutrientsPer100g": {
+      "vitamin_c": 31.2
+    },
+    "tags": [
+      "fruit",
+      "vegan",
+      "citrus"
+    ],
+    "groups": [
+      "fruit",
+      "citrus"
+    ],
+    "allergens": []
+  },
+  {
+    "id": "kiwi",
+    "name": "Киви",
+    "macrosPer100g": {
+      "calories": 61,
+      "protein": 1.1,
+      "fat": 0.5,
+      "carbs": 14.7
+    },
+    "nutrientsPer100g": {
+      "vitamin_c": 92.7
+    },
+    "tags": [
+      "fruit",
+      "vegan"
+    ],
+    "groups": [
+      "fruit"
+    ],
+    "allergens": []
+  },
+  {
+    "id": "blueberries",
+    "name": "Черника",
+    "macrosPer100g": {
+      "calories": 57,
+      "protein": 0.7,
+      "fat": 0.3,
+      "carbs": 14.5
+    },
+    "nutrientsPer100g": {
+      "vitamin_c": 9.7
+    },
+    "tags": [
+      "fruit",
+      "vegan"
+    ],
+    "groups": [
+      "fruit",
+      "berries"
+    ],
+    "allergens": []
+  },
+  {
+    "id": "strawberries",
+    "name": "Клубника",
+    "macrosPer100g": {
+      "calories": 32,
+      "protein": 0.7,
+      "fat": 0.3,
+      "carbs": 7.7
+    },
+    "nutrientsPer100g": {
+      "vitamin_c": 58.8
+    },
+    "tags": [
+      "fruit",
+      "vegan"
+    ],
+    "groups": [
+      "fruit",
+      "berries"
+    ],
+    "allergens": []
+  },
+  {
+    "id": "raspberries",
+    "name": "Малина",
+    "macrosPer100g": {
+      "calories": 52,
+      "protein": 1.2,
+      "fat": 0.7,
+      "carbs": 11.9
+    },
+    "nutrientsPer100g": {
+      "vitamin_c": 26.2
+    },
+    "tags": [
+      "fruit",
+      "vegan"
+    ],
+    "groups": [
+      "fruit",
+      "berries"
+    ],
+    "allergens": []
+  },
+  {
+    "id": "blackcurrant",
+    "name": "Чёрная смородина",
+    "macrosPer100g": {
+      "calories": 63,
+      "protein": 1.4,
+      "fat": 0.4,
+      "carbs": 15.4
+    },
+    "nutrientsPer100g": {
+      "vitamin_c": 181.0
+    },
+    "tags": [
+      "fruit",
+      "vegan"
+    ],
+    "groups": [
+      "fruit",
+      "berries"
+    ],
+    "allergens": []
+  },
+  {
+    "id": "avocado",
+    "name": "Авокадо",
+    "macrosPer100g": {
+      "calories": 160,
+      "protein": 2.0,
+      "fat": 14.7,
+      "carbs": 8.5
+    },
+    "nutrientsPer100g": {
+      "vitamin_c": 10.0
+    },
+    "tags": [
+      "fruit",
+      "vegan"
+    ],
+    "groups": [
+      "fruit"
+    ],
+    "allergens": []
+  },
+  {
+    "id": "spinach",
+    "name": "Шпинат",
+    "macrosPer100g": {
+      "calories": 23,
+      "protein": 2.9,
+      "fat": 0.4,
+      "carbs": 3.6
+    },
+    "nutrientsPer100g": {
+      "iron": 2.7,
+      "vitamin_c": 28.0
+    },
+    "tags": [
+      "vegetable",
+      "vegan"
+    ],
+    "groups": [
+      "vegetable"
+    ],
+    "allergens": []
+  },
+  {
+    "id": "broccoli",
+    "name": "Брокколи",
+    "macrosPer100g": {
+      "calories": 34,
+      "protein": 2.8,
+      "fat": 0.4,
+      "carbs": 6.6
+    },
+    "nutrientsPer100g": {
+      "iron": 0.7,
+      "vitamin_c": 89.0
+    },
+    "tags": [
+      "vegetable",
+      "vegan"
+    ],
+    "groups": [
+      "vegetable"
+    ],
+    "allergens": []
+  },
+  {
+    "id": "tomato",
+    "name": "Томат",
+    "macrosPer100g": {
+      "calories": 18,
+      "protein": 0.9,
+      "fat": 0.2,
+      "carbs": 3.9
+    },
+    "nutrientsPer100g": {
+      "vitamin_c": 13.7
+    },
+    "tags": [
+      "vegetable",
+      "vegan"
+    ],
+    "groups": [
+      "vegetable"
+    ],
+    "allergens": []
+  },
+  {
+    "id": "cucumber",
+    "name": "Огурец",
+    "macrosPer100g": {
+      "calories": 15,
+      "protein": 0.7,
+      "fat": 0.1,
+      "carbs": 3.6
+    },
+    "nutrientsPer100g": {
+      "vitamin_c": 2.8
+    },
+    "tags": [
+      "vegetable",
+      "vegan"
+    ],
+    "groups": [
+      "vegetable"
+    ],
+    "allergens": []
+  },
+  {
+    "id": "bell_pepper",
+    "name": "Болгарский перец",
+    "macrosPer100g": {
+      "calories": 31,
+      "protein": 1.0,
+      "fat": 0.3,
+      "carbs": 6.0
+    },
+    "nutrientsPer100g": {
+      "vitamin_c": 127.7
+    },
+    "tags": [
+      "vegetable",
+      "vegan"
+    ],
+    "groups": [
+      "vegetable"
+    ],
+    "allergens": []
+  },
+  {
+    "id": "zucchini",
+    "name": "Кабачок",
+    "macrosPer100g": {
+      "calories": 17,
+      "protein": 1.2,
+      "fat": 0.3,
+      "carbs": 3.1
+    },
+    "nutrientsPer100g": {
+      "vitamin_c": 17.9
+    },
+    "tags": [
+      "vegetable",
+      "vegan"
+    ],
+    "groups": [
+      "vegetable"
+    ],
+    "allergens": []
+  },
+  {
+    "id": "carrot",
+    "name": "Морковь",
+    "macrosPer100g": {
+      "calories": 41,
+      "protein": 0.9,
+      "fat": 0.2,
+      "carbs": 9.6
+    },
+    "nutrientsPer100g": {
+      "vitamin_c": 5.9
+    },
+    "tags": [
+      "vegetable",
+      "vegan"
+    ],
+    "groups": [
+      "vegetable"
+    ],
+    "allergens": []
+  },
+  {
+    "id": "beetroot",
+    "name": "Свёкла",
+    "macrosPer100g": {
+      "calories": 43,
+      "protein": 1.6,
+      "fat": 0.2,
+      "carbs": 10.0
+    },
+    "nutrientsPer100g": {
+      "iron": 0.8,
+      "vitamin_c": 4.9
+    },
+    "tags": [
+      "vegetable",
+      "vegan"
+    ],
+    "groups": [
+      "vegetable"
+    ],
+    "allergens": []
+  },
+  {
+    "id": "cauliflower",
+    "name": "Цветная капуста",
+    "macrosPer100g": {
+      "calories": 25,
+      "protein": 1.9,
+      "fat": 0.3,
+      "carbs": 5.0
+    },
+    "nutrientsPer100g": {
+      "vitamin_c": 48.2
+    },
+    "tags": [
+      "vegetable",
+      "vegan"
+    ],
+    "groups": [
+      "vegetable"
+    ],
+    "allergens": []
+  },
+  {
+    "id": "mushrooms",
+    "name": "Шампиньоны",
+    "macrosPer100g": {
+      "calories": 22,
+      "protein": 3.1,
+      "fat": 0.3,
+      "carbs": 3.3
+    },
+    "nutrientsPer100g": {
+      "iron": 0.5
+    },
+    "tags": [
+      "vegetable",
+      "vegan"
+    ],
+    "groups": [
+      "vegetable"
+    ],
+    "allergens": []
+  },
+  {
+    "id": "onion",
+    "name": "Лук",
+    "macrosPer100g": {
+      "calories": 40,
+      "protein": 1.1,
+      "fat": 0.1,
+      "carbs": 9.3
+    },
+    "nutrientsPer100g": {
+      "vitamin_c": 7.4
+    },
+    "tags": [
+      "vegetable",
+      "vegan"
+    ],
+    "groups": [
+      "vegetable"
+    ],
+    "allergens": []
+  },
+  {
+    "id": "pumpkin_seeds",
+    "name": "Тыквенные семечки",
+    "macrosPer100g": {
+      "calories": 559,
+      "protein": 30.2,
+      "fat": 49.0,
+      "carbs": 10.7
+    },
+    "nutrientsPer100g": {
+      "iron": 8.8,
+      "magnesium": 592.0
+    },
+    "tags": [
+      "seed",
+      "vegan"
+    ],
+    "groups": [
+      "seeds"
+    ],
+    "allergens": []
+  },
+  {
+    "id": "chia_seeds",
+    "name": "Семена чиа",
+    "macrosPer100g": {
+      "calories": 486,
+      "protein": 16.5,
+      "fat": 30.7,
+      "carbs": 42.1
+    },
+    "nutrientsPer100g": {
+      "calcium": 631.0,
+      "iron": 7.7
+    },
+    "tags": [
+      "seed",
+      "vegan"
+    ],
+    "groups": [
+      "seeds"
+    ],
+    "allergens": []
+  },
+  {
+    "id": "flax_seeds",
+    "name": "Семена льна",
+    "macrosPer100g": {
+      "calories": 534,
+      "protein": 18.3,
+      "fat": 42.2,
+      "carbs": 28.9
+    },
+    "nutrientsPer100g": {
+      "iron": 5.7
+    },
+    "tags": [
+      "seed",
+      "vegan"
+    ],
+    "groups": [
+      "seeds"
+    ],
+    "allergens": []
+  },
+  {
+    "id": "almonds",
+    "name": "Миндаль",
+    "macrosPer100g": {
+      "calories": 579,
+      "protein": 21.2,
+      "fat": 49.9,
+      "carbs": 21.6
+    },
+    "nutrientsPer100g": {
+      "iron": 3.7,
+      "calcium": 269.0
+    },
+    "tags": [
+      "nut",
+      "vegan"
+    ],
+    "groups": [
+      "nuts"
+    ],
+    "allergens": [
+      "nuts"
+    ]
+  },
+  {
+    "id": "walnuts",
+    "name": "Грецкий орех",
+    "macrosPer100g": {
+      "calories": 654,
+      "protein": 15.2,
+      "fat": 65.2,
+      "carbs": 13.7
+    },
+    "nutrientsPer100g": {
+      "iron": 2.9
+    },
+    "tags": [
+      "nut",
+      "vegan"
+    ],
+    "groups": [
+      "nuts"
+    ],
+    "allergens": [
+      "nuts"
+    ]
+  },
+  {
+    "id": "cashews",
+    "name": "Кешью",
+    "macrosPer100g": {
+      "calories": 553,
+      "protein": 18.2,
+      "fat": 43.8,
+      "carbs": 30.2
+    },
+    "nutrientsPer100g": {
+      "iron": 6.7
+    },
+    "tags": [
+      "nut",
+      "vegan"
+    ],
+    "groups": [
+      "nuts"
+    ],
+    "allergens": [
+      "nuts"
+    ]
+  },
+  {
+    "id": "peanut_butter",
+    "name": "Арахисовая паста",
+    "macrosPer100g": {
+      "calories": 588,
+      "protein": 25.0,
+      "fat": 50.0,
+      "carbs": 20.0
+    },
+    "nutrientsPer100g": {
+      "iron": 1.9
+    },
+    "tags": [
+      "nut",
+      "vegan"
+    ],
+    "groups": [
+      "nuts"
+    ],
+    "allergens": [
+      "nuts"
+    ]
+  },
+  {
+    "id": "olive_oil",
+    "name": "Оливковое масло",
+    "macrosPer100g": {
+      "calories": 884,
+      "protein": 0.0,
+      "fat": 100.0,
+      "carbs": 0.0
+    },
+    "nutrientsPer100g": {},
+    "tags": [
+      "fat",
+      "vegan"
+    ],
+    "groups": [
+      "oil"
+    ],
+    "allergens": []
+  },
+  {
+    "id": "butter",
+    "name": "Сливочное масло",
+    "macrosPer100g": {
+      "calories": 717,
+      "protein": 0.9,
+      "fat": 81.1,
+      "carbs": 0.1
+    },
+    "nutrientsPer100g": {
+      "vitamin_a": 684.0
+    },
+    "tags": [
+      "fat"
+    ],
+    "groups": [
+      "dairy"
+    ],
+    "allergens": [
+      "lactose"
+    ]
+  },
+  {
+    "id": "mackerel",
+    "name": "Скумбрия",
+    "macrosPer100g": {
+      "calories": 205,
+      "protein": 19.0,
+      "fat": 13.9,
+      "carbs": 0.0
+    },
+    "nutrientsPer100g": {
+      "iron": 1.6
+    },
+    "tags": [
+      "seafood"
+    ],
+    "groups": [
+      "seafood"
+    ],
+    "allergens": [
+      "fish"
+    ]
+  },
+  {
+    "id": "skyr",
+    "name": "Скир",
+    "macrosPer100g": {
+      "calories": 63,
+      "protein": 11.0,
+      "fat": 0.2,
+      "carbs": 3.8
+    },
+    "nutrientsPer100g": {
+      "iron": 0.1
+    },
+    "tags": [
+      "dairy",
+      "high_protein"
+    ],
+    "groups": [
+      "dairy"
+    ],
+    "allergens": [
+      "lactose"
+    ]
+  }
 ]

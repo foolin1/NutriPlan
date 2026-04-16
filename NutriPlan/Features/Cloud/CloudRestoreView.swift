@@ -16,7 +16,7 @@ struct CloudRestoreView: View {
             .padding(16)
         }
         .background(Color(.systemGroupedBackground).ignoresSafeArea())
-        .navigationTitle("Синхронизация данных")
+        .navigationTitle("Синхронизация")
         .navigationBarTitleDisplayMode(.large)
         .onAppear {
             appState.clearAuthMessages()
@@ -29,7 +29,7 @@ struct CloudRestoreView: View {
                 Text("Синхронизация данных")
                     .font(.title2.weight(.bold))
 
-                Text("Здесь можно обновить данные аккаунта на этом устройстве и восстановить сохранённую информацию.")
+                Text("На этом экране можно вручную подтянуть профиль и данные дня из аккаунта, если ты вошёл на новом устройстве или хочешь обновить сохранённую информацию.")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
@@ -39,12 +39,14 @@ struct CloudRestoreView: View {
     private var syncStatusCard: some View {
         AppCard {
             VStack(alignment: .leading, spacing: 12) {
-                Text("Состояние данных")
+                Text("Текущее состояние")
                     .font(.headline)
 
                 InfoValueRow(
                     title: "Профиль",
-                    value: appState.isCloudProfileLiveSyncActive ? "Обновляется автоматически" : "Ожидает обновления"
+                    value: appState.isCloudProfileLiveSyncActive
+                        ? "Синхронизируется автоматически"
+                        : "Можно обновить вручную"
                 )
 
                 InfoValueRow(
@@ -54,7 +56,9 @@ struct CloudRestoreView: View {
 
                 InfoValueRow(
                     title: "Данные дня",
-                    value: vm.isCloudRestoreInProgress ? "Сейчас обновляются" : "Можно обновить вручную"
+                    value: vm.isCloudRestoreInProgress
+                        ? "Сейчас обновляются"
+                        : "Можно обновить вручную"
                 )
 
                 InfoValueRow(
@@ -62,7 +66,7 @@ struct CloudRestoreView: View {
                     value: formattedDate(vm.lastCloudRestoreAt)
                 )
 
-                Text("Если ты входишь на новом устройстве или после переустановки приложения, здесь можно быстро подтянуть сохранённые данные.")
+                Text("Если приложение было переустановлено или ты вошёл на другом устройстве, здесь можно быстро восстановить последние сохранённые данные.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -75,16 +79,20 @@ struct CloudRestoreView: View {
                 Text("Профиль")
                     .font(.headline)
 
+                Text("Обновляет параметры пользователя, ограничения и связанные с профилем изменения.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+
                 if let info = appState.authInfoMessage {
                     Text(info)
                         .font(.caption)
-                        .foregroundStyle(.green)
+                        .foregroundStyle(Color.green)
                 }
 
                 if let error = appState.authErrorMessage {
                     Text(error)
                         .font(.caption)
-                        .foregroundStyle(.red)
+                        .foregroundStyle(Color.red)
                 }
 
                 Button {
@@ -120,12 +128,16 @@ struct CloudRestoreView: View {
                 Text("Текущий день и история")
                     .font(.headline)
 
+                Text("Обновляет активный день, дневник и историю прошлых записей о питании.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+
                 if let message = vm.cloudRestoreMessage {
                     let isError = message.localizedCaseInsensitiveContains("не удалось")
 
                     Text(message)
                         .font(.caption)
-                        .foregroundStyle(isError ? .red : .green)
+                        .foregroundStyle(isError ? Color.red : Color.green)
                 }
 
                 Button {
@@ -158,7 +170,7 @@ struct CloudRestoreView: View {
     private var helpCard: some View {
         AppCard {
             VStack(alignment: .leading, spacing: 12) {
-                Text("Что обновляется")
+                Text("Что восстанавливается")
                     .font(.headline)
 
                 restoreBullet("текущий профиль пользователя;")
@@ -166,7 +178,7 @@ struct CloudRestoreView: View {
                 restoreBullet("активный день;")
                 restoreBullet("архив прошлых дней и записей о питании.")
 
-                Text("Обычно профиль обновляется сам. Ручное обновление пригодится, если ты сменил устройство или хочешь подтянуть последние сохранённые данные.")
+                Text("Обычно профиль обновляется автоматически. Ручная синхронизация нужна, если ты сменил устройство или хочешь подтянуть последние сохранённые данные сразу.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -177,8 +189,10 @@ struct CloudRestoreView: View {
     private func restoreBullet(_ text: String) -> some View {
         HStack(alignment: .top, spacing: 8) {
             Text("•")
+
             Text(text)
                 .foregroundStyle(.secondary)
+
             Spacer(minLength: 0)
         }
         .font(.subheadline)

@@ -11,7 +11,6 @@ struct MainTabView: View {
     let accountId: String
 
     @EnvironmentObject private var appState: AppState
-
     @AppStorage("app.selectedTab") private var selectedTabRawValue: String = MainTab.today.rawValue
     @StateObject private var planViewModel: PlanViewModel
 
@@ -70,9 +69,7 @@ struct MainTabView: View {
 
     private var tabSelection: Binding<MainTab> {
         Binding(
-            get: {
-                MainTab(rawValue: selectedTabRawValue) ?? .today
-            },
+            get: { MainTab(rawValue: selectedTabRawValue) ?? .today },
             set: { newValue in
                 selectedTabRawValue = newValue.rawValue
             }

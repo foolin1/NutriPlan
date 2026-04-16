@@ -14,7 +14,7 @@ enum BundleJSONLoader {
             let data = try Data(contentsOf: url)
             return try JSONDecoder().decode([T].self, from: data)
         } catch {
-            print("Failed to load \(fileName).json: \(error)")
+            print("Не удалось загрузить \(fileName).json: \(error)")
             return nil
         }
     }

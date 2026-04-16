@@ -14,6 +14,7 @@ struct ProfileView: View {
     @State private var excludedProductsText: String = ""
     @State private var excludedGroups: Set<String> = []
     @State private var showSavedMessage = false
+    @State private var didInitialLoadProfile = false
 
     var body: some View {
         NavigationStack {
@@ -28,7 +29,9 @@ struct ProfileView: View {
             }
             .navigationTitle("Профиль")
             .onAppear {
+                guard !didInitialLoadProfile else { return }
                 loadProfile()
+                didInitialLoadProfile = true
             }
             .onChange(of: appState.userProfile) { _ in
                 loadProfile()
@@ -252,7 +255,7 @@ struct ProfileView: View {
     private var savedMessageSection: some View {
         if showSavedMessage {
             Section {
-                Text("Профиль сохранён. Обновлены параметры пользователя и расчётные рекомендации.")
+                Text("Профиль сохранён.\nОбновлены параметры пользователя и расчётные рекомендации.")
                     .font(.subheadline)
                     .foregroundStyle(.green)
             }
@@ -326,7 +329,6 @@ struct ProfileView: View {
         if excludedGroups.isEmpty {
             return "Сейчас группы продуктов не исключены."
         }
-
         return groupsSummary(from: excludedGroups.sorted())
     }
 
@@ -463,7 +465,6 @@ struct ProfileView: View {
         if unit == "мг" {
             return String(format: "%.0f %@", value, unit)
         }
-
         return String(format: "%.1f %@", value, unit)
     }
 }

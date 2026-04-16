@@ -39,10 +39,10 @@ struct AuthGateView: View {
     private var headerCard: some View {
         AppCard {
             VStack(alignment: .leading, spacing: 10) {
-                Text("Вход в NutriPlan")
+                Text("Вход в аккаунт NutriPlan")
                     .font(.title2.weight(.bold))
 
-                Text("Авторизация нужна, чтобы профиль, дневник и история дней были привязаны к постоянному uid пользователя, а не к текущей версии его профиля.")
+                Text("Авторизация нужна, чтобы профиль, дневник питания и история дней были привязаны к одному аккаунту и могли восстанавливаться после повторного входа.")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
@@ -66,7 +66,7 @@ struct AuthGateView: View {
                 Text("Данные аккаунта")
                     .font(.headline)
 
-                TextField("Email", text: $email)
+                TextField("Электронная почта", text: $email)
                     .keyboardType(.emailAddress)
                     .textInputAutocapitalization(.never)
                     .autocorrectionDisabled()
@@ -98,12 +98,14 @@ struct AuthGateView: View {
                 } label: {
                     HStack {
                         Spacer()
+
                         if appState.isAuthenticating {
                             ProgressView()
                         } else {
                             Text(mode == .signIn ? "Войти" : "Создать аккаунт")
                                 .font(.headline)
                         }
+
                         Spacer()
                     }
                     .padding(.vertical, 14)
@@ -145,9 +147,7 @@ struct AuthGateView: View {
     }
 
     private var buttonEnabled: Bool {
-        guard !normalizedEmail.isEmpty, password.count >= 8 else {
-            return false
-        }
+        guard !normalizedEmail.isEmpty, password.count >= 8 else { return false }
 
         if mode == .signUp {
             return confirmPassword == password
@@ -158,10 +158,10 @@ struct AuthGateView: View {
 
     private var helperText: String {
         if mode == .signUp {
-            return "Для регистрации используй email и пароль не короче 8 символов."
+            return "Для регистрации укажи электронную почту и пароль не короче 8 символов."
         }
 
-        return "После входа приложение загрузит данные пользователя, связанные с этим аккаунтом."
+        return "После входа приложение загрузит данные, связанные с этим аккаунтом."
     }
 
     private func submit() {

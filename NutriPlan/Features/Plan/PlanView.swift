@@ -32,7 +32,7 @@ struct PlanView: View {
                             if !meals.isEmpty {
                                 SectionTitleView(
                                     mealType.ruTitle,
-                                    subtitle: "Блюда, подобранные для этой части дня."
+                                    subtitle: "Блюда, подобранные для этого приёма пищи."
                                 )
 
                                 VStack(spacing: 12) {
@@ -66,7 +66,7 @@ struct PlanView: View {
                 Text("План питания на день")
                     .font(.title2.weight(.bold))
 
-                Text("Здесь можно просмотреть подобранные блюда, оценить итоговые показатели и при необходимости пересчитать или обновить текущий вариант плана.")
+                Text("Здесь можно посмотреть текущий набор блюд, оценить итоговые показатели и при необходимости пересчитать план или подобрать другой вариант.")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
@@ -81,12 +81,12 @@ struct PlanView: View {
     ) -> some View {
         SectionTitleView(
             "Сводка плана",
-            subtitle: "Общий обзор текущего рациона на день."
+            subtitle: "Целевые показатели и итоговые значения текущего рациона."
         )
 
         AppCard {
             VStack(alignment: .leading, spacing: 14) {
-                Text("Текущая цель")
+                Text("Цель на день")
                     .font(.headline)
 
                 InfoValueRow(title: "Калории", value: "\(goal.targetCalories) ккал")
@@ -115,6 +115,7 @@ struct PlanView: View {
                 if nutrientFocus != .none,
                    let nutrient = NutrientCatalog.nutrient(for: nutrientFocus) {
                     Divider()
+
                     InfoValueRow(
                         title: "\(nutrient.name) в плане",
                         value: amountText(
@@ -131,7 +132,7 @@ struct PlanView: View {
         Group {
             SectionTitleView(
                 "Действия с планом",
-                subtitle: "Можно пересчитать текущий вариант или подобрать другой хороший план на день."
+                subtitle: "Можно пересчитать текущий рацион или подобрать другой удачный вариант на день."
             )
 
             AppCard {
@@ -144,10 +145,10 @@ struct PlanView: View {
                                 .font(.title3)
 
                             VStack(alignment: .leading, spacing: 4) {
-                                Text("Пересчитать")
+                                Text("Пересчитать план")
                                     .font(.headline)
 
-                                Text("Построить лучший вариант плана для текущего профиля.")
+                                Text("Сформировать основной вариант плана для текущего профиля.")
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
                             }
@@ -200,7 +201,7 @@ struct PlanView: View {
                 Text("План пока не сформирован")
                     .font(.headline)
 
-                Text("Нажми «Пересчитать» или «Подобрать другой вариант», чтобы приложение сформировало набор блюд на день.")
+                Text("Нажми «Пересчитать план» или «Подобрать другой вариант», чтобы приложение составило рацион на день.")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }

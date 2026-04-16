@@ -27,10 +27,10 @@ struct AccountCenterView: View {
     private var headerCard: some View {
         AppCard {
             VStack(alignment: .leading, spacing: 10) {
-                Text("Аккаунт")
+                Text("Аккаунт NutriPlan")
                     .font(.title2.weight(.bold))
 
-                Text("Аккаунт нужен для того, чтобы твой профиль, история питания и изменения параметров оставались привязаны к одному и тому же пользователю.")
+                Text("Аккаунт нужен, чтобы профиль, история питания и изменения параметров были привязаны к одному пользователю и могли восстанавливаться после повторного входа.")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
@@ -57,15 +57,16 @@ struct AccountCenterView: View {
 
                 Divider()
 
-                InfoValueRow(title: "Идентификатор", value: appState.accountShortId)
+                InfoValueRow(title: "ID аккаунта", value: appState.accountShortId)
                 InfoValueRow(title: "Состояние данных", value: appState.accountSyncTitle)
 
                 if let account = appState.account {
                     Divider()
+
                     InfoValueRow(title: "Пользователь", value: account.displayNameOrFallback)
 
                     if let email = account.email, !email.isEmpty {
-                        InfoValueRow(title: "Email", value: email)
+                        InfoValueRow(title: "Электронная почта", value: email)
                     }
 
                     if let linkedAt = account.linkedAt {
@@ -101,7 +102,7 @@ struct AccountCenterView: View {
                     value: formattedDate(appState.lastCloudProfileRestoreAt)
                 )
 
-                Text("Обновить данные вручную можно через экран «Синхронизация» на главной странице.")
+                Text("При необходимости данные можно обновить вручную через экран «Синхронизация» на главной странице.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -114,7 +115,7 @@ struct AccountCenterView: View {
                 Text("Сеанс")
                     .font(.headline)
 
-                Text("При выходе из аккаунта приложение перестанет показывать связанные с ним данные, пока ты снова не выполнишь вход.")
+                Text("После выхода приложение перестанет показывать данные этого аккаунта, пока ты снова не выполнишь вход.")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
 
@@ -123,8 +124,10 @@ struct AccountCenterView: View {
                 } label: {
                     HStack {
                         Spacer()
+
                         Text("Выйти из аккаунта")
                             .font(.headline)
+
                         Spacer()
                     }
                     .padding(.vertical, 14)
@@ -157,7 +160,7 @@ struct AccountCenterView: View {
                 accountBullet("список покупок и отметки купленного;")
                 accountBullet("текущий профиль и его изменения.")
 
-                Text("Изменение веса, цели или ограничений не создаёт нового пользователя. Это просто обновление твоего текущего профиля.")
+                Text("Изменение веса, цели или ограничений не создаёт нового пользователя. Это просто обновление текущего профиля.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -188,12 +191,12 @@ struct AccountCenterView: View {
                 Text("Что уже работает")
                     .font(.headline)
 
-                accountBullet("вход по email и паролю;")
+                accountBullet("вход по электронной почте и паролю;")
                 accountBullet("сохранение профиля;")
                 accountBullet("история изменений профиля;")
                 accountBullet("сохранение текущего дня и истории питания.")
 
-                Text("Этого уже достаточно, чтобы продолжать пользоваться приложением на одном или нескольких устройствах под тем же аккаунтом.")
+                Text("Этого уже достаточно, чтобы пользоваться приложением на одном или нескольких устройствах под тем же аккаунтом.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -204,8 +207,10 @@ struct AccountCenterView: View {
     private func accountBullet(_ text: String) -> some View {
         HStack(alignment: .top, spacing: 8) {
             Text("•")
+
             Text(text)
                 .foregroundStyle(.secondary)
+
             Spacer(minLength: 0)
         }
         .font(.subheadline)
