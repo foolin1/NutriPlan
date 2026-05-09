@@ -15,13 +15,16 @@ enum PlanAdjuster {
         let fatDelta = actualFat - Double(baseGoal.fatGrams)
         let carbsDelta = actualCarbs - Double(baseGoal.carbsGrams)
 
-        let calorieCorrection = clamp(calorieDelta * 0.30, min: -180, max: 180)
+        let calorieCorrectionResult = adaptiveCalorieCorrection(
+            delta: calorieDelta,
+            baseCalories: baseGoal.targetCalories
+        )
 
-        let rawNextCalories = Double(baseGoal.targetCalories) - calorieCorrection
+        let rawNextCalories = Double(baseGoal.targetCalories) - calorieCorrectionResult.value
         let boundedNextCalories = clamp(
             rawNextCalories,
-            min: max(1200, Double(baseGoal.targetCalories - 220)),
-            max: Double(baseGoal.targetCalories + 220)
+            min: 1200,
+            max: Double(baseGoal.targetCalories) + calorieCorrectionResult.maxShift
         )
         let nextCalories = roundToNearest10(boundedNextCalories)
 
@@ -31,11 +34,17 @@ enum PlanAdjuster {
         if proteinDelta < -12 {
             nextProtein += Int(min(18, abs(proteinDelta) * 0.45).rounded())
         } else if proteinDelta > 25 {
-            nextProtein = max(70, baseGoal.proteinGrams - Int(min(10, (proteinDelta - 25) * 0.15).rounded()))
+            nextProtein = max(
+                70,
+                baseGoal.proteinGrams - Int(min(10, (proteinDelta - 25) * 0.15).rounded())
+            )
         }
 
         if fatDelta > 12 {
-            nextFat = max(35, baseGoal.fatGrams - Int(min(10, (fatDelta - 12) * 0.30).rounded()))
+            nextFat = max(
+                35,
+                baseGoal.fatGrams - Int(min(10, (fatDelta - 12) * 0.30).rounded())
+            )
         } else if fatDelta < -12 {
             nextFat += Int(min(8, abs(fatDelta) * 0.20).rounded())
         }
@@ -43,7 +52,10 @@ enum PlanAdjuster {
         let proteinCalories = Double(nextProtein * 4)
         let fatCalories = Double(nextFat * 9)
         let minimumCarbs = 90
-        let remainingForCarbs = max(Double(nextCalories) - proteinCalories - fatCalories, Double(minimumCarbs * 4))
+        let remainingForCarbs = max(
+            Double(nextCalories) - proteinCalories - fatCalories,
+            Double(minimumCarbs * 4)
+        )
         let nextCarbs = max(minimumCarbs, Int((remainingForCarbs / 4.0).rounded()))
 
         let nextGoal = NutritionGoal(
@@ -62,7 +74,8 @@ enum PlanAdjuster {
         let summary = makeSummary(
             baseGoal: baseGoal,
             nextGoal: nextGoal,
-            calorieDelta: calorieDelta
+            calorieDelta: calorieDelta,
+            correction: calorieCorrectionResult
         )
 
         let hints = makeHints(
@@ -85,16 +98,16 @@ enum PlanAdjuster {
         proteinDelta: Double,
         fatDelta: Double
     ) -> String {
-        if abs(calorieDelta) <= 120 && abs(proteinDelta) <= 10 && abs(fatDelta) <= 10 {
+        if abs(calorieDelta) <= 100 && abs(proteinDelta) <= 10 && abs(fatDelta) <= 10 {
             return "План выполнен близко к цели"
         }
 
-        if calorieDelta > 120 {
-            return "На завтра стоит немного снизить калорийность"
+        if calorieDelta > 100 {
+            return "На завтра стоит снизить калорийность"
         }
 
-        if calorieDelta < -120 {
-            return "На завтра стоит немного повысить калорийность"
+        if calorieDelta < -100 {
+            return "На завтра стоит повысить калорийность"
         }
 
         return "На завтра предлагается небольшая корректировка"
@@ -103,18 +116,35 @@ enum PlanAdjuster {
     private static func makeSummary(
         baseGoal: NutritionGoal,
         nextGoal: NutritionGoal,
-        calorieDelta: Double
+        calorieDelta: Double,
+        correction: CalorieCorrectionResult
     ) -> String {
-        let direction: String
-        if calorieDelta > 120 {
-            direction = "После небольшого избытка"
-        } else if calorieDelta < -120 {
-            direction = "После недобора"
-        } else {
-            direction = "После небольшого отклонения"
+        let roundedDelta = Int(calorieDelta.rounded())
+        let roundedCorrection = Int(correction.value.rounded())
+
+        if correction.rate == 0 {
+            return """
+            Отклонение от плана составило \(formatSigned(roundedDelta)) ккал. \
+            Оно находится в допустимом диапазоне, поэтому целевая калорийность на следующий день сохранена: \
+            \(baseGoal.targetCalories) ккал.
+            """
         }
 
-        return "\(direction) цель на следующий день мягко скорректирована: \(baseGoal.targetCalories) → \(nextGoal.targetCalories) ккал. Коррекция сделана без резких ограничений, чтобы сохранить устойчивость рациона."
+        let compensationPercent = Int((correction.rate * 100).rounded())
+        let direction: String
+
+        if calorieDelta > 0 {
+            direction = "Фактическая калорийность была выше плана"
+        } else {
+            direction = "Фактическая калорийность была ниже плана"
+        }
+
+        return """
+        \(direction) на \(abs(roundedDelta)) ккал. \
+        На следующий день компенсируется \(compensationPercent)% отклонения, \
+        что дает поправку \(abs(roundedCorrection)) ккал. \
+        Целевая калорийность изменена: \(baseGoal.targetCalories) → \(nextGoal.targetCalories) ккал.
+        """
     }
 
     private static func makeHints(
@@ -125,9 +155,9 @@ enum PlanAdjuster {
     ) -> [String] {
         var hints: [String] = []
 
-        if calorieDelta > 150 {
-            hints.append("Завтра лучше немного сократить общую калорийность, а не пытаться компенсировать всё сразу.")
-        } else if calorieDelta < -150 {
+        if calorieDelta > 100 {
+            hints.append("Завтра лучше немного сократить общую калорийность, но не пытаться компенсировать всё отклонение за один день.")
+        } else if calorieDelta < -100 {
             hints.append("Завтра лучше немного добрать калории, чтобы рацион оставался комфортным и стабильным.")
         }
 
@@ -156,11 +186,75 @@ enum PlanAdjuster {
         return hints
     }
 
+    private static func adaptiveCalorieCorrection(
+        delta: Double,
+        baseCalories: Int
+    ) -> CalorieCorrectionResult {
+        let absDelta = abs(delta)
+        let maxShift = dynamicCalorieShiftLimit(baseCalories: baseCalories)
+
+        guard absDelta > 100 else {
+            return CalorieCorrectionResult(
+                value: 0,
+                rate: 0,
+                maxShift: maxShift
+            )
+        }
+
+        let rate = compensationRate(forAbsoluteDelta: absDelta)
+        let rawCorrection = delta * rate
+        let boundedCorrection = clamp(
+            rawCorrection,
+            min: -maxShift,
+            max: maxShift
+        )
+
+        return CalorieCorrectionResult(
+            value: boundedCorrection,
+            rate: rate,
+            maxShift: maxShift
+        )
+    }
+
+    private static func compensationRate(forAbsoluteDelta absDelta: Double) -> Double {
+        switch absDelta {
+        case 0...100:
+            return 0
+        case 100...300:
+            return 0.25
+        case 300...700:
+            return 0.40
+        default:
+            return 0.50
+        }
+    }
+
+    private static func dynamicCalorieShiftLimit(baseCalories: Int) -> Double {
+        min(
+            350.0,
+            max(180.0, Double(baseCalories) * 0.15)
+        )
+    }
+
     private static func roundToNearest10(_ value: Double) -> Int {
         Int((value / 10.0).rounded() * 10.0)
     }
 
-    private static func clamp(_ value: Double, min minValue: Double, max maxValue: Double) -> Double {
+    private static func clamp(
+        _ value: Double,
+        min minValue: Double,
+        max maxValue: Double
+    ) -> Double {
         Swift.max(minValue, Swift.min(maxValue, value))
+    }
+
+    private static func formatSigned(_ value: Int) -> String {
+        value > 0 ? "+\(value)" : "\(value)"
+    }
+
+    private struct CalorieCorrectionResult {
+        let value: Double
+        let rate: Double
+        let maxShift: Double
     }
 }
